@@ -1,5 +1,6 @@
 HUECO MUNDO HUD  —  a Bleach / Ulquiorra Cifer themed TF2 HUD
-Made by Ingalther Ulquiorra
+Made by Ingalther Ulquiorra  -  version 1.0 (the number is also shown small in the main menu's
+bottom right corner; compare it with the latest release on GitHub)
 ==============================================================
 
 Black sky, a crescent moon, bone-white dunes and emerald tear marks.

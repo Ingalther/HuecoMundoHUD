@@ -1,5 +1,12 @@
 """Full-screen menus: main menu, matchmaking bar, class select, inventory, scoreboard."""
+import os
+
 import kv
+
+# the HUD's version (VERSION at the project root): shown small in the main menu's bottom right corner, and the
+# number of the GitHub release
+VERSION = open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'VERSION'),
+               encoding='utf-8').read().strip()
 
 T = 'replay/thumbnails/hm/'
 SCENE = '../console/background_huecomundo_widescreen'
@@ -122,9 +129,10 @@ def mainmenu(root):
     kv.setmany(kv.find(body, 'Notifications_Panel'), xpos=270, ypos=300)
     for n in ('BackgroundFooter', 'FooterLine'):
         kv.setmany(kv.find(body, n), visible=0, wide=0, tall=0)
-    add(body, 'HM_Credit', {'ControlName': 'CExLabel', 'fieldName': 'HM_Credit', 'xpos': 'r246', 'ypos': 'r16',
-                            'zpos': 1, 'wide': 236, 'tall': 12, 'visible': 1, 'enabled': 1, 'mouseinputenabled': 0,
-                            'labelText': 'Hueco Mundo HUD  -  made by Ingalther Ulquiorra', 'textAlignment': 'east',
+    add(body, 'HM_Credit', {'ControlName': 'CExLabel', 'fieldName': 'HM_Credit', 'xpos': 'r290', 'ypos': 'r16',
+                            'zpos': 1, 'wide': 280, 'tall': 12, 'visible': 1, 'enabled': 1, 'mouseinputenabled': 0,
+                            'labelText': f'Hueco Mundo HUD v{VERSION}  -  made by Ingalther Ulquiorra',
+                            'textAlignment': 'east',
                             'font': 'HM_Small', 'fgcolor': '150 152 150 110'})
 
 
