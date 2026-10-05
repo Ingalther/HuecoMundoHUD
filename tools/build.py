@@ -4,7 +4,7 @@
     python build.py --install       -> also installs it into tf/custom
 
 The project folder is the HUD: resource/, scripts/, materials/ and info.vdf sit at its root, so the folder (a
-GitHub ZIP like "HuecoMundoHUD-main" or a clone) works when dropped straight into tf/custom. tools/, docs/ and
+GitHub ZIP like "huecomundo-hud-main" or a clone) works when dropped straight into tf/custom. tools/, docs/ and
 update.bat are ignored by the game. If the project folder already is in tf/custom, --install builds in place.
 
 The HUD is derived from the game's own current UI files (extracted from tf2_misc_dir.vpk at build time),
@@ -802,46 +802,56 @@ STOCK_MEDIC = '''"Resource/UI/HudMedicCharge.res"
 '''
 
 
+UBER_W, UBER_H = 80, 26
+UBER_BAR = (30, 15, 46, 8)   # bar box inside the card, right of the medic cross
+UBER_GAP = 2                 # ink gap between the Vaccinator segments
+UBER_FILL = '170 198 181 255'   # what the emerald sheet turns a white bar into (measured in game)
+UBER_TRACK = '1 112 69 255'
+
+
 def patch_uber(root):
     """The game pins the Vaccinator's resist icon to the panel's 0,0, so the panel starts at the tag's top left
     (the other cards keep a 10 / 4 margin for the stickybomb) and the icon lands right on the logo."""
     body = next(e[1] for e in root if isinstance(e[1], list))
     bg = kv.find(body, 'Background')
-    kv.setmany(bg, xpos=0, ypos=0, zpos=0, wide=58, tall=26, image=T + 'meter_uber', teambg_1=T + 'meter_uber',
+    kv.setmany(bg, xpos=0, ypos=0, zpos=0, wide=UBER_W, tall=UBER_H, image=T + 'meter_uber', teambg_1=T + 'meter_uber',
                teambg_2=T + 'meter_uber', teambg_3=T + 'meter_uber')
     for key in ('teambg_2_lodef', 'teambg_3_lodef'):
         kv.remove(bg, key)
     # the percent only (the game fills %charge% in; the Vaccinator shows its full charges, %charge_count%, there)
     for n, text in (('ChargeLabel', '%charge%'), ('IndividualChargesLabel', '%charge_count%')):
-        kv.setmany(kv.find(body, n), labelText=text, xpos=28, ypos=0, zpos=2, wide=30, tall=14, font='HM_Metal',
-                   fgcolor='HM_Bone', textAlignment='west')
+        kv.setmany(kv.find(body, n), labelText=text, xpos=UBER_BAR[0], ypos=0, zpos=2, wide=UBER_BAR[2], tall=14,
+                   font='HM_Metal', fgcolor='HM_Bone', textAlignment='west')
     blk = kv.find(body, 'HealthClusterIcon')
     if blk is not None:
         kv.setmany(blk, xpos=0, ypos=0, wide=0, tall=0)
-    # white like the item bars (the Vaccinator's are forced white), under the same emerald sheet
-    kv.setmany(kv.find(body, 'ChargeMeter'), xpos=28, ypos=15, zpos=2, wide=26, tall=7,
-               fgcolor_override='255 255 255 255', bgcolor_override=BAR_TRACK)
-    # Vaccinator: four short segments where the bar is. Each one runs under the neighbouring notches, so no sliver of
-    # sheet is left between a segment and a notch when the HUD is scaled (e.g. 2.25x at 1440p)
-    for i, (x, w) in enumerate(((28, 6), (34, 7), (41, 7), (48, 6)), 1):
-        blk = kv.find(body, 'ChargeMeter%d' % i)
+    x, y, w, h = UBER_BAR
+    # Vaccinator: four wide segments with ink gaps. The game paints them white (grey while filling), so each gets
+    # its own emerald sheet of exactly its size (pale jade on deep emerald, like the item bars)
+    seg = (w - 3 * UBER_GAP) // 4
+    for i in range(4):
+        sx = x + i * (seg + UBER_GAP)
+        sw = seg if i < 3 else x + w - sx
+        blk = kv.find(body, 'ChargeMeter%d' % (i + 1))
         if blk is not None:
-            kv.setmany(blk, xpos=x, ypos=15, zpos=2, wide=w, tall=7, bgcolor_override=BAR_TRACK)
-    tint_bar(body, 28, 15, 26, 7)
-    # ink notches over the sheet between the segments (the plain uber bar reads as four quarters too)
-    for i in range(1, 4):
-        kv.add_block(body, 'HM_BarNotch%d' % i, {
-            'ControlName': 'EditablePanel', 'fieldName': 'HM_BarNotch%d' % i, 'xpos': 26 + i * 7, 'ypos': 15,
-            'zpos': 4, 'wide': 2, 'tall': 7, 'visible': 1, 'enabled': 1, 'paintbackground': 1,
-            'bgcolor_override': '8 8 10 255', 'mouseinputenabled': 0})
+            kv.setmany(blk, xpos=sx, ypos=y, zpos=2, wide=sw, tall=h, bgcolor_override=BAR_TRACK)
+        kv.add_block(body, 'HM_SegTint%d' % (i + 1), {
+            'ControlName': 'EditablePanel', 'fieldName': 'HM_SegTint%d' % (i + 1), 'xpos': sx, 'ypos': y, 'zpos': 3,
+            'wide': sw, 'tall': h, 'visible': 1, 'enabled': 1, 'paintbackground': 1, 'bgcolor_override': BAR_TINT,
+            'mouseinputenabled': 0})
+    # the regular uber bar: one plain bar in the jade / deep emerald the tinted bars end up as, drawn above the
+    # Vaccinator sheets (the game hides it for the Vaccinator, which uncovers them)
+    kv.setmany(kv.find(body, 'ChargeMeter'), xpos=x, ypos=y, zpos=5, wide=w, tall=h, fgcolor_override=UBER_FILL,
+               bgcolor_override=UBER_TRACK)
     blk = kv.find(body, 'ResistIcon')
     if blk is not None:
         kv.setmany(blk, xpos=0, ypos=0, zpos=4, wide=26, tall=26)
 
 
 def uber_box(alt=False):
+    """Centered on the sticky tag (which is 58 wide at +10 in its slot), wider than it."""
     x, y = meter_card_pos(0, alt)
-    return 'c%d' % (int(x[1:]) + 10), y + 4
+    return 'c%d' % (int(x[1:]) + 10 + (58 - UBER_W) // 2), y + 4
 
 
 def patch_streak_notice(root):
@@ -1090,7 +1100,7 @@ def patch_hudlayout(root):
     # ÜberCharge (incl. Vaccinator): a card in the sticky slot, below the healing target ID
     uber = kv.find(body, 'HudMedicCharge')
     if uber is not None:
-        kv.setmany(uber, **box(*uber_box(), 58, 26))
+        kv.setmany(uber, **box(*uber_box(), UBER_W, UBER_H))
         minmode(uber, *uber_box(True))
     pipes = kv.find(body, 'HudDemomanPipes')
     kv.setmany(pipes, **box(*pipes_pos(), PIPES_W, PIPES_H))
@@ -1220,11 +1230,11 @@ event HudLowAmmoPulseStop
 	Animate HudWeaponLowAmmoImage	Alpha	"0"	Linear 0.0 0.0
 }
 
-// ÜberCharge ready: the (white, emerald-sheeted) bar breathes pale jade <-> emerald instead of the stock tan flash
+// ÜberCharge ready: the jade bar breathes emerald <-> pale jade instead of the stock tan flash
 event HudMedicCharged
 {
-	Animate ChargeMeter		FgColor	"255 255 255 255"	Linear 0.0 0.1
-	Animate ChargeMeter		FgColor	"120 120 120 255"	Linear 0.3 0.3
+	Animate ChargeMeter		FgColor	"46 214 140 255"	Linear 0.0 0.1
+	Animate ChargeMeter		FgColor	"170 198 181 255"	Linear 0.3 0.3
 	RunEvent HudMedicChargedLoop	0.6
 }
 event HudMedicChargedLoop
@@ -1235,7 +1245,7 @@ event HudMedicChargedStop
 {
 	StopEvent HudMedicCharged 0.0
 	StopEvent HudMedicChargedLoop 0.0
-	Animate ChargeMeter		FgColor	"255 255 255 255"	Linear 0.0 0.0001
+	Animate ChargeMeter		FgColor	"170 198 181 255"	Linear 0.0 0.0001
 }
 '''
 

@@ -1006,13 +1006,13 @@ def logo_icicle():      # Spy-cicle
         highlights=[(0.46, 0.26, 0.015, 0.1)])
 
 
-def tag_with_icon(icon, seed=419, size=(512, 160), crisp=False):
+def tag_with_icon(icon, seed=419, size=(512, 160), crisp=False, box=(58, 26)):
     """meter_bg (manga.tag seed 419) with an icon inked into its left end. Same seed and size as meter_bg, so a
     plain meter_bg drawn on top covers it exactly (the sticky mode hides the shield that way)."""
     im = tag(seed, size=size)
     h = size[1]
-    # the tag texture is squashed into a 58x26 box; pre-stretch the icon so it lands round
-    stretch = (size[0] / size[1]) / (58 / 26)
+    # the tag texture is squashed into its HUD box (58x26 for most); pre-stretch the icon so it lands round
+    stretch = (size[0] / size[1]) / (box[0] / box[1])
     ih = int(h * 0.86)
     ic = icon.resize((int(ih * stretch), ih), Image.LANCZOS)
     # emerald reiatsu rim (like the stickybomb's aura) so dark ink outlines still read on the ink tag

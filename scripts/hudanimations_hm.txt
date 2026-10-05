@@ -72,11 +72,11 @@ event HudLowAmmoPulseStop
 	Animate HudWeaponLowAmmoImage	Alpha	"0"	Linear 0.0 0.0
 }
 
-// ÜberCharge ready: the (white, emerald-sheeted) bar breathes pale jade <-> emerald instead of the stock tan flash
+// ÜberCharge ready: the jade bar breathes emerald <-> pale jade instead of the stock tan flash
 event HudMedicCharged
 {
-	Animate ChargeMeter		FgColor	"255 255 255 255"	Linear 0.0 0.1
-	Animate ChargeMeter		FgColor	"120 120 120 255"	Linear 0.3 0.3
+	Animate ChargeMeter		FgColor	"46 214 140 255"	Linear 0.0 0.1
+	Animate ChargeMeter		FgColor	"170 198 181 255"	Linear 0.3 0.3
 	RunEvent HudMedicChargedLoop	0.6
 }
 event HudMedicChargedLoop
@@ -87,7 +87,7 @@ event HudMedicChargedStop
 {
 	StopEvent HudMedicCharged 0.0
 	StopEvent HudMedicChargedLoop 0.0
-	Animate ChargeMeter		FgColor	"255 255 255 255"	Linear 0.0 0.0001
+	Animate ChargeMeter		FgColor	"170 198 181 255"	Linear 0.0 0.0001
 }
 
 // hitmarker (your damage on an enemy). Restarted through its own event: re-running DamagedPlayer on

@@ -222,7 +222,8 @@ def hud_cards(out):
     out.thumb('tag_shield_blue', manga.tag_with_icon(manga.targe_icon(blue)))
     out.thumb('streak_card', manga.streak_card(), mips=False)  # killstreak splash (nine-slice border)
     out.thumb('meter_metal', manga.tag_with_icon(manga.logo_metal(), crisp=True))  # Engineer metal card
-    out.thumb('meter_uber', manga.tag_with_icon(manga.logo_uber(), crisp=True))  # ÜberCharge card
+    # ÜberCharge card: wider than the other tags (80x26, build.UBER_W), so its own size keeps the tag and the cross
+    out.thumb('meter_uber', manga.tag_with_icon(manga.logo_uber(), size=(704, 160), crisp=True, box=(80, 26)))
     import build  # item meter cards: the item's manga logo on the sticky tag (build.METER_CARDS)
     for fname, (logo, _) in sorted(build.METER_CARDS.items()):
         out.thumb(build.meter_card_name(fname), manga.tag_with_icon(getattr(manga, 'logo_' + logo)(),
