@@ -1,103 +1,88 @@
-"""Store / GitHub thumbnail (1920x1080): the Hueco Mundo scene, a torn manga title panel, the in-game HUD pieces.
+"""Store / GitHub thumbnail (1920x1080): a clean title card, no HUD pieces.
 
-    python thumbnail.py [out.png]
+    python thumbnail.py [style] [out.png]      style: moon (default), eye, paper
 """
 import os
 import sys
 
 import numpy as np
-from PIL import Image, ImageDraw, ImageFilter
+from PIL import Image, ImageFilter
 
 import art
 import manga
-from art import BONE, EMERALD, INK, ASH
+from art import BONE, EMERALD, INK
 
 W, H = 1920, 1080
 
 
-def shade(im, alpha):
-    im.alpha_composite(art.solid_with_alpha((0, 0, 0), np.full((im.height, im.width), alpha, np.float32)))
+def fill(color, alpha=1.0):
+    return art.solid_with_alpha(color, np.full((H, W), alpha, np.float32))
 
 
-def fit_text(txt, font, max_w, start, color, **kw):
-    size = start
-    while True:
-        im = art.text_img(txt, art.font(font, size), color, **kw)
-        if im.width <= max_w or size < 20:
-            return im
-        size -= 4
+def centered(im, layer, y, x=None):
+    im.alpha_composite(layer, ((W - layer.width) // 2 if x is None else x, y))
 
 
-def italic(im, k=0.2):
-    return im.transform(im.size, Image.AFFINE, (1, k, -im.height * k / 2, 0, 1, 0), Image.BICUBIC)
+def wordmark(color=BONE, accent=EMERALD, size=150):
+    """HUECO MUNDO in wide-tracked serif, a thin rule, HUD small and spaced below it."""
+    title = art.text_img('HUECO  MUNDO', art.font(art.SERIF, size), color, tracking=int(size * 0.18))
+    hud = art.text_img('H U D', art.font(art.SERIF_B, int(size * 0.42)), accent, tracking=int(size * 0.2))
+    w = max(title.width, hud.width)
+    out = art.rgba((w, title.height + hud.height + 70))
+    out.alpha_composite(title, ((w - title.width) // 2, 0))
+    line = np.zeros((2, int(w * 0.5)), np.float32)
+    line[:] = np.sin(np.linspace(0, np.pi, line.shape[1])) ** 0.6
+    out.alpha_composite(art.solid_with_alpha(accent, line * 0.8), ((w - line.shape[1]) // 2, title.height + 26))
+    out.alpha_composite(hud, ((w - hud.width) // 2, title.height + 56))
+    return out
 
 
-def title_panel():
-    """Torn ink panel, speed lines bursting from the left, BLEACH / HUECO MUNDO in bone serif, HUD in emerald,
-    虚圏 down the right edge."""
-    w, h = 1180, 470
-    pts = [(40, 30), (w - 20, 8), (w - 60, h - 26), (12, h - 6)]
-    content = art.rgba((w, h), INK, 238)
-    content.alpha_composite(manga.speed_lines((w, h), 90, h // 2, n=110, seed=61, alpha=0.14, inner=0.15))
-    tone = manga.tone_fill((w, int(h * 0.26)), 1.0, (40, 110, 80), period=9, vertical=True, lo=1.0, hi=0.3)
-    content.alpha_composite(tone, (0, h - tone.height))
-    card = manga.panel((w, h), pts, 63, content=content)
-
-    x0, text_w = 100, 850
-    small = art.text_img('B L E A C H', art.font(art.SERIF, 40), ASH, tracking=12)
-    card.alpha_composite(small, (x0 + 6, 54))
-    moon = art.crescent(18, glow=True, phase=0.55, tilt=-150)
-    card.alpha_composite(moon, (x0 + 16 + small.width, 54 + small.height // 2 - moon.height // 2))
-    big = fit_text('HUECO MUNDO', art.SERIF_B, text_w, 140, BONE, tracking=8)
-    card.alpha_composite(big, (x0, 112))
-    y = 112 + big.height + 10
-    hud = italic(art.text_img('HUD', art.font('bahnschrift.ttf', 132), EMERALD, tracking=10))
-    card.alpha_composite(hud, (x0, y))
-    card.alpha_composite(manga.rule(w - 80 - 130 - (x0 + hud.width + 30) - 40, 22, thick=7), (x0 + hud.width + 30, y + 40))
-    k = art.vertical_text('虚圏', art.font(art.KANJI, 130), EMERALD, gap=12)
-    kx = w - k.width - 80
-    card.alpha_composite(k, (kx, (h - k.height) // 2 - 10))
-    sx = x0 + hud.width + 34
-    sub = fit_text('ULQUIORRA  ·  TF2 HUD', 'constan.ttf', kx - sx - 30, 34, ASH, tracking=6)
-    card.alpha_composite(sub, (sx, y + 76))
-    return card
-
-
-def hud_pieces(im):
-    """The real in-game pieces, big, bottom corners: model triangle + health band, ammo blade."""
-    shard = manga.shard((56, 90, 140), 411).resize((330, 317), Image.LANCZOS)
-    im.alpha_composite(shard, (70, H - 330))
-    band = manga.hp_band(412).resize((330, 133), Image.LANCZOS)
-    im.alpha_composite(band, (300, H - 220))
-    hp = art.text_img('125', art.font('bahnschrift.ttf', 118), BONE, stroke=0)
-    hp = italic(hp)
-    im.alpha_composite(hp, (330, H - 222))
-    blade = manga.ammo_blade(413).resize((380, 223), Image.LANCZOS)
-    im.alpha_composite(blade, (W - 470, H - 300))
-    clip = art.text_img('6', art.font('bahnschrift.ttf', 130), BONE)
-    clip = italic(clip)
-    im.alpha_composite(clip, (W - 380, H - 262))
-    res = art.text_img('32', art.font('bahnschrift.ttf', 60), ASH)
-    im.alpha_composite(res, (W - 380 + clip.width + 6, H - 262 + clip.height - res.height - 10))
-    hit = manga.hitmarker().resize((150, 150), Image.LANCZOS)
-    im.alpha_composite(hit, (W // 2 - 75, 770))
-
-
-def main(out):
+def moon():
+    """Night over Hueco Mundo: the scene (its crescent moon, the dunes) sunk in black, the wordmark in the sky."""
     im = art.hueco_mundo_scene(W, H, menu_shade=False).convert('RGBA')
-    shade(im, 0.25)
-    eye = art.ulq_eye(470)
-    im.alpha_composite(eye, (W - 560, 120))
-    panel = title_panel()
-    panel = panel.rotate(2.5, resample=Image.BICUBIC, expand=True)
-    im.alpha_composite(panel, (110, 110))
-    hud_pieces(im)
-    vig = np.clip(np.hypot(*np.mgrid[-1:1:H * 1j, -1:1:W * 1j]) - 0.95, 0, 1) * 0.8
-    im.alpha_composite(art.solid_with_alpha((0, 0, 0), vig.astype(np.float32)))
-    im.convert('RGB').save(out, quality=95)
+    im = im.filter(ImageFilter.GaussianBlur(2))
+    im.alpha_composite(fill((0, 0, 0), 0.55))
+    yy = np.linspace(0, 1, H)[:, None].repeat(W, 1).astype(np.float32)
+    im.alpha_composite(art.solid_with_alpha((0, 0, 0), np.clip(1.2 - yy * 1.6, 0, 1) * 0.6))
+    centered(im, wordmark(), 300)
+    return im
+
+
+def eye():
+    """Ink black, Ulquiorra's eye on the left with its emerald tear, the wordmark on the right."""
+    im = fill(INK)
+    yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
+    glow = np.exp(-(((xx - 480) / 520) ** 2 + ((yy - 540) / 420) ** 2)) * 0.18
+    im.alpha_composite(art.solid_with_alpha((20, 90, 62), glow.astype(np.float32)))
+    e = art.ulq_eye(620)
+    im.alpha_composite(e, (170, (H - e.height) // 2))
+    wm = wordmark(size=92)
+    im.alpha_composite(wm, (860 + (980 - wm.width) // 2, (H - wm.height) // 2))
+    return im
+
+
+def paper():
+    """Bone manga paper with a soft screentone, a huge faint 虚圏 behind, the wordmark in ink."""
+    yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
+    g = np.clip(1 - np.hypot(xx / W - 0.5, (yy / H - 0.5) * 0.7) * 1.1, 0, 1)
+    tone = manga.screentone(np.clip(0.55 + g * 0.45, 0, 1), period=10, dot_color=(190, 188, 180),
+                            paper=(226, 224, 216))
+    im = Image.fromarray(np.concatenate([tone, np.full((H, W, 1), 255.)], -1).astype(np.uint8), 'RGBA')
+    k = art.text_img('虚圏', art.font(art.KANJI, 700), INK)
+    k.putalpha(Image.fromarray((manga.arr(k.getchannel('A')) * 0.08 * 255).astype(np.uint8)))
+    centered(im, k, (H - k.height) // 2)
+    centered(im, wordmark(color=INK, accent=(20, 150, 98)), 460)
+    return im
+
+
+STYLES = {'moon': moon, 'eye': eye, 'paper': paper}
+
+
+def main(style='moon', out=None):
+    out = out or os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'thumbnail.png')
+    STYLES[style]().convert('RGB').save(out, quality=95)
     print('thumbnail ->', out)
 
 
 if __name__ == '__main__':
-    main(sys.argv[1] if len(sys.argv) > 1 else os.path.join(os.path.dirname(os.path.dirname(
-        os.path.abspath(__file__))), 'thumbnail.png'))
+    main(*sys.argv[1:3])
