@@ -625,10 +625,10 @@
 		"ControlName"		"EditablePanel"
 		"fieldName"		"MOTD_ShowButtonPanel"
 		"xpos"		"9999"
-		"ypos"		"436"
+		"ypos"		"28"
 		"zpos"		"1"
-		"wide"		"28"
-		"tall"		"28"
+		"wide"		"32"
+		"tall"		"32"
 		"autoResize"		"0"
 		"pinCorner"		"3"
 		"visible"		"1"
@@ -1637,102 +1637,87 @@
 				{
 					"0"
 					{
-						"item"		"Summer 2026 Cosmetic Key"
+						"item"		"Halloween 2026 Key"
 						"show_market"		"0"
 					}
 					"1"
 					{
-						"item"		"Summer 2026 Cosmetic Case"
+						"item"		"Halloween 2026 Case"
 						"show_market"		"1"
 					}
 					"2"
 					{
-						"item"		"Summer 2026 War Paint Key"
+						"item"		"Taunt: Hippocratic Hypocrite"
 						"show_market"		"0"
 					}
 					"3"
 					{
-						"item"		"Summer 2026 War Paint Case"
-						"show_market"		"1"
+						"item"		"Taunt: One-Eyed Punt"
+						"show_market"		"0"
 					}
 					"4"
 					{
-						"item"		"Taunt: The Circuit Breaker"
+						"item"		"Taunt: Showrunner's Spirit"
 						"show_market"		"0"
 					}
 					"5"
 					{
-						"item"		"Taunt: Buffoon's Bivouac"
+						"item"		"Taunt: Barrel Roll"
 						"show_market"		"0"
 					}
 					"6"
 					{
-						"item"		"Taunt: Faux-calization"
+						"item"		"Taunt: Sear You Later"
 						"show_market"		"0"
 					}
 					"7"
 					{
-						"item"		"Taunt: Friendly Fire"
+						"item"		"Map Token HolyHell"
 						"show_market"		"0"
 					}
 					"8"
 					{
-						"item"		"Map Token Dryfield"
+						"item"		"Map Token Scarypass"
 						"show_market"		"0"
 					}
 					"9"
 					{
-						"item"		"Map Token Camp Saxton"
+						"item"		"Map Token Trainsawlaser"
 						"show_market"		"0"
 					}
 					"10"
 					{
-						"item"		"Map Token Shorelight"
+						"item"		"Map Token Medi-Evil"
 						"show_market"		"0"
 					}
 					"11"
 					{
-						"item"		"Map Token Redwood"
+						"item"		"Map Token Scaredy-Cat"
 						"show_market"		"0"
 					}
 					"12"
 					{
-						"item"		"Map Token Premuda"
+						"item"		"Strange Filter: HolyHell (Community)"
 						"show_market"		"0"
 					}
 					"13"
 					{
-						"item"		"Map Token Mojave"
+						"item"		"Strange Filter: Scarypass (Community)"
 						"show_market"		"0"
 					}
 					"14"
 					{
-						"item"		"Strange Filter: Dryfield (Community)"
+						"item"		"Strange Filter: Trainsawlaser (Community)"
 						"show_market"		"0"
 					}
 					"15"
 					{
-						"item"		"Strange Filter: Camp Saxton (Community)"
+						"item"		"Strange Filter: Medi-Evil (Community)"
 						"show_market"		"0"
 					}
 					"16"
 					{
-						"item"		"Strange Filter: Shorelight (Community)"
-						"show_market"		"0"
-					}
-					"17"
-					{
-						"item"		"Strange Filter: Redwood (Community)"
-						"show_market"		"0"
-					}
-					"18"
-					{
-						"item"		"Strange Filter: Premuda (Community)"
-						"show_market"		"0"
-					}
-					"19"
-					{
-						"item"		"Strange Filter: Mojave (Community)"
+						"item"		"Strange Filter: Scaredy-Cat (Community)"
 						"show_market"		"0"
 					}
 				}

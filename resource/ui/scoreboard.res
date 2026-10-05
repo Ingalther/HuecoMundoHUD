@@ -262,8 +262,8 @@
 		{
 			"visible"		"0"
 		}
-		"fgcolor"		"226 226 220 255"
 		"zpos"		"5"
+		"fgcolor"		"226 226 220 255"
 	}
 	"RedTeamLabel"
 	{
@@ -350,8 +350,8 @@
 		{
 			"visible"		"0"
 		}
-		"fgcolor"		"226 226 220 255"
 		"zpos"		"5"
+		"fgcolor"		"226 226 220 255"
 	}
 	"ServerLabel"
 	{

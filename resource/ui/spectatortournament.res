@@ -244,17 +244,17 @@
 	{
 		"ControlName"		"CExLabel"
 		"fieldName"		"ReinforcementsLabel"
-		"xpos"		"c-150"
-		"ypos"		"32"
-		"wide"		"300"
-		"tall"		"18"
+		"xpos"		"c-140"
+		"ypos"		"41"
+		"wide"		"280"
+		"tall"		"22"
 		"autoResize"		"0"
 		"pinCorner"		"0"
 		"visible"		"1"
 		"enabled"		"1"
 		"labelText"		"#game_respawntime_in_secs"
 		"textAlignment"		"center"
-		"font"		"HudFontSmall"
+		"font"		"HM_NoticeTitle"
 		"if_mvm"
 		{
 			"xpos"		"c-190"
@@ -262,6 +262,8 @@
 			"wide"		"380"
 			"textAlignment"		"center"
 		}
+		"zpos"		"2"
+		"fgcolor"		"HM_Bone"
 	}
 	"BuyBackLabel"
 	{
@@ -420,5 +422,20 @@
 		"pinCorner"		"0"
 		"visible"		"1"
 		"enabled"		"1"
+	}
+	"HM_RespawnCard"
+	{
+		"ControlName"		"ImagePanel"
+		"fieldName"		"HM_RespawnCard"
+		"xpos"		"c-160"
+		"ypos"		"37"
+		"zpos"		"1"
+		"wide"		"320"
+		"tall"		"29"
+		"visible"		"1"
+		"enabled"		"1"
+		"scaleImage"		"1"
+		"image"		"replay/thumbnails/hm/respawn_card"
+		"mouseinputenabled"		"0"
 	}
 }

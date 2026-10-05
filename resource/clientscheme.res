@@ -159,6 +159,7 @@
 		"UpgradeDisabledBg"		"52 52 54 255"
 		"HM_Bone"		"226 226 220 255"
 		"HM_BoneDim"		"226 226 220 150"
+		"HM_BoneMid"		"184 186 180 255"
 		"HM_Ash"		"122 124 124 255"
 		"HM_AshDim"		"122 124 124 120"
 		"HM_Ink"		"8 9 10 255"
@@ -171,7 +172,6 @@
 		"HM_Amber"		"255 196 48 255"
 		"HM_TeamRed"		"208 92 92 255"
 		"HM_TeamBlue"		"128 160 200 255"
-		"HM_BoneMid"		"184 186 180 255"
 	}
 	"BaseSettings"
 	{
@@ -2914,12 +2914,12 @@
 		{
 			"1"
 			{
-				"name"		"Bahnschrift SemiBold Condensed"
-				"tall"		"15"
-				"weight"		"600"
+				"name"		"Bahnschrift Bold Condensed"
+				"tall"		"21"
+				"weight"		"800"
 				"additive"		"0"
 				"antialias"		"1"
-				"italic"		"0"
+				"italic"		"1"
 				"outline"		"1"
 				"dropshadow"		"0"
 			}
@@ -2928,12 +2928,12 @@
 		{
 			"1"
 			{
-				"name"		"Bahnschrift SemiBold Condensed"
-				"tall"		"21"
-				"weight"		"600"
+				"name"		"Bahnschrift Bold Condensed"
+				"tall"		"32"
+				"weight"		"800"
 				"additive"		"0"
 				"antialias"		"1"
-				"italic"		"0"
+				"italic"		"1"
 				"outline"		"1"
 				"dropshadow"		"0"
 			}
@@ -3145,6 +3145,20 @@
 				"antialias"		"1"
 				"italic"		"0"
 				"outline"		"0"
+				"dropshadow"		"0"
+			}
+		}
+		"HM_SpecHealth"
+		{
+			"1"
+			{
+				"name"		"Bahnschrift SemiBold Condensed"
+				"tall"		"10"
+				"weight"		"600"
+				"additive"		"0"
+				"antialias"		"1"
+				"italic"		"0"
+				"outline"		"1"
 				"dropshadow"		"0"
 			}
 		}
@@ -5538,6 +5552,46 @@
 			"draw_corner_width"		"2"
 			"draw_corner_height"		"2"
 		}
+		"HM_ScoreMain"
+		{
+			"bordertype"		"scalable_image"
+			"backgroundtype"		"2"
+			"image"		"replay/thumbnails/hm/score_main"
+			"src_corner_height"		"0"
+			"src_corner_width"		"0"
+			"draw_corner_width"		"0"
+			"draw_corner_height"		"0"
+		}
+		"HM_TornTag"
+		{
+			"bordertype"		"scalable_image"
+			"backgroundtype"		"2"
+			"image"		"replay/thumbnails/hm/meter_bg"
+			"src_corner_height"		"0"
+			"src_corner_width"		"0"
+			"draw_corner_width"		"0"
+			"draw_corner_height"		"0"
+		}
+		"HM_TopBand"
+		{
+			"bordertype"		"scalable_image"
+			"backgroundtype"		"2"
+			"image"		"replay/thumbnails/hm/top_band"
+			"src_corner_height"		"0"
+			"src_corner_width"		"0"
+			"draw_corner_width"		"0"
+			"draw_corner_height"		"0"
+		}
+		"HM_StreakCard"
+		{
+			"bordertype"		"scalable_image"
+			"backgroundtype"		"2"
+			"image"		"replay/thumbnails/hm/streak_card"
+			"src_corner_height"		"40"
+			"src_corner_width"		"40"
+			"draw_corner_width"		"4"
+			"draw_corner_height"		"3"
+		}
 		"HM_Card_none"
 		{
 			"bordertype"		"scalable_image"
@@ -5863,46 +5917,6 @@
 			"bordertype"		"scalable_image"
 			"backgroundtype"		"2"
 			"image"		"replay/thumbnails/hm/layout_corners_h"
-			"src_corner_height"		"0"
-			"src_corner_width"		"0"
-			"draw_corner_width"		"0"
-			"draw_corner_height"		"0"
-		}
-		"HM_StreakCard"
-		{
-			"bordertype"		"scalable_image"
-			"backgroundtype"		"2"
-			"image"		"replay/thumbnails/hm/streak_card"
-			"src_corner_height"		"40"
-			"src_corner_width"		"40"
-			"draw_corner_width"		"4"
-			"draw_corner_height"		"3"
-		}
-		"HM_ScoreMain"
-		{
-			"bordertype"		"scalable_image"
-			"backgroundtype"		"2"
-			"image"		"replay/thumbnails/hm/score_main"
-			"src_corner_height"		"0"
-			"src_corner_width"		"0"
-			"draw_corner_width"		"0"
-			"draw_corner_height"		"0"
-		}
-		"HM_TornTag"
-		{
-			"bordertype"		"scalable_image"
-			"backgroundtype"		"2"
-			"image"		"replay/thumbnails/hm/meter_bg"
-			"src_corner_height"		"0"
-			"src_corner_width"		"0"
-			"draw_corner_width"		"0"
-			"draw_corner_height"		"0"
-		}
-		"HM_TopBand"
-		{
-			"bordertype"		"scalable_image"
-			"backgroundtype"		"2"
-			"image"		"replay/thumbnails/hm/top_band"
 			"src_corner_height"		"0"
 			"src_corner_width"		"0"
 			"draw_corner_width"		"0"

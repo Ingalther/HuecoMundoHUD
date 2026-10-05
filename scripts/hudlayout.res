@@ -738,9 +738,6 @@
 		"enabled"		"1"
 		"icon_space"		"2"
 	}
-	"HUDAutoAim"
-	{
-	}
 	"HudHDRDemo"
 	{
 	}
@@ -1325,5 +1322,21 @@
 		"keyboardinputenabled"		"1"
 		"mouseinputenabled"		"0"
 		"alpha"		"100"
+	}
+	"HM_Hitmarker"
+	{
+		"ControlName"		"ImagePanel"
+		"fieldName"		"HM_Hitmarker"
+		"xpos"		"c-12"
+		"ypos"		"c-12"
+		"zpos"		"10"
+		"wide"		"24"
+		"tall"		"24"
+		"visible"		"1"
+		"enabled"		"1"
+		"scaleImage"		"1"
+		"image"		"replay/thumbnails/hm/hitmarker"
+		"mouseinputenabled"		"0"
+		"alpha"		"0"
 	}
 }

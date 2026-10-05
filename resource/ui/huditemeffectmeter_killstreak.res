@@ -92,6 +92,5 @@
 		"font"		"HM_StreakSmall"
 		"fgcolor"		"HM_Bone"
 		"textinsetx"		"0"
-		"use_proportional_insets"		"1"
 	}
 }

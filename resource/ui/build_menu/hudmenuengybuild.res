@@ -8,9 +8,9 @@
 		"xpos"		"0"
 		"ypos"		"10"
 		"zpos"		"0"
-		"wide"		"450"
-		"tall"		"170"
-		"visible"		"1"
+		"wide"		"0"
+		"tall"		"0"
+		"visible"		"0"
 		"enabled"		"1"
 		"scaleImage"		"1"
 		"icon"		"hud_menu_bg"
@@ -24,8 +24,8 @@
 		"ypos"		"47"
 		"zpos"		"1"
 		"wide"		"436"
-		"tall"		"2"
-		"fillcolor"		"212 213 213 255"
+		"tall"		"1"
+		"fillcolor"		"46 214 140 200"
 	}
 	"BuildIcon"
 	{
@@ -290,5 +290,20 @@
 		"wide"		"100"
 		"tall"		"124"
 		"visible"		"0"
+	}
+	"HM_MainBackground"
+	{
+		"ControlName"		"ImagePanel"
+		"fieldName"		"HM_MainBackground"
+		"xpos"		"0"
+		"ypos"		"10"
+		"zpos"		"0"
+		"wide"		"450"
+		"tall"		"170"
+		"visible"		"1"
+		"enabled"		"1"
+		"scaleImage"		"1"
+		"image"		"replay/thumbnails/hm/menu_bg"
+		"mouseinputenabled"		"0"
 	}
 }
