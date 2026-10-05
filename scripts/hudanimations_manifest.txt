@@ -1,0 +1,7 @@
+// Hueco Mundo HUD - made by Ingalther Ulquiorra. Licence: CC BY-NC-SA 4.0 (credit required, no selling).
+hudanimations_manifest
+{
+	"file"		"scripts/hudanimations.txt"
+	"file"		"scripts/hudanimations_hm.txt"
+	"file"		"scripts/hudanimations_tf.txt"
+}

@@ -1,0 +1,2 @@
+# cmd.exe misreads batch files with LF line endings, so check them out with CRLF everywhere
+*.bat text eol=crlf

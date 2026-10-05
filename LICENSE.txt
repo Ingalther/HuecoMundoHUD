@@ -1,0 +1,14 @@
+Hueco Mundo HUD
+Copyright (c) 2026 Ingalther Ulquiorra
+
+This HUD is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0
+International licence (CC BY-NC-SA 4.0): https://creativecommons.org/licenses/by-nc-sa/4.0/
+
+You may use, share and modify it, as long as you:
+  - BY: keep the credit "Hueco Mundo HUD by Ingalther Ulquiorra" (in-game credit, this file and the
+        README included) and link back to the original release;
+  - NC: do not sell it or put it behind a paywall;
+  - SA: release any modified version under this same licence.
+
+Team Fortress 2 and its artwork (class portraits, icons, fonts shipped with the game) belong to Valve.
+Bleach and its characters belong to Tite Kubo / Shueisha. This is a non-commercial fan work.

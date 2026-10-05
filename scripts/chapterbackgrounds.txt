@@ -1,0 +1,15 @@
+// Hueco Mundo HUD - made by Ingalther Ulquiorra. Licence: CC BY-NC-SA 4.0 (credit required, no selling).
+"chapters"
+{
+	1	"background_huecomundo"
+	2	"background_huecomundo"
+	3	"background_huecomundo"
+	4	"background_huecomundo"
+}
+"BackgroundMaps"
+{
+	1	"background_huecomundo"
+	2	"background_huecomundo"
+	3	"background_huecomundo"
+	4	"background_huecomundo"
+}

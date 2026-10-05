@@ -1,0 +1,9 @@
+"UnlitGeneric"
+{
+	"$basetexture"	"vgui/replay/thumbnails/hm/panel_blue_opaque"
+	"$translucent"	"1"
+	"$vertexcolor"	"1"
+	"$vertexalpha"	"1"
+	"$no_fullbright"	"1"
+	"$ignorez"	"1"
+}
