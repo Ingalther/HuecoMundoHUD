@@ -21,11 +21,11 @@
 		"fieldName"		"TopBar"
 		"xpos"		"0"
 		"ypos"		"0"
-		"tall"		"84"
+		"tall"		"0"
 		"wide"		"f0"
 		"autoResize"		"0"
 		"pinCorner"		"0"
-		"visible"		"1"
+		"visible"		"0"
 		"enabled"		"1"
 		"tabPosition"		"0"
 	}
@@ -34,25 +34,26 @@
 		"ControlName"		"Frame"
 		"fieldName"		"BottomBar"
 		"xpos"		"0"
-		"ypos"		"r70"
-		"tall"		"70"
+		"ypos"		"9999"
+		"tall"		"0"
 		"autoResize"		"0"
 		"pinCorner"		"0"
-		"visible"		"1"
+		"visible"		"0"
 		"enabled"		"0"
 		"tabPosition"		"0"
+		"wide"		"0"
 	}
 	"bottombarblank"
 	{
 		"ControlName"		"Panel"
 		"fieldName"		"bottombarblank"
 		"xpos"		"0"
-		"ypos"		"r70"
-		"tall"		"70"
+		"ypos"		"r0"
+		"tall"		"0"
 		"wide"		"f0"
 		"autoResize"		"0"
 		"pinCorner"		"0"
-		"visible"		"1"
+		"visible"		"0"
 		"enabled"		"1"
 		"tabPosition"		"0"
 	}
@@ -60,20 +61,22 @@
 	{
 		"ControlName"		"CExLabel"
 		"fieldName"		"ReinforcementsLabel"
-		"xpos"		"c-300"
-		"ypos"		"50"
-		"ypos_hidef"		"79"
-		"ypos_lodef"		"85"
-		"wide"		"600"
-		"tall"		"18"
-		"tall_hidef"		"23"
+		"xpos"		"c-160"
+		"ypos"		"37"
+		"wide"		"320"
+		"tall"		"29"
 		"autoResize"		"0"
 		"pinCorner"		"0"
 		"visible"		"1"
 		"enabled"		"1"
 		"labelText"		"#game_respawntime_in_secs"
 		"textAlignment"		"center"
-		"font"		"HudFontMediumSmallSecondary"
+		"font"		"HM_NoticeTitle"
+		"zpos"		"2"
+		"fgcolor_override"		"HM_Bone"
+		"paintbackground"		"0"
+		"paintborder"		"1"
+		"border"		"HM_RespawnCard"
 	}
 	"BuyBackLabel"
 	{
@@ -97,8 +100,7 @@
 	{
 		"ControlName"		"CExLabel"
 		"fieldName"		"MapLabel"
-		"font"		"HudFontSmall"
-		"font_hidef"		"HudFontMedium"
+		"font"		"HM_SpecMap"
 		"xpos"		"r260" [$WIN32]
 		"ypos"		"16" [$WIN32]
 		"xpos"		"r285" [$X360]
@@ -146,7 +148,7 @@
 		"enabled"		"1"
 		"labelText"		"#TF_Spectator_ChangeTeam_NoKey"
 		"textAlignment"		"west"
-		"font"		"SpectatorKeyHints"
+		"font"		"HM_SpecHint"
 	}
 	"CycleTargetFwdHintIcon"
 	{
@@ -195,7 +197,7 @@
 		"enabled"		"1"
 		"labelText"		"#TF_Spectator_CycleTargetFwd"
 		"textAlignment"		"west"
-		"font"		"SpectatorKeyHints"
+		"font"		"HM_SpecHint"
 	}
 	"CycleTargetRevLabel"
 	{
@@ -211,7 +213,7 @@
 		"enabled"		"1"
 		"labelText"		"#TF_Spectator_CycleTargetRev"
 		"textAlignment"		"west"
-		"font"		"SpectatorKeyHints"
+		"font"		"HM_SpecHint"
 	}
 	"TipLabel"
 	{
@@ -236,9 +238,7 @@
 		"labelText"		"%tip%"
 		"textAlignment"		"center" [$WIN32]
 		"textAlignment"		"north-west" [$X360]
-		"font"		"SpectatorKeyHints"
-		"font_hidef"		"HudFontSmall"
-		"font_lodef"		"DefaultVerySmall"
+		"font"		"HM_SpecHint"
 		"wrap"		"1"
 	}
 	"itempanel"

@@ -21,12 +21,11 @@
 		"fieldName"		"TopBar"
 		"xpos"		"0"
 		"ypos"		"0"
-		"tall"		"84" [$WIN32]
-		"tall"		"104" [$X360]
+		"tall"		"0"
 		"wide"		"f0"
 		"autoResize"		"0"
 		"pinCorner"		"0"
-		"visible"		"1"
+		"visible"		"0"
 		"enabled"		"1"
 		"tabPosition"		"0"
 	}
@@ -35,29 +34,26 @@
 		"ControlName"		"Frame"
 		"fieldName"		"BottomBar"
 		"xpos"		"0"
-		"ypos"		"r70" [$WIN32]
-		"ypos"		"r90" [$X360]
-		"tall"		"70" [$WIN32]
-		"tall"		"90" [$X360]
+		"ypos"		"9999"
+		"tall"		"0"
 		"autoResize"		"0"
 		"pinCorner"		"0"
-		"visible"		"1"
+		"visible"		"0"
 		"enabled"		"0"
 		"tabPosition"		"0"
+		"wide"		"0"
 	}
 	"bottombarblank"
 	{
 		"ControlName"		"Panel"
 		"fieldName"		"bottombarblank"
 		"xpos"		"0"
-		"ypos"		"r70" [$WIN32]
-		"ypos"		"r90" [$X360]
-		"tall"		"70" [$WIN32]
-		"tall"		"90" [$X360]
+		"ypos"		"r0"
+		"tall"		"0"
 		"wide"		"f0"
 		"autoResize"		"0"
 		"pinCorner"		"0"
-		"visible"		"1"
+		"visible"		"0"
 		"enabled"		"1"
 		"tabPosition"		"0"
 	}
@@ -65,10 +61,10 @@
 	{
 		"ControlName"		"CExLabel"
 		"fieldName"		"ReinforcementsLabel"
-		"xpos"		"c-140"
-		"ypos"		"41"
-		"wide"		"280"
-		"tall"		"22"
+		"xpos"		"c-160"
+		"ypos"		"37"
+		"wide"		"320"
+		"tall"		"29"
 		"autoResize"		"0"
 		"pinCorner"		"0"
 		"visible"		"1"
@@ -77,7 +73,10 @@
 		"textAlignment"		"center"
 		"font"		"HM_NoticeTitle"
 		"zpos"		"2"
-		"fgcolor"		"HM_Bone"
+		"fgcolor_override"		"HM_Bone"
+		"paintbackground"		"0"
+		"paintborder"		"1"
+		"border"		"HM_RespawnCard"
 	}
 	"BuyBackLabel"
 	{
@@ -101,8 +100,7 @@
 	{
 		"ControlName"		"CExLabel"
 		"fieldName"		"MapLabel"
-		"font"		"HudFontSmall"
-		"font_hidef"		"HudFontMedium"
+		"font"		"HM_SpecMap"
 		"xpos"		"r260" [$WIN32]
 		"ypos"		"16" [$WIN32]
 		"xpos"		"r285" [$X360]
@@ -142,9 +140,7 @@
 		"labelText"		"#TF_Spectator_ChangeTeam"
 		"textAlignment"		"center"
 		"textAlignment_lodef"		"north-west"
-		"font"		"SpectatorKeyHints"
-		"font_hidef"		"HudFontSmallest"
-		"font_lodef"		"HudFontSmall"
+		"font"		"HM_SpecHint"
 		"wrap_lodef"		"1"
 	}
 	"SwitchCamModeKeyLabel"
@@ -165,7 +161,7 @@
 		"enabled"		"1"
 		"labelText"		"#TF_Spectator_ChangeTeam"
 		"textAlignment"		"east"
-		"font"		"SpectatorKeyHints"
+		"font"		"HM_SpecHint"
 	}
 	"SwitchCamModeLabel"
 	{
@@ -185,7 +181,7 @@
 		"enabled"		"1"
 		"labelText"		"#TF_Spectator_SwitchCamMode"
 		"textAlignment"		"west"
-		"font"		"SpectatorKeyHints"
+		"font"		"HM_SpecHint"
 	}
 	"CycleTargetFwdKeyLabel"
 	{
@@ -205,7 +201,7 @@
 		"enabled"		"1"
 		"labelText"		"#TF_Spectator_ClassOrTeamKey"
 		"textAlignment"		"east"
-		"font"		"SpectatorKeyHints"
+		"font"		"HM_SpecHint"
 	}
 	"CycleTargetFwdLabel"
 	{
@@ -225,7 +221,7 @@
 		"enabled"		"1"
 		"labelText"		"#TF_Spectator_CycleTargetFwd"
 		"textAlignment"		"west"
-		"font"		"SpectatorKeyHints"
+		"font"		"HM_SpecHint"
 	}
 	"CycleTargetRevKeyLabel"
 	{
@@ -245,7 +241,7 @@
 		"enabled"		"1"
 		"labelText"		"#TF_Spectator_ClassOrTeamKey"
 		"textAlignment"		"east"
-		"font"		"SpectatorKeyHints"
+		"font"		"HM_SpecHint"
 	}
 	"CycleTargetRevLabel"
 	{
@@ -265,7 +261,7 @@
 		"enabled"		"1"
 		"labelText"		"#TF_Spectator_CycleTargetRev"
 		"textAlignment"		"west"
-		"font"		"SpectatorKeyHints"
+		"font"		"HM_SpecHint"
 	}
 	"TipLabel"
 	{
@@ -290,9 +286,7 @@
 		"labelText"		"%tip%"
 		"textAlignment"		"center" [$WIN32]
 		"textAlignment"		"north-west" [$X360]
-		"font"		"SpectatorKeyHints"
-		"font_hidef"		"HudFontSmall"
-		"font_lodef"		"DefaultVerySmall"
+		"font"		"HM_SpecHint"
 		"wrap"		"1"
 	}
 	"itempanel"
@@ -357,20 +351,5 @@
 		"pinCorner"		"0"
 		"visible"		"1"
 		"enabled"		"1"
-	}
-	"HM_RespawnCard"
-	{
-		"ControlName"		"ImagePanel"
-		"fieldName"		"HM_RespawnCard"
-		"xpos"		"c-160"
-		"ypos"		"37"
-		"zpos"		"1"
-		"wide"		"320"
-		"tall"		"29"
-		"visible"		"1"
-		"enabled"		"1"
-		"scaleImage"		"1"
-		"image"		"replay/thumbnails/hm/respawn_card"
-		"mouseinputenabled"		"0"
 	}
 }

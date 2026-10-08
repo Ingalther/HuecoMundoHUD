@@ -3148,6 +3148,34 @@
 				"dropshadow"		"0"
 			}
 		}
+		"HM_SpecHint"
+		{
+			"1"
+			{
+				"name"		"Bahnschrift SemiCondensed"
+				"tall"		"10"
+				"weight"		"500"
+				"additive"		"0"
+				"antialias"		"1"
+				"italic"		"0"
+				"outline"		"1"
+				"dropshadow"		"0"
+			}
+		}
+		"HM_SpecMap"
+		{
+			"1"
+			{
+				"name"		"Bahnschrift SemiBold Condensed"
+				"tall"		"14"
+				"weight"		"600"
+				"additive"		"0"
+				"antialias"		"1"
+				"italic"		"0"
+				"outline"		"1"
+				"dropshadow"		"0"
+			}
+		}
 		"HM_SpecHealth"
 		{
 			"1"
@@ -5917,6 +5945,16 @@
 			"bordertype"		"scalable_image"
 			"backgroundtype"		"2"
 			"image"		"replay/thumbnails/hm/layout_corners_h"
+			"src_corner_height"		"0"
+			"src_corner_width"		"0"
+			"draw_corner_width"		"0"
+			"draw_corner_height"		"0"
+		}
+		"HM_RespawnCard"
+		{
+			"bordertype"		"scalable_image"
+			"backgroundtype"		"2"
+			"image"		"replay/thumbnails/hm/respawn_card"
 			"src_corner_height"		"0"
 			"src_corner_width"		"0"
 			"draw_corner_width"		"0"

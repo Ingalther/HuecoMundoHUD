@@ -223,31 +223,33 @@
 		"ControlName"		"Panel"
 		"fieldName"		"TopBar"
 		"visible"		"0"
-		"tall"		"33"
+		"tall"		"0"
 	}
 	"BottomBar"
 	{
 		"ControlName"		"Frame"
 		"fieldName"		"BottomBar"
 		"visible"		"0"
-		"ypos"		"100"
+		"ypos"		"9999"
 		"tall"		"0"
+		"wide"		"0"
 	}
 	"bottombarblank"
 	{
 		"ControlName"		"Panel"
 		"fieldName"		"bottombarblank"
 		"visible"		"0"
-		"ypos"		"480"
+		"ypos"		"r0"
+		"tall"		"0"
 	}
 	"ReinforcementsLabel"
 	{
 		"ControlName"		"CExLabel"
 		"fieldName"		"ReinforcementsLabel"
-		"xpos"		"c-140"
-		"ypos"		"41"
-		"wide"		"280"
-		"tall"		"22"
+		"xpos"		"c-160"
+		"ypos"		"37"
+		"wide"		"320"
+		"tall"		"29"
 		"autoResize"		"0"
 		"pinCorner"		"0"
 		"visible"		"1"
@@ -263,7 +265,10 @@
 			"textAlignment"		"center"
 		}
 		"zpos"		"2"
-		"fgcolor"		"HM_Bone"
+		"fgcolor_override"		"HM_Bone"
+		"paintbackground"		"0"
+		"paintborder"		"1"
+		"border"		"HM_RespawnCard"
 	}
 	"BuyBackLabel"
 	{
@@ -292,54 +297,63 @@
 		"ControlName"		"CExLabel"
 		"fieldName"		"MapLabel"
 		"visible"		"0"
+		"font"		"HM_SpecMap"
 	}
 	"ClassOrTeamLabel"
 	{
 		"ControlName"		"CExLabel"
 		"fieldName"		"ClassOrTeamLabel"
 		"visible"		"0"
+		"font"		"HM_SpecHint"
 	}
 	"SwitchCamModeKeyLabel"
 	{
 		"ControlName"		"CExLabel"
 		"fieldName"		"SwitchCamModeKeyLabel"
 		"visible"		"0"
+		"font"		"HM_SpecHint"
 	}
 	"SwitchCamModeLabel"
 	{
 		"ControlName"		"CExLabel"
 		"fieldName"		"SwitchCamModeLabel"
 		"visible"		"0"
+		"font"		"HM_SpecHint"
 	}
 	"CycleTargetFwdKeyLabel"
 	{
 		"ControlName"		"CExLabel"
 		"fieldName"		"CycleTargetFwdKeyLabel"
 		"visible"		"0"
+		"font"		"HM_SpecHint"
 	}
 	"CycleTargetFwdLabel"
 	{
 		"ControlName"		"CExLabel"
 		"fieldName"		"CycleTargetFwdLabel"
 		"visible"		"0"
+		"font"		"HM_SpecHint"
 	}
 	"CycleTargetRevKeyLabel"
 	{
 		"ControlName"		"CExLabel"
 		"fieldName"		"CycleTargetRevKeyLabel"
 		"visible"		"0"
+		"font"		"HM_SpecHint"
 	}
 	"CycleTargetRevLabel"
 	{
 		"ControlName"		"CExLabel"
 		"fieldName"		"CycleTargetRevLabel"
 		"visible"		"0"
+		"font"		"HM_SpecHint"
 	}
 	"TipLabel"
 	{
 		"ControlName"		"CExLabel"
 		"fieldName"		"TipLabel"
 		"visible"		"0"
+		"font"		"HM_SpecHint"
 	}
 	"itempanel"
 	{
@@ -422,20 +436,5 @@
 		"pinCorner"		"0"
 		"visible"		"1"
 		"enabled"		"1"
-	}
-	"HM_RespawnCard"
-	{
-		"ControlName"		"ImagePanel"
-		"fieldName"		"HM_RespawnCard"
-		"xpos"		"c-160"
-		"ypos"		"37"
-		"zpos"		"1"
-		"wide"		"320"
-		"tall"		"29"
-		"visible"		"1"
-		"enabled"		"1"
-		"scaleImage"		"1"
-		"image"		"replay/thumbnails/hm/respawn_card"
-		"mouseinputenabled"		"0"
 	}
 }

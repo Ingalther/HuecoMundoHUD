@@ -66,7 +66,9 @@ WHAT CHANGES
 - Kill feed: stacked sharp manga strips with bold outlined italic lettering: ink strips, your own kills on
   bone-jade paper with emerald info text (the game draws the rows as plain boxes, so they take colours, not art).
 - Hitmarker: an emerald X flashes on the crosshair every time you hurt an enemy.
-- Respawn timer ("Respawn in X seconds"): on a torn manga card.
+- Respawn timer ("Respawn in X seconds"): on a torn manga card (hidden when there is no timer).
+- Spectator / death screen: no black bars at the top and bottom; the key hints, map name and tip
+  have outlined lettering so they read over the map.
 - Engineer build / destroy menus and the spy disguise menu: torn manga sheets; the slots are emerald (ready),
   grey (built / unavailable) or crimson (not enough metal), the number keys on emerald chips. The
   "disguised as" box is a torn manga card.

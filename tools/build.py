@@ -149,6 +149,9 @@ HM_FONTS = {
     'HM_NoticeTitle': font_block('Bahnschrift SemiBold Condensed', 17, 600),
     'HM_NoticeBody': font_block('Bahnschrift SemiCondensed', 11, 400),
     'HM_SpecHealth': font_block('Bahnschrift SemiBold Condensed', 10, 600, outline=1),
+    # spectator key hints / tip / map name: outlined, they float over the map now that the black bars are gone
+    'HM_SpecHint': font_block('Bahnschrift SemiCondensed', 10, 500, outline=1),
+    'HM_SpecMap': font_block('Bahnschrift SemiBold Condensed', 14, 600, outline=1),
 }
 
 
@@ -170,6 +173,7 @@ HM_BORDERS = {
     'HM_TornTag': scalable_border('meter_bg', 0, 0),
     'HM_TopBand': scalable_border('top_band', 0, 0),
     'HM_StreakCard': scalable_border('streak_card', 40, 4, draw_h=3),  # only as tall as its text; text starts 5 in
+    'HM_RespawnCard': scalable_border('respawn_card', 0, 0),  # the respawn label's own border (patch_spectator)
 }
 HM_BORDERS['HM_Card_none'] = scalable_border('blank', 0, 0)
 for _c in screens.CARD_BORDERS:  # whole-image borders: zero corners stretch the art over the button
@@ -1266,16 +1270,41 @@ event HM_HitmarkerFlash
 '''
 
 # ------------------------------------------------------------------ respawn card, menus, objectives
-def patch_respawn(root):
-    """The "Respawn in X seconds" text on a torn manga card."""
+SPEC_HINTS = ('ClassOrTeamLabel', 'SwitchCamModeKeyLabel', 'SwitchCamModeLabel', 'CycleTargetFwdKeyLabel',
+              'CycleTargetFwdLabel', 'CycleTargetRevKeyLabel', 'CycleTargetRevLabel', 'TipLabel')
+
+
+def patch_spectator(root):
+    """Spectator / death screen (spectator.res, spectatortournament.res).
+    - The black letterbox bars are gone. The game shows them again in code on every scheme load and only sizes them
+      from the file (the top bar keeps its tall, the bottom one runs from its ypos to the screen bottom), so they
+      are shrunk to nothing instead of hidden.
+    - The key hints, map name and tip that sat on the bars get outlined lettering so they read over the map.
+    - "Respawn in X seconds" sits on a torn manga card that is the label's own border: the game hides the label
+      whenever there is no respawn timer (spectator team, freezecam), and the card goes with it."""
     body = next(e[1] for e in root if isinstance(e[1], list))
+    for name, vals in (('topbar', dict(tall=0, visible=0)),
+                       ('BottomBar', dict(ypos=9999, wide=0, tall=0, visible=0)),
+                       ('bottombarblank', dict(ypos='r0', tall=0, visible=0))):
+        blk = kv.find(body, name)
+        if blk is not None:
+            kv.setmany(blk, **vals)
+    for name in SPEC_HINTS:
+        blk = kv.find(body, name)
+        if blk is not None:
+            kv.set(blk, 'font', 'HM_SpecHint')
+    blk = kv.find(body, 'MapLabel')
+    if blk is not None:
+        kv.set(blk, 'font', 'HM_SpecMap')
+    kv.remove(body, 'HM_RespawnCard')  # older builds drew the card as a separate (always visible) image
     lbl = kv.find(body, 'ReinforcementsLabel')
     if lbl is None:
         return
-    kv.setmany(lbl, xpos='c-140', ypos=41, wide=280, tall=22, zpos=2, font='HM_NoticeTitle', fgcolor='HM_Bone',
-               textAlignment='center')
-    # the card ends above the game's "Press [ , ] to Change Class" line (ypos 68)
-    kv.add_block(body, 'HM_RespawnCard', img_panel('HM_RespawnCard', 'c-160', 37, 320, 29, 'respawn_card', z=1))
+    # the game creates this one as a plain vgui Label: fgcolor_override, not fgcolor. The card ends above the
+    # game's "Press [ , ] to Change Class" line (ypos 68)
+    kv.remove(lbl, 'fgcolor')
+    kv.setmany(lbl, xpos='c-160', ypos=37, wide=320, tall=29, zpos=2, font='HM_NoticeTitle', fgcolor_override='HM_Bone',
+               textAlignment='center', paintbackground=0, paintborder=1, border='HM_RespawnCard')
 
 
 MENU_DIRS = ('resource/ui/build_menu/', 'resource/ui/destroy_menu/', 'resource/ui/disguise_menu/')
@@ -1391,8 +1420,9 @@ def main():
         'resource/ui/hudtournament.res': patch_tournament,
         'resource/ui/targetid.res': patch_targetid,
         'resource/ui/mapinfomenu.res': screens.mapinfo,
-        'resource/ui/spectator.res': patch_respawn,
-        'resource/ui/spectatortournament.res': patch_respawn,
+        'resource/ui/spectator.res': patch_spectator,
+        'resource/ui/spectatortournament.res': patch_spectator,
+        'resource/ui/spectator_sc.res': patch_spectator,  # Steam Controller variant
         'resource/ui/disguisestatuspanel.res': patch_disguise_status,
         'resource/ui/objectivestatusescort.res': patch_escort,
         'resource/ui/controlpointprogressbar.res': patch_cp_progress,
