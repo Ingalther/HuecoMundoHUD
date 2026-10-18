@@ -608,6 +608,15 @@ def patch_meter(root):
         lift(blk)
 
 
+def patch_rocketpack(root):
+    """Thermal Thruster: stock layout beside the ammo blade. Its file #bases the generic meter, so it would inherit
+    the generic card's corner position (the sticky slot) and bar tint: lift it above the blade there, no tint."""
+    body = next(e[1] for e in root if isinstance(e[1], list))
+    top = kv.find(body, 'HudItemEffectMeter')
+    minmode(top, kv.get(top, 'xpos'), 'r%d' % (int(kv.get(top, 'ypos')[1:]) + METER_LIFT[True]))
+    kv.add_block(body, 'HM_BarTint', {'visible': 0, 'wide': 0, 'tall': 0})
+
+
 # Item meters as manga cards in the sticky slot: same torn tag as the sticky counter, a manga logo of the item on its
 # (The game shares huditemeffectmeter.res between many items: cloak, Dead Ringer, Jarate, sandvich, banner... The
 # per-item files only get an item logo where the in-game test confirmed which item uses them.)
@@ -623,6 +632,7 @@ METER_CARDS = {  # file: (manga logo, slot)
     'huditemeffectmeter_organs.res': ('heart', -1),     # Vita-Saw organs (the uber meter owns slot 0)
     'huditemeffectmeter_particlecannon.res': ('plasma', 0),  # Cow Mangler (raised: right above the sticky slot)
     'huditemeffectmeter_pomson.res': ('bolt', 1),       # Pomson 6000 (metal owns slot 0)
+    'huditemeffectmeter_pyro.res': ('flame', 0),        # Phlogistinator Mmmph (raised: the Gas Passer in slot 0)
     'huditemeffectmeter_raygun.res': ('beam', 1),       # Righteous Bison
     'huditemeffectmeter_sapper.res': ('sapper', 1),     # sapper recharge
     'huditemeffectmeter_scout.res': ('drink', 0),       # Bonk / Crit-a-Cola / Mad Milk (raised: Sandman in slot 0)
@@ -640,11 +650,12 @@ CARD_STEP = 76
 # enough to show the game's own label next to the count, "KILLS" for the Air Strike, "HEADS" for the Eyelander.
 # The generic meter file (banner rage, cloak, Jarate, Razorback, Sandman, lunchbox...) owns the sticky slot, so the
 # per-item files that a class can show next to it go one row up: Scout's drinks next to the Sandman, Sniper's Bazaar
-# Bargain next to Jarate, Spy's Diamondback next to the cloak, Heavy's MvM rage next to the sandvich. No class can
-# show two of the raised cards at once (checked against the game's per-class meter list).
+# Bargain next to Jarate, Spy's Diamondback next to the cloak, Heavy's MvM rage next to the sandvich, Pyro's
+# Phlogistinator next to the Gas Passer. No class can show two of the raised cards at once (checked against the
+# game's per-class meter list). The row sits right under the target IDs, which move up to clear it (target_id_ys).
 METER_RAISED = {'huditemeffectmeter_particlecannon.res', 'huditemeffectmeter_demoman.res',
                 'huditemeffectmeter_scout.res', 'huditemeffectmeter_sniper.res', 'huditemeffectmeter_spy.res',
-                'huditemeffectmeter_heavy.res'}
+                'huditemeffectmeter_heavy.res', 'huditemeffectmeter_pyro.res'}
 # card width (others: 58): count cards wide enough for the game's own word next to the count
 # (Air Strike KILLS / Eyelander HEADS, Bazaar Bargain HEADS, Diamondback CRITS)
 METER_WIDE = {'huditemeffectmeter_demoman.res': 80, 'huditemeffectmeter_sniper.res': 80,
@@ -660,6 +671,16 @@ def meter_card_name(filename):
 def meter_card_pos(slot, alt=False):
     x, y = pipes_pos(alt)
     return 'c%d' % (-PIPES_W // 2 + slot * CARD_STEP), y
+
+
+TID_H, TID_GAP = 35, 6  # target ID strip height (stock), gap under each strip
+
+
+def target_id_ys(alt=False):
+    """Main and secondary target ID tops (stock 285 / 335). The secondary strip ("Healer: ..." / "Healing: ...")
+    covered the raised card row (its art starts 4 under the meter's top), so both strips go up until it clears."""
+    healer = min(335, pipes_pos(alt)[1] - CARD_ROW + 4 - TID_GAP - TID_H)
+    return min(285, healer - TID_GAP - TID_H), healer
 
 
 # Item meter bars and the Vaccinator segments are painted white (grey when not full) by the game's code every frame,
@@ -695,9 +716,12 @@ def patch_meter_card(root, rel):
             kv.setmany(top, **box(x, y - rise, PIPES_W + grow, PIPES_H))
     for key in list(e[0] for e in top if e[0].lower().startswith('x_offset')):
         kv.remove(top, key)
-    kv.setmany(kv.find(body, 'ItemEffectMeterBG'), xpos=10, ypos=4, zpos=0, wide=cw, tall=26, image=T + name,
+    bg = kv.find(body, 'ItemEffectMeterBG')
+    if bg is None:  # a #base file (Pyro) only overrides the generic card underneath: its own logo, the rest inherited
+        bg = kv.add_block(body, 'ItemEffectMeterBG', {})
+    kv.setmany(bg, xpos=10, ypos=4, zpos=0, wide=cw, tall=26, image=T + name,
                teambg_1=T + name, teambg_2=T + name, teambg_3=T + name)
-    kv.remove(kv.find(body, 'ItemEffectMeterBG'), 'visible_minmode')
+    kv.remove(bg, 'visible_minmode')
     # the logo says what the meter is, so the game's text labels go; the bar (or count) fills the card's right half.
     # Wide cards keep the first label, small, right of the count (the game writes the item's word into it)
     for n in ('ItemEffectMeterLabel', 'ItemEffectMeterLabel2'):
@@ -1136,6 +1160,10 @@ def patch_hudlayout(root):
     pipes = kv.find(body, 'HudDemomanPipes')
     kv.setmany(pipes, **box(*pipes_pos(), PIPES_W, PIPES_H))
     minmode(pipes, *pipes_pos(True))
+    for n, y, y_alt in zip(('CMainTargetID', 'CSecondaryTargetID'), target_id_ys(), target_id_ys(True)):
+        blk = kv.find(body, n)
+        kv.set(blk, 'ypos', y)
+        minmode(blk, None, y_alt)
     kv.setmany(kv.find(body, 'HudVoiceSelfStatus'), ypos=min(weapon_pos(alt)[1] for alt in LAYOUTS) - 38)
     for n, y in (('HudTeamGoal', 65), ('HudTeamSwitch', 75), ('HudAlert', 130)):
         kv.setmany(kv.find(body, n), xpos='c-%d' % (NOTICE_W // 2), ypos=y, wide=NOTICE_W, tall=NOTICE_H + 8)
@@ -1453,6 +1481,7 @@ def main():
         'resource/ui/disguisestatuspanel.res': patch_disguise_status,
         'resource/ui/objectivestatusescort.res': patch_escort,
         'resource/ui/controlpointprogressbar.res': patch_cp_progress,
+        'resource/ui/hudrocketpack.res': patch_rocketpack,
     }
     medic = os.path.join(work, 'resource', 'ui', 'hudmediccharge.res')
     if not os.path.exists(medic):

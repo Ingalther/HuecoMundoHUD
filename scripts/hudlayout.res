@@ -222,7 +222,7 @@
 		"visible"		"0"
 		"enabled"		"1"
 		"xpos"		"c-126"
-		"ypos"		"285"
+		"ypos"		"272"
 		"wide"		"252"
 		"tall"		"35"
 		"priority"		"40"
@@ -232,6 +232,7 @@
 			"ypos"		"370"
 			"x_offset"		"20"
 		}
+		"ypos_minmode"		"285"
 	}
 	"CSpectatorTargetID"
 	{
@@ -253,7 +254,7 @@
 		"visible"		"0"
 		"enabled"		"1"
 		"xpos"		"c-126"
-		"ypos"		"335"
+		"ypos"		"313"
 		"wide"		"252"
 		"tall"		"35"
 		"priority"		"35"
@@ -262,6 +263,7 @@
 			"ypos"		"330"
 			"x_offset"		"20"
 		}
+		"ypos_minmode"		"335"
 	}
 	"BuildingStatus_Spy"
 	{

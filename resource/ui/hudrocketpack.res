@@ -11,6 +11,8 @@
 		"ypos"		"r105" [$WIN32]
 		"wide"		"94"
 		"tall"		"45"
+		"xpos_minmode"		"r95"
+		"ypos_minmode"		"r201"
 	}
 	"ItemEffectMeterBG"
 	{
@@ -102,5 +104,11 @@
 		"dulltext"		"0"
 		"brighttext"		"0"
 		"fgcolor"		"White"
+	}
+	"HM_BarTint"
+	{
+		"visible"		"0"
+		"wide"		"0"
+		"tall"		"0"
 	}
 }

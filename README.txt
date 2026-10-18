@@ -36,16 +36,16 @@ WHAT CHANGES
     * Engineer buildings: torn manga cards (sentry 砲, dispenser 補, teleporters 入 / 出).
     * Center-screen notices ("You are now Attacking!", autobalance warning, team switch): torn
       manga cards with a kanji seal (任務 / 警告 / 移籍).
-    * Item meters (cloak / Dead Ringer, Heatmaker focus, Jarate, Pomson, Cow Mangler, Soda Popper,
+    * Item meters (cloak / Dead Ringer, Heatmaker focus, Jarate, Pomson, Cow Mangler, Phlogistinator, Soda Popper,
       banner rage, Eyelander heads...) are manga cards at the bottom center, in the same spot as the
       sticky counter: each with its own manga logo (cleaver, shotgun shells, heart, plasma orb, lightning
-      bolt, energy rings, sapper, scope, soda can, ice knife, revolver, energy drink, minigun, a skull for heads /
+      bolt, energy rings, sapper, scope, soda can, ice knife, revolver, energy drink, minigun, flame, a skull for heads /
       kills, a demon mask for the shared generic meter...) and an emerald bar
       (the game paints these bars white, so an emerald sheet lies over them: pale jade on deep emerald). Meters that can show at the same
       time sit side by side, or one row up: the Cow Mangler, the Air Strike / Eyelander and Bazaar Bargain cards (a
-      skull, the count and the game's own word next to it, KILLS or HEADS), the Diamondback (CRITS), Bonk / Mad Milk
-      and the MvM rage bar sit right above the sticky slot, so the card in it (banner rage, cloak, Jarate, Sandman,
-      sandvich, the sticky counter...) never covers them. ÜberCharge is a card there too: a bold medic cross, the charge % over an emerald
+      skull, the count and the game's own word next to it, KILLS or HEADS), the Diamondback (CRITS), Bonk / Mad Milk,
+      the Phlogistinator and the MvM rage bar sit right above the sticky slot, so the card in it (banner rage, cloak, Jarate, Sandman,
+      sandvich, Gas Passer, the sticky counter...) never covers them. ÜberCharge is a card there too: a bold medic cross, the charge % over an emerald
       bar that breathes when it is ready (Vaccinator: four segments and the full-charge count, its resist
       icon over the cross).
     * Demoman: a small torn tag at the bottom center, level with the health band and the ammo blade:
@@ -63,7 +63,8 @@ WHAT CHANGES
 - Casual / competitive team strip at the top: a torn blue | red band, each player portrait in a torn bone rim,
   emerald / bone / crimson health bars.
 - Death screen ("You were killed by"): a torn manga card in the killer's team tone with a faint 死.
-- Target ID (what you look at, who is healing you): a see-through torn manga card in the target's team tone.
+- Target ID (what you look at, who is healing you): a see-through torn manga card in the target's team tone,
+  a little higher than stock so the cards above the sticky slot never cover the healer's name.
 - Match start countdown: the digits on a square torn manga card with speed lines.
 - End-of-round win panel: a torn manga page with speed lines and a 勝 stamp, screentone team banners behind
   the scores, emerald brush rules.

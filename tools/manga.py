@@ -1037,6 +1037,38 @@ def logo_icicle():      # Spy-cicle
         highlights=[(0.46, 0.26, 0.015, 0.1)])
 
 
+def _curve(pts, tips=(), n=10):
+    """Closed Catmull-Rom curve through pts; the points listed in tips stay sharp (flame tongues)."""
+    out = []
+    for i in range(len(pts)):
+        p0, p1, p2, p3 = (pts[(i + k) % len(pts)] for k in (-1, 0, 1, 2))
+        if p1 in tips:
+            p0 = p1
+        if p2 in tips:
+            p3 = p2
+        for t in np.linspace(0, 1, n, endpoint=False):
+            out.append(tuple(0.5 * (2 * b + (-a + c) * t + (2 * a - 5 * b + 4 * c - d) * t * t
+                                    + (-a + 3 * b - 3 * c + d) * t ** 3) for a, b, c, d in zip(p0, p1, p2, p3)))
+    return out
+
+
+def logo_flame():       # Phlogistinator Mmmph: a three-tongued flame, ember red outside, gold core
+    def flame(pts, tips, s=1.0, cx=0.5, cy=0.95):
+        pts = [(cx + (x - cx) * s, cy + (y - cy) * s) for x, y in pts]
+        tips = [(cx + (x - cx) * s, cy + (y - cy) * s) for x, y in tips]
+        return _poly(_curve(pts, tips))
+
+    main, left, right = (0.54, 0.03), (0.2, 0.3), (0.84, 0.2)
+    outer = [main, (0.64, 0.24), (0.68, 0.36), right, (0.86, 0.5), (0.82, 0.72), (0.66, 0.92), (0.5, 0.96),
+             (0.34, 0.92), (0.18, 0.74), (0.15, 0.52), left, (0.32, 0.44), (0.4, 0.26)]
+    inner = [(0.5, 0.36), (0.6, 0.56), (0.64, 0.74), (0.56, 0.88), (0.44, 0.88), (0.36, 0.74), (0.4, 0.56)]
+    return item_logo([
+        (flame(outer, (main, left, right)), 'flat', (226, 66, 34)),
+        (flame(outer, (main, left, right), s=0.66), 'flat', (250, 146, 40)),
+        (flame(inner, ((0.5, 0.36),), s=0.9), 'flat', (255, 228, 146))],
+        highlights=[(0.36, 0.56, 0.025, 0.06)], outline=0.026)
+
+
 def tag_with_icon(icon, seed=419, size=(512, 160), crisp=False, box=(58, 26)):
     """meter_bg (manga.tag seed 419) with an icon inked into its left end. Same seed and size as meter_bg, so a
     plain meter_bg drawn on top covers it exactly (the sticky mode hides the shield that way)."""
