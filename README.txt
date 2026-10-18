@@ -38,8 +38,9 @@ WHAT CHANGES
       manga cards with a kanji seal (任務 / 警告 / 移籍).
     * Item meters (cloak / Dead Ringer, Heatmaker focus, Jarate, Pomson, Cow Mangler, Soda Popper,
       banner rage, Eyelander heads...) are manga cards at the bottom center, in the same spot as the
-      sticky counter: each with its own inked logo (pocket watch, scope, jar, lightning bolt, plasma
-      orb, soda can, a Hollow mask for the shared generic meter...) and an emerald bar
+      sticky counter: each with its own manga logo (cleaver, shotgun shells, heart, plasma orb, lightning
+      bolt, energy rings, sapper, scope, soda can, ice knife, revolver, energy drink, minigun, a skull for heads /
+      kills, a demon mask for the shared generic meter...) and an emerald bar
       (the game paints these bars white, so an emerald sheet lies over them: pale jade on deep emerald). Meters that can show at the same
       time sit side by side, or one row up: the Cow Mangler, the Air Strike / Eyelander and Bazaar Bargain cards (a
       skull, the count and the game's own word next to it, KILLS or HEADS), the Diamondback (CRITS), Bonk / Mad Milk
