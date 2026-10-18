@@ -861,6 +861,20 @@ def logo_eyelander():   # Eyelander: claymore with the eye in the pommel
         (_ell(0.13, 0.81, 0.21, 0.89), 'color', EM_MID)], highlights=[(0.6, 0.36, 0.05, 0.012)])
 
 
+LOGO_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'logos')
+
+
+def logo(name, size=256, fallback=None):
+    """An item logo: the hand-picked artwork tools/logos/<name>.png (square, transparent) when there is one,
+    else the procedural drawing (fallback, or logo_<name>(), or the Hollow mask)."""
+    p = os.path.join(LOGO_DIR, name + '.png')
+    if os.path.exists(p):
+        return Image.open(p).convert('RGBA').resize((size, size), Image.LANCZOS)
+    if fallback is not None:
+        return fallback()
+    return globals().get('logo_' + name, logo_mask)()
+
+
 def logo_skull():       # Air Strike kills / Eyelander heads (one shared meter file): a bone skull, emerald eyes
     em = (46, 214, 140)
     return item_logo([

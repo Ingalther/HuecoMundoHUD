@@ -619,17 +619,17 @@ METER_CARDS = {  # file: (manga logo, slot)
     'huditemeffectmeter_cleaver.res': ('cleaver', -1),  # Flying Guillotine (next to the scout meter)
     'huditemeffectmeter_demoman.res': ('skull', 0),      # shared: Air Strike kills / Eyelander heads (raised, wide)
     'huditemeffectmeter_engineer.res': ('revenge', 1),  # Frontier Justice revenge crits (metal owns slot 0)
-    'huditemeffectmeter_heavy.res': ('mask', 0),        # item not confirmed in game: Hollow emblem
+    'huditemeffectmeter_heavy.res': ('minigun', 0),     # MvM minigun rage (raised: the lunchbox meter owns slot 0)
     'huditemeffectmeter_organs.res': ('heart', -1),     # Vita-Saw organs (the uber meter owns slot 0)
     'huditemeffectmeter_particlecannon.res': ('plasma', 0),  # Cow Mangler (raised: right above the sticky slot)
     'huditemeffectmeter_pomson.res': ('bolt', 1),       # Pomson 6000 (metal owns slot 0)
     'huditemeffectmeter_raygun.res': ('beam', 1),       # Righteous Bison
     'huditemeffectmeter_sapper.res': ('sapper', 1),     # sapper recharge
-    'huditemeffectmeter_scout.res': ('mask', 0),        # item not confirmed in game: Hollow emblem
-    'huditemeffectmeter_sniper.res': ('mask', 0),       # item not confirmed in game: Hollow emblem
+    'huditemeffectmeter_scout.res': ('drink', 0),       # Bonk / Crit-a-Cola / Mad Milk (raised: Sandman in slot 0)
+    'huditemeffectmeter_sniper.res': ('skull', 0),      # Bazaar Bargain heads (raised: Jarate / Razorback in slot 0)
     'huditemeffectmeter_sniperfocus.res': ('scope', 1),  # Hitman's Heatmaker focus
     'huditemeffectmeter_sodapopper.res': ('soda', 1),   # Soda Popper hype
-    'huditemeffectmeter_spy.res': ('mask', 0),          # item not confirmed in game: Hollow emblem
+    'huditemeffectmeter_spy.res': ('revolver', 0),      # Diamondback crits (raised: the cloak meter owns slot 0)
     'huditemeffectmeter_spyknife.res': ('icicle', -1),  # Spy-cicle
 }
 CARD_STEP = 76
@@ -638,8 +638,17 @@ CARD_STEP = 76
 # The Air Strike and the Eyelander share huditemeffectmeter_demoman.res, so one card serves both: a skull (heads /
 # kills), raised over the sticky slot (Demoman's sticky / shield counter and a Soldier's banner rage sit in it), wide
 # enough to show the game's own label next to the count, "KILLS" for the Air Strike, "HEADS" for the Eyelander.
-METER_RAISED = {'huditemeffectmeter_particlecannon.res', 'huditemeffectmeter_demoman.res'}
-METER_WIDE = {'huditemeffectmeter_demoman.res': 80}  # card width (others: 58)
+# The generic meter file (banner rage, cloak, Jarate, Razorback, Sandman, lunchbox...) owns the sticky slot, so the
+# per-item files that a class can show next to it go one row up: Scout's drinks next to the Sandman, Sniper's Bazaar
+# Bargain next to Jarate, Spy's Diamondback next to the cloak, Heavy's MvM rage next to the sandvich. No class can
+# show two of the raised cards at once (checked against the game's per-class meter list).
+METER_RAISED = {'huditemeffectmeter_particlecannon.res', 'huditemeffectmeter_demoman.res',
+                'huditemeffectmeter_scout.res', 'huditemeffectmeter_sniper.res', 'huditemeffectmeter_spy.res',
+                'huditemeffectmeter_heavy.res'}
+# card width (others: 58): count cards wide enough for the game's own word next to the count
+# (Air Strike KILLS / Eyelander HEADS, Bazaar Bargain HEADS, Diamondback CRITS)
+METER_WIDE = {'huditemeffectmeter_demoman.res': 80, 'huditemeffectmeter_sniper.res': 80,
+              'huditemeffectmeter_spy.res': 80}
 CARD_ROW = 30  # one card (26) plus a gap
 
 

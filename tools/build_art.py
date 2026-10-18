@@ -216,20 +216,21 @@ def hud_cards(out):
     out.thumb('hp_band', manga.hp_band(412))
     out.thumb('ammo_blade', manga.ammo_blade(413))
     out.thumb('tag_streak', manga.tag(414, '殺'))
-    out.thumb('sticky_red', manga.sticky_icon(red))
-    out.thumb('sticky_blue', manga.sticky_icon(blue))
-    out.thumb('tag_shield_red', manga.tag_with_icon(manga.targe_icon(red)))
-    out.thumb('tag_shield_blue', manga.tag_with_icon(manga.targe_icon(blue)))
+    # artwork in tools/logos/*.png replaces the procedural drawings (manga.logo)
+    out.thumb('sticky_red', manga.logo('sticky_red', fallback=lambda: manga.sticky_icon(red)))
+    out.thumb('sticky_blue', manga.logo('sticky_blue', fallback=lambda: manga.sticky_icon(blue)))
+    out.thumb('tag_shield_red', manga.tag_with_icon(manga.logo('shield_red', fallback=lambda: manga.targe_icon(red))))
+    out.thumb('tag_shield_blue', manga.tag_with_icon(manga.logo('shield_blue',
+                                                                fallback=lambda: manga.targe_icon(blue))))
     out.thumb('streak_card', manga.streak_card(), mips=False)  # killstreak splash (nine-slice border)
-    out.thumb('meter_metal', manga.tag_with_icon(manga.logo_metal(), crisp=True))  # Engineer metal card
+    out.thumb('meter_metal', manga.tag_with_icon(manga.logo('metal'), crisp=True))  # Engineer metal card
     # ÜberCharge card: wider than the other tags (80x26, build.UBER_W), so its own size keeps the tag and the cross
-    out.thumb('meter_uber', manga.tag_with_icon(manga.logo_uber(), size=(704, 160), crisp=True, box=(80, 26)))
+    out.thumb('meter_uber', manga.tag_with_icon(manga.logo('uber'), size=(704, 160), crisp=True, box=(80, 26)))
     import build  # item meter cards: the item's manga logo on the sticky tag (build.METER_CARDS)
     for fname, (logo, _) in sorted(build.METER_CARDS.items()):
         cw = build.METER_WIDE.get(fname, 58)  # wide cards get their own aspect, so the tag and logo stay true
-        out.thumb(build.meter_card_name(fname), manga.tag_with_icon(getattr(manga, 'logo_' + logo)(),
-                                                                   size=(round(512 * cw / 58), 160),
-                                                                   crisp=logo in ('mask', 'skull'), box=(cw, 26)))
+        out.thumb(build.meter_card_name(fname), manga.tag_with_icon(manga.logo(logo), size=(round(512 * cw / 58), 160),
+                                                                   crisp=True, box=(cw, 26)))
     out.thumb('hp_track', manga.hp_track(), mips=False)
     out.thumb('hp_fill', manga.hp_fill(), mips=False)
     out.thumb('hp_mask', manga.hp_mask())
