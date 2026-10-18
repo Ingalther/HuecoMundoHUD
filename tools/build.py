@@ -633,7 +633,8 @@ METER_CARDS = {  # file: (manga logo, slot)
     'huditemeffectmeter_particlecannon.res': ('plasma', 0),  # Cow Mangler (raised: right above the sticky slot)
     'huditemeffectmeter_pomson.res': ('bolt', 1),       # Pomson 6000 (metal owns slot 0)
     'huditemeffectmeter_pyro.res': ('flame', 0),        # Phlogistinator Mmmph (raised: the Gas Passer in slot 0)
-    'huditemeffectmeter_raygun.res': ('beam', 1),       # Righteous Bison
+    'huditemeffectmeter_raygun.res': ('beam', 0),       # Righteous Bison (a secondary like the banner: right under
+                                                        # the Cow Mangler / Air Strike card, not off to the side)
     'huditemeffectmeter_sapper.res': ('sapper', 1),     # sapper recharge
     'huditemeffectmeter_scout.res': ('drink', 0),       # Bonk / Crit-a-Cola / Mad Milk (raised: Sandman in slot 0)
     'huditemeffectmeter_sniper.res': ('skull', 0),      # Bazaar Bargain heads (raised: Jarate / Razorback in slot 0)

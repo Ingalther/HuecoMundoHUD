@@ -44,7 +44,7 @@ WHAT CHANGES
       (the game paints these bars white, so an emerald sheet lies over them: pale jade on deep emerald). Meters that can show at the same
       time sit side by side, or one row up: the Cow Mangler, the Air Strike / Eyelander and Bazaar Bargain cards (a
       skull, the count and the game's own word next to it, KILLS or HEADS), the Diamondback (CRITS), Bonk / Mad Milk,
-      the Phlogistinator and the MvM rage bar sit right above the sticky slot, so the card in it (banner rage, cloak, Jarate, Sandman,
+      the Phlogistinator and the MvM rage bar sit right above the sticky slot, so the card in it (banner rage, Righteous Bison, cloak, Jarate, Sandman,
       sandvich, Gas Passer, the sticky counter...) never covers them. ÜberCharge is a card there too: a bold medic cross, the charge % over an emerald
       bar that breathes when it is ready (Vaccinator: four segments and the full-charge count, its resist
       icon over the cross).
