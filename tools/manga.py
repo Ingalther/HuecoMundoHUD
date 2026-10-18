@@ -861,6 +861,23 @@ def logo_eyelander():   # Eyelander: claymore with the eye in the pommel
         (_ell(0.13, 0.81, 0.21, 0.89), 'color', EM_MID)], highlights=[(0.6, 0.36, 0.05, 0.012)])
 
 
+def logo_skull():       # Air Strike kills / Eyelander heads (one shared meter file): a bone skull, emerald eyes
+    em = (46, 214, 140)
+    return item_logo([
+        (_ell(0.16, 0.08, 0.84, 0.66), 'bone', None),
+        (_rect(0.3, 0.5, 0.7, 0.88, r=0.07), 'bone', None),
+        (_ell(0.25, 0.31, 0.47, 0.53), 'ink', None),
+        (_ell(0.53, 0.31, 0.75, 0.53), 'ink', None),
+        (_ell(0.32, 0.38, 0.4, 0.46), 'flat', em),
+        (_ell(0.6, 0.38, 0.68, 0.46), 'flat', em),
+        (_poly([(0.5, 0.53), (0.44, 0.65), (0.56, 0.65)]), 'ink', None),
+        (_rect(0.405, 0.72, 0.425, 0.88), 'ink', None),
+        (_rect(0.49, 0.72, 0.51, 0.88), 'ink', None),
+        (_rect(0.575, 0.72, 0.595, 0.88), 'ink', None),
+        (_poly([(0.62, 0.1), (0.58, 0.2), (0.64, 0.24), (0.6, 0.3), (0.62, 0.3), (0.67, 0.24), (0.61, 0.2),
+                (0.64, 0.1)]), 'ink', None)], highlights=[(0.34, 0.18, 0.045, 0.02)])
+
+
 def logo_revenge():     # Frontier Justice: two shotgun shells
     def shell(dx, dy):
         return [(_rect(0.36 + dx, 0.14 + dy, 0.6 + dx, 0.66 + dy, 0.04), 'color', CRIMSON),

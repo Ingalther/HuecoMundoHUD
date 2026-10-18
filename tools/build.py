@@ -617,7 +617,7 @@ def patch_meter(root):
 METER_CARDS = {  # file: (manga logo, slot)
     'huditemeffectmeter.res': ('mask', 0),              # generic: sandvich, banner rage, gas passer... (Hollow mask)
     'huditemeffectmeter_cleaver.res': ('cleaver', -1),  # Flying Guillotine (next to the scout meter)
-    'huditemeffectmeter_demoman.res': ('eyelander', -1),  # Eyelander heads (the sticky counter owns slot 0)
+    'huditemeffectmeter_demoman.res': ('skull', 0),      # shared: Air Strike kills / Eyelander heads (raised, wide)
     'huditemeffectmeter_engineer.res': ('revenge', 1),  # Frontier Justice revenge crits (metal owns slot 0)
     'huditemeffectmeter_heavy.res': ('mask', 0),        # item not confirmed in game: Hollow emblem
     'huditemeffectmeter_organs.res': ('heart', -1),     # Vita-Saw organs (the uber meter owns slot 0)
@@ -635,7 +635,11 @@ METER_CARDS = {  # file: (manga logo, slot)
 CARD_STEP = 76
 # Cards that sit one row above their slot (fixed, like WeirdcoreHUD: the game cannot tell the HUD which other
 # meter is showing). Cow Mangler: right above the sticky slot, so a banner's rage card below never covers it.
-METER_RAISED = {'huditemeffectmeter_particlecannon.res'}
+# The Air Strike and the Eyelander share huditemeffectmeter_demoman.res, so one card serves both: a skull (heads /
+# kills), raised over the sticky slot (Demoman's sticky / shield counter and a Soldier's banner rage sit in it), wide
+# enough to show the game's own label next to the count, "KILLS" for the Air Strike, "HEADS" for the Eyelander.
+METER_RAISED = {'huditemeffectmeter_particlecannon.res', 'huditemeffectmeter_demoman.res'}
+METER_WIDE = {'huditemeffectmeter_demoman.res': 80}  # card width (others: 58)
 CARD_ROW = 30  # one card (26) plus a gap
 
 
@@ -665,28 +669,41 @@ def tint_bar(body, x, y, w, h):
 
 
 def patch_meter_card(root, rel):
-    _, slot = METER_CARDS[rel.split('/')[-1]]
-    name = meter_card_name(rel.split('/')[-1])
+    fname = rel.split('/')[-1]
+    _, slot = METER_CARDS[fname]
+    name = meter_card_name(fname)
     body = next(e[1] for e in root if isinstance(e[1], list))
     top = kv.find(body, 'HudItemEffectMeter')
-    rise = CARD_ROW if rel.split('/')[-1] in METER_RAISED else 0
-    x, y = meter_card_pos(slot)
-    kv.setmany(top, **box(x, y - rise, PIPES_W, PIPES_H))
-    x, y = meter_card_pos(slot, True)
-    minmode(top, x, y - rise)
+    rise = CARD_ROW if fname in METER_RAISED else 0
+    cw = METER_WIDE.get(fname, 58)
+    grow = cw - 58  # a wider card grows both ways around the slot's centre
+    for alt in (False, True):
+        x, y = meter_card_pos(slot, alt)
+        x = 'c%d' % (int(x[1:]) - grow // 2)
+        if alt:
+            minmode(top, x, y - rise)
+        else:
+            kv.setmany(top, **box(x, y - rise, PIPES_W + grow, PIPES_H))
     for key in list(e[0] for e in top if e[0].lower().startswith('x_offset')):
         kv.remove(top, key)
-    kv.setmany(kv.find(body, 'ItemEffectMeterBG'), xpos=10, ypos=4, zpos=0, wide=58, tall=26, image=T + name,
+    kv.setmany(kv.find(body, 'ItemEffectMeterBG'), xpos=10, ypos=4, zpos=0, wide=cw, tall=26, image=T + name,
                teambg_1=T + name, teambg_2=T + name, teambg_3=T + name)
     kv.remove(kv.find(body, 'ItemEffectMeterBG'), 'visible_minmode')
-    # the logo says what the meter is, so the game's text labels go; the bar (or count) fills the card's right half
+    # the logo says what the meter is, so the game's text labels go; the bar (or count) fills the card's right half.
+    # Wide cards keep the first label, small, right of the count (the game writes the item's word into it)
     for n in ('ItemEffectMeterLabel', 'ItemEffectMeterLabel2'):
         blk = kv.find(body, n)
-        if blk is not None:
+        if blk is None:
+            continue
+        if fname in METER_WIDE and n == 'ItemEffectMeterLabel':
+            kv.setmany(blk, xpos=10 + 52, ypos=12, zpos=2, wide=cw - 54, tall=10, visible=1, font='HM_Small',
+                       textAlignment='west', autoResize=0)
+        else:
             kv.setmany(blk, xpos=0, ypos=0, wide=0, tall=0)
+    kv.remove(body, 'HM_BarTint')
     for n, extra in (('ItemEffectMeter', dict(xpos=38, ypos=13, wide=26, tall=8)),
-                     ('ItemEffectMeterCount', dict(xpos=39, ypos=8, wide=28, tall=18, font='HM_Sticky',
-                                                   fgcolor='HM_Bone'))):
+                     ('ItemEffectMeterCount', dict(xpos=39 if cw == 58 else 10 + 30, ypos=8, wide=28 if cw == 58 else 22,
+                                                   tall=18, font='HM_Sticky', fgcolor='HM_Bone'))):
         blk = kv.find(body, n)
         if blk is not None:
             kv.setmany(blk, zpos=2, **extra)
@@ -694,7 +711,8 @@ def patch_meter_card(root, rel):
                 kv.setmany(blk, textAlignment='west', autoResize=0)
             else:
                 kv.setmany(blk, bgcolor_override=BAR_TRACK)
-                tint_bar(body, 38, 13, 26, 8)
+                if kv.get(blk, 'visible') != '0':  # count-only meters keep their (hidden) bar: no sheet over the count
+                    tint_bar(body, 38, 13, 26, 8)
     for i in range(1, 4):  # heavy kill-combo class icons
         blk = kv.find(body, 'KillComboClassIcon%d' % i)
         if blk is not None:
@@ -1497,12 +1515,8 @@ def main():
 
     if install:
         dst = os.path.join(vpk.TF, 'custom', HUD_NAME)
-        if IN_CUSTOM:
-            # already in tf/custom: the build above was the install. An older copy installed next to it as
-            # custom/huecomundo-hud would load as a second HUD, so it goes.
-            if os.path.normcase(os.path.abspath(dst)) != os.path.normcase(OUT) and is_our_install(dst):
-                shutil.rmtree(dst)
-                print('removed the older separate install ->', dst)
+        remove_other_copies(OUT if IN_CUSTOM else dst)
+        if IN_CUSTOM:  # already in tf/custom: the build above was the install
             dst = OUT
         else:
             if os.path.isdir(dst):
@@ -1521,6 +1535,28 @@ def main():
 def is_our_install(path):
     vdf = os.path.join(path, 'info.vdf')
     return os.path.isfile(vdf) and HUD_NAME in open(vdf, encoding='utf-8', errors='replace').read()
+
+
+def remove_other_copies(keep):
+    """Two copies of the HUD in tf/custom load together and mix their files (counters drawn from one copy's
+    layout with the other's panels go missing or land off screen). Plain installed copies (an older
+    custom/huecomundo-hud, an extra ZIP folder) are removed; a project folder (with .git or tools) is only
+    reported, since it may hold someone's work."""
+    custom = os.path.join(vpk.TF, 'custom')
+    if not os.path.isdir(custom):
+        return
+    for entry in sorted(os.listdir(custom)):
+        p = os.path.join(custom, entry)
+        if not os.path.isdir(p) or os.path.normcase(os.path.abspath(p)) == os.path.normcase(os.path.abspath(keep)):
+            continue
+        if not is_our_install(p):
+            continue
+        if os.path.exists(os.path.join(p, '.git')) or os.path.isdir(os.path.join(p, 'tools')):
+            print('WARNING: another Hueco Mundo HUD folder is in tf/custom and loads together with this one:', p)
+            print('         delete one of them (keep the one you run update.bat in), then restart TF2.')
+        else:
+            shutil.rmtree(p)
+            print('removed another copy of the HUD (two copies mix their files) ->', p)
 
 
 def set_desktop_icon(ico):

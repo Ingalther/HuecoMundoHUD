@@ -226,8 +226,10 @@ def hud_cards(out):
     out.thumb('meter_uber', manga.tag_with_icon(manga.logo_uber(), size=(704, 160), crisp=True, box=(80, 26)))
     import build  # item meter cards: the item's manga logo on the sticky tag (build.METER_CARDS)
     for fname, (logo, _) in sorted(build.METER_CARDS.items()):
+        cw = build.METER_WIDE.get(fname, 58)  # wide cards get their own aspect, so the tag and logo stay true
         out.thumb(build.meter_card_name(fname), manga.tag_with_icon(getattr(manga, 'logo_' + logo)(),
-                                                                   crisp=logo == 'mask'))
+                                                                   size=(round(512 * cw / 58), 160),
+                                                                   crisp=logo in ('mask', 'skull'), box=(cw, 26)))
     out.thumb('hp_track', manga.hp_track(), mips=False)
     out.thumb('hp_fill', manga.hp_fill(), mips=False)
     out.thumb('hp_mask', manga.hp_mask())

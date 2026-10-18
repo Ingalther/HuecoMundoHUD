@@ -39,9 +39,11 @@ WHAT CHANGES
     * Item meters (cloak / Dead Ringer, Heatmaker focus, Jarate, Pomson, Cow Mangler, Soda Popper,
       banner rage, Eyelander heads...) are manga cards at the bottom center, in the same spot as the
       sticky counter: each with its own inked logo (pocket watch, scope, jar, lightning bolt, plasma
-      orb, soda can, claymore, a Hollow mask for the shared generic meter...) and an emerald bar
+      orb, soda can, a Hollow mask for the shared generic meter...) and an emerald bar
       (the game paints these bars white, so an emerald sheet lies over them: pale jade on deep emerald). Meters that can show at the same
-      time sit side by side. ÜberCharge is a card there too: a bold medic cross, the charge % over an emerald
+      time sit side by side, or one row up: the Cow Mangler, and the Air Strike / Eyelander card (a skull, the count
+      and the game's own word next to it, KILLS or HEADS) sit right above the sticky slot, so a banner's rage card
+      or the sticky counter below never covers them. ÜberCharge is a card there too: a bold medic cross, the charge % over an emerald
       bar that breathes when it is ready (Vaccinator: four segments and the full-charge count, its resist
       icon over the cross).
     * Demoman: a small torn tag at the bottom center, level with the health band and the ammo blade:
@@ -85,6 +87,8 @@ health / ammo layout:
 It applies instantly. It uses TF2's cl_hud_minmode cvar (CENTERED = 0, CORNERS = 1), so it can also
 be set from the console. In this HUD minmode does not give TF2's "minimal HUD"; it only switches
 between these two layouts.
+RELOAD HUD at its bottom reloads the HUD (same as hud_reloadscheme in the console): use it if a counter
+(ammo, stickies...) ever goes missing in a match (ESC brings the main menu up in game).
 The popup replaces the main menu's news (MOTD) panel, which is why the MOTD icon is gone.
 
 VAC / SAFETY

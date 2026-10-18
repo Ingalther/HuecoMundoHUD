@@ -92,19 +92,4 @@
 		"fgcolor"		"HM_Bone"
 		"autoResize"		"0"
 	}
-	"HM_BarTint"
-	{
-		"ControlName"		"EditablePanel"
-		"fieldName"		"HM_BarTint"
-		"xpos"		"38"
-		"ypos"		"13"
-		"zpos"		"3"
-		"wide"		"26"
-		"tall"		"8"
-		"visible"		"1"
-		"enabled"		"1"
-		"paintbackground"		"1"
-		"bgcolor_override"		"3 141 89 153"
-		"mouseinputenabled"		"0"
-	}
 }

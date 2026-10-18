@@ -145,7 +145,7 @@ LAYOUT_OPTIONS = [  # (button, preview art, cl_hud_minmode, name, description)
     ('HM_LayoutCentered', 'layout_centered', 0, 'CENTERED', 'Pulled in toward the crosshair (default)'),
     ('HM_LayoutCorners', 'layout_corners', 1, 'CORNERS', 'Health and ammo in the bottom corners'),
 ]
-POPUP_W, POPUP_H = 372, 206
+POPUP_W, POPUP_H = 372, 236
 
 
 def hud_settings_button(body, y):
@@ -195,6 +195,17 @@ def hud_settings_popup(motd):
                                       'zpos': 2, 'wide': 160, 'tall': 12, 'visible': 1, 'enabled': 1,
                                       'labelText': text, 'textAlignment': 'west', 'font': font, 'fgcolor': color})
     note(motd, 'HM_PopupNote0', 184, 'Applies instantly. Same as cl_hud_minmode 0 / 1 in the console.')
+    # RELOAD HUD: hud_reloadscheme, for when a counter (ammo, stickies...) goes missing mid-match
+    add(motd, 'HM_ReloadButton', {
+        'ControlName': 'CExButton', 'fieldName': 'HM_ReloadButton', 'xpos': 22, 'ypos': 202, 'zpos': 6, 'wide': 92,
+        'tall': 18, 'visible': 1, 'enabled': 1, 'tabPosition': 0, 'labelText': 'RELOAD HUD', 'font': 'HM_Menu',
+        'textAlignment': 'center', 'Command': 'engine hud_reloadscheme', 'actionsignallevel': 2,
+        'paintbackground': 1, 'defaultBgColor_override': '14 46 34 235', 'armedBgColor_override': '28 110 78 255',
+        'depressedBgColor_override': '46 214 140 255', 'defaultFgColor_override': '226 226 220 255',
+        'armedFgColor_override': '255 255 255 255', 'depressedFgColor_override': '8 9 10 255',
+        'sound_depressed': 'UI/buttonclick.wav', 'sound_released': 'UI/buttonclickrelease.wav'})
+    note(motd, 'HM_PopupNote1', 201, 'A counter went missing? This reloads the HUD,', 124)
+    note(motd, 'HM_PopupNote2', 211, 'same as hud_reloadscheme in the console.', 124)
 
 
 def note(motd, name, y, text, x=22):
