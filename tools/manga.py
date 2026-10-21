@@ -1164,6 +1164,24 @@ def freeze_card(tint, seed, size=(1024, 176)):
     return card
 
 
+def stat_card(tint, seed, size=(1024, 354)):
+    """Death screen record card ("On the bright side... You came close to your record ..."), HUD 266x92: the notice
+    card (your team's tone behind the class portrait), an emerald brush rule over the stat line, a faint 記録 (record)
+    down its right end."""
+    w, h = size
+    card = notice_card(tint, seed, size)
+    k = art.vertical_text('記録', art.font(art.KANJI, int(h * 0.36)), (226, 226, 220), gap=4)
+    k.putalpha(Image.fromarray((arr(k.getchannel('A')) * 0.1 * 255).astype(np.uint8)))
+    card.alpha_composite(k, (w - k.width - 40, (h - k.height) // 2))
+    y = int(h * 0.635)
+    m = Image.new('L', size, 0)
+    ImageDraw.Draw(m).polygon([(int(w * 0.3), y + 2), (w - 66, y - 4), (w - 70, y + 1), (int(w * 0.3), y + 7)], fill=255)
+    glow = arr(m.filter(ImageFilter.GaussianBlur(3)))
+    card.alpha_composite(art.solid_with_alpha(EMERALD, np.clip(glow * 1.5, 0, 1) * 0.7))
+    card.alpha_composite(art.solid_with_alpha((170, 240, 206), arr(m) * 0.9))
+    return card
+
+
 def countdown_card(seed=423, size=(256, 256)):
     """Match start countdown: a square torn manga panel, speed lines bursting from the digits, emerald screentone
     rising from the corners (a nine-slice image: the rim sits in the corner cells)."""

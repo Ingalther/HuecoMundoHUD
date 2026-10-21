@@ -63,6 +63,8 @@ WHAT CHANGES
 - Casual / competitive team strip at the top: a torn blue | red band, each player portrait in a torn bone rim,
   emerald / bone / crimson health bars.
 - Death screen ("You were killed by"): a torn manga card in the killer's team tone with a faint 死.
+- Record card on the death screen ("On the bright side... You came close to your record"): a torn manga
+  card in your team's tone, your class on its toned end, a faint 記録.
 - Target ID (what you look at, who is healing you): a see-through torn manga card in the target's team tone,
   a little higher than stock so the cards above the sticky slot never cover the healer's name.
 - Match start countdown: the digits on a square torn manga card with speed lines.

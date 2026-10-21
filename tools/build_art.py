@@ -247,6 +247,8 @@ def hud_cards(out):
     out.thumb('countdown_card', manga.countdown_card())  # match start countdown
     out.thumb('freeze_red', manga.freeze_card(red, 422))  # death screen "You were killed by" (killer's team)
     out.thumb('freeze_blue', manga.freeze_card(blue, 422))
+    out.thumb('stat_red', manga.stat_card(red, 425))  # death screen record card (your own team)
+    out.thumb('stat_blue', manga.stat_card(blue, 425))
     out.thumb('notice_rule', manga.rule(512, 32, thick=8))
     for name, txt in (('goal', '任務'), ('switch', '移籍'), ('alert', '警告')):
         out.thumb('seal_' + name, manga.seal(txt, 417))

@@ -997,6 +997,23 @@ def patch_freezepanel(root):
     kv.set(kv.find(base, 'AvatarImage'), 'zpos', 2)
 
 
+def patch_statpanel(root):
+    """Death screen record card ("On the bright side... You came close to your record for ..."): the stock framed box
+    becomes a torn manga card in your own team's tone, the class portrait on its toned end, the text in the notice
+    fonts over an emerald rule. It starts below the spectator target ID, whose bottom the stock box covered."""
+    body = next(e[1] for e in root if isinstance(e[1], list))
+    kv.setmany(kv.find(body, 'StatPanelBG'), xpos=0, ypos=20, wide=266, tall=92, image=T + 'stat_blue',
+               teambg_2=T + 'stat_red', teambg_3=T + 'stat_blue')
+    kv.setmany(kv.find(body, 'StatPanelClassImage'), xpos=6, ypos=28, wide=70, tall=70)
+    # plain vgui Labels: fgcolor_override (fgcolor is CExLabel only)
+    for n, extra in (('titleLable', dict(ypos=26, tall=12, font='HM_NoticeBody', fgcolor_override='HM_Emerald')),
+                     ('summaryLabel', dict(ypos=38, tall=40, font='HM_NoticeBody', fgcolor_override='HM_Bone')),
+                     ('StatLabelLarge', dict(ypos=80, tall=22, font='HM_NoticeTitle', fgcolor_override='HM_Bone')),
+                     ('StatLabelSmall', dict(ypos=83, tall=16, font='HM_NoticeBody', fgcolor_override='HM_BoneMid'))):
+        kv.setmany(kv.find(body, n), xpos=82, wide=176, **extra)
+    kv.setmany(kv.find(body, 'StatBox'), wide=0, tall=0)  # the game paints it translucent black from code
+
+
 def patch_tournament(root):
     """Match start countdown (casual / competitive): the digits on a square torn manga card, in the health font."""
     body = next(e[1] for e in root if isinstance(e[1], list))
@@ -1483,6 +1500,7 @@ def main():
         'resource/ui/hudmatchstatus.res': patch_matchstatus,
         'resource/ui/winpanel.res': screens.winpanel,
         'resource/ui/freezepanel_basic.res': patch_freezepanel,
+        'resource/ui/statpanel_base.res': patch_statpanel,
         'resource/ui/hudtournament.res': patch_tournament,
         'resource/ui/targetid.res': patch_targetid,
         'resource/ui/mapinfomenu.res': screens.mapinfo,
