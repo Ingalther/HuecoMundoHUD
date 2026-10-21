@@ -90,8 +90,11 @@ health / ammo layout:
 It applies instantly. It uses TF2's cl_hud_minmode cvar (CENTERED = 0, CORNERS = 1), so it can also
 be set from the console. In this HUD minmode does not give TF2's "minimal HUD"; it only switches
 between these two layouts.
-RELOAD HUD at its bottom reloads the HUD (same as hud_reloadscheme in the console): use it if a counter
-(ammo, stickies...) ever goes missing in a match (ESC brings the main menu up in game).
+If the ammo / sticky counter (or the uber and item cards) disappears in a match, it is almost always
+TF2's inspect card: a quick tap of F (inspect) while looking at a teammate shows their item at the
+bottom right, and the game hides those counters until the card closes. Fire or tap F once to close it.
+RELOAD HUD at its bottom reloads the HUD (same as hud_reloadscheme in the console) for anything else
+(ESC brings the main menu up in game).
 The popup replaces the main menu's news (MOTD) panel, which is why the MOTD icon is gone.
 
 VAC / SAFETY

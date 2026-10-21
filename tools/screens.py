@@ -195,7 +195,8 @@ def hud_settings_popup(motd):
                                       'zpos': 2, 'wide': 160, 'tall': 12, 'visible': 1, 'enabled': 1,
                                       'labelText': text, 'textAlignment': 'west', 'font': font, 'fgcolor': color})
     note(motd, 'HM_PopupNote0', 184, 'Applies instantly. Same as cl_hud_minmode 0 / 1 in the console.')
-    # RELOAD HUD: hud_reloadscheme, for when a counter (ammo, stickies...) goes missing mid-match
+    # RELOAD HUD: hud_reloadscheme. A counter (ammo, stickies...) that goes missing mid-match is almost always the
+    # inspect card (an F tap on a teammate), which closes on fire or another F tap (build.patch_inspect)
     add(motd, 'HM_ReloadButton', {
         'ControlName': 'CExButton', 'fieldName': 'HM_ReloadButton', 'xpos': 22, 'ypos': 202, 'zpos': 6, 'wide': 92,
         'tall': 18, 'visible': 1, 'enabled': 1, 'tabPosition': 0, 'labelText': 'RELOAD HUD', 'font': 'HM_Menu',
@@ -204,8 +205,8 @@ def hud_settings_popup(motd):
         'depressedBgColor_override': '46 214 140 255', 'defaultFgColor_override': '226 226 220 255',
         'armedFgColor_override': '255 255 255 255', 'depressedFgColor_override': '8 9 10 255',
         'sound_depressed': 'UI/buttonclick.wav', 'sound_released': 'UI/buttonclickrelease.wav'})
-    note(motd, 'HM_PopupNote1', 201, 'A counter went missing? This reloads the HUD,', 124)
-    note(motd, 'HM_PopupNote2', 211, 'same as hud_reloadscheme in the console.', 124)
+    note(motd, 'HM_PopupNote1', 201, 'Ammo / stickies gone? Fire or tap F once.', 124)
+    note(motd, 'HM_PopupNote2', 211, 'Else this reloads the HUD (hud_reloadscheme).', 124)
 
 
 def note(motd, name, y, text, x=22):

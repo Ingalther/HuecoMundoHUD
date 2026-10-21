@@ -608,6 +608,16 @@ def patch_meter(root):
         lift(blk)
 
 
+def patch_inspect(root):
+    """An F tap on a teammate opens the inspect card (their item), and the game hides the ammo, sticky, uber and item
+    meter counters while it is open: it locks their render group when the card shows and unlocks it when the card
+    hides. A HUD reload with the card open hid the card without the unlock, so the counters stayed gone until the map
+    changed. Loading the card as visible keeps that bookkeeping right: the next close (fire, an F tap, death) after a
+    reload always unlocks the counters."""
+    body = next(e[1] for e in root if isinstance(e[1], list))
+    kv.set(kv.find(body, 'itempanel'), 'visible', 1)
+
+
 def patch_rocketpack(root):
     """Thermal Thruster: stock layout beside the ammo blade. Its file #bases the generic meter, so it would inherit
     the generic card's corner position (the sticky slot) and bar tint: lift it above the blade there, no tint."""
@@ -1483,6 +1493,7 @@ def main():
         'resource/ui/objectivestatusescort.res': patch_escort,
         'resource/ui/controlpointprogressbar.res': patch_cp_progress,
         'resource/ui/hudrocketpack.res': patch_rocketpack,
+        'resource/ui/hudinspectpanel.res': patch_inspect,
     }
     medic = os.path.join(work, 'resource', 'ui', 'hudmediccharge.res')
     if not os.path.exists(medic):
