@@ -505,7 +505,9 @@ def patch_class(root):
     body = kv.find(root, 'Resource/UI/HudPlayerClass.res')
     kv.setmany(kv.find(body, 'HudPlayerClass'), xpos=0, ypos=0)
     place(kv.find(body, 'classmodelpanel'), (-6, PLAYER_H - 4 - 260, 130, 260), zpos=3)
-    place(kv.find(body, 'PlayerStatusClassImage'), (18, 36, 80, 80), zpos=3)
+    # 2D mode (HUD Settings > PLAYER CHARACTER, i.e. cl_hud_playerclass_use_playermodel 0): TF2's own class art
+    # where the model stands, the same size as the model, its base on the triangle's base, its chest under the band
+    place(kv.find(body, 'PlayerStatusClassImage'), (-4, 9, 116, 116), zpos=3)
     for n in ('classmodelpanelBG', 'PlayerStatusClassImageBG'):
         kv.setmany(kv.find(body, n), xpos=0, ypos=0, wide=0, tall=0)
     for n in ('PlayerStatusSpyImage', 'PlayerStatusSpyOutlineImage'):

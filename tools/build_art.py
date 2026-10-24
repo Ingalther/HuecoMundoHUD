@@ -263,7 +263,8 @@ def hud_settings_art(out):
     positions (build.LAYOUTS)."""
     import build
     import manga
-    out.thumb('popup', manga.popup_bg(430))
+    import screens
+    out.thumb('popup', manga.popup_bg(430, size=(1024, round(1024 * screens.POPUP_H / screens.POPUP_W))))
     scene = art.hueco_mundo_scene(854, 480, menu_shade=False)
     shard, band = manga.shard((56, 90, 140), 411), manga.hp_band(412)
     blade, streak = manga.ammo_blade(413), manga.tag(414, '殺')

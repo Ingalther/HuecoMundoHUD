@@ -148,7 +148,8 @@ LAYOUT_OPTIONS = [  # (button, preview art, cl_hud_minmode, name, description)
     ('HM_LayoutCentered', 'layout_centered', 0, 'CENTERED', 'Pulled in toward the crosshair (default)'),
     ('HM_LayoutCorners', 'layout_corners', 1, 'CORNERS', 'Health and ammo in the bottom corners'),
 ]
-POPUP_W, POPUP_H = 372, 236
+POPUP_W, POPUP_H = 372, 290
+CHARACTER_OPTIONS = (('HM_Char3D', '3D MODEL', 1), ('HM_Char2D', '2D IMAGE', 0))  # cl_hud_playerclass_use_playermodel
 
 
 def hud_settings_button(body, y):
@@ -198,18 +199,31 @@ def hud_settings_popup(motd):
                                       'zpos': 2, 'wide': 160, 'tall': 12, 'visible': 1, 'enabled': 1,
                                       'labelText': text, 'textAlignment': 'west', 'font': font, 'fgcolor': color})
     note(motd, 'HM_PopupNote0', 184, 'Applies instantly. Same as cl_hud_minmode 0 / 1 in the console.')
+    # PLAYER CHARACTER: the live 3D model or TF2's own 2D class art, through the game's own setting (no reload)
+    add(motd, 'HM_PopupSection2', {'ControlName': 'CExLabel', 'fieldName': 'HM_PopupSection2', 'xpos': 22,
+                                   'ypos': 202, 'zpos': 2, 'wide': POPUP_W - 44, 'tall': 12, 'visible': 1,
+                                   'enabled': 1, 'labelText': 'PLAYER CHARACTER', 'textAlignment': 'west',
+                                   'font': 'HM_Menu', 'fgcolor': '46 214 140 255'})
+    for i, (name, text, value) in enumerate(CHARACTER_OPTIONS):
+        popup_button(motd, name, 22 + i * 100, 218, text, f'engine cl_hud_playerclass_use_playermodel {value}')
+    note(motd, 'HM_PopupNote3', 238, 'Same as cl_hud_playerclass_use_playermodel 1 / 0 in the console.')
     # RELOAD HUD: hud_reloadscheme. A counter (ammo, stickies...) that goes missing mid-match is almost always the
     # inspect card (an F tap on a teammate), which closes on fire or another F tap (build.patch_inspect)
-    add(motd, 'HM_ReloadButton', {
-        'ControlName': 'CExButton', 'fieldName': 'HM_ReloadButton', 'xpos': 22, 'ypos': 202, 'zpos': 6, 'wide': 92,
-        'tall': 18, 'visible': 1, 'enabled': 1, 'tabPosition': 0, 'labelText': 'RELOAD HUD', 'font': 'HM_Menu',
-        'textAlignment': 'center', 'Command': 'engine hud_reloadscheme', 'actionsignallevel': 2,
+    popup_button(motd, 'HM_ReloadButton', 22, 258, 'RELOAD HUD', 'engine hud_reloadscheme')
+    note(motd, 'HM_PopupNote1', 257, 'Ammo / stickies gone? Fire or tap F once.', 124)
+    note(motd, 'HM_PopupNote2', 267, 'Else this reloads the HUD (hud_reloadscheme).', 124)
+
+
+def popup_button(motd, name, x, y, text, command):
+    """Flat emerald button inside the popup; actionsignallevel 2 so its "engine ..." command reaches the main menu."""
+    add(motd, name, {
+        'ControlName': 'CExButton', 'fieldName': name, 'xpos': x, 'ypos': y, 'zpos': 6, 'wide': 92,
+        'tall': 18, 'visible': 1, 'enabled': 1, 'tabPosition': 0, 'labelText': text, 'font': 'HM_Menu',
+        'textAlignment': 'center', 'Command': command, 'actionsignallevel': 2,
         'paintbackground': 1, 'defaultBgColor_override': '14 46 34 235', 'armedBgColor_override': '28 110 78 255',
         'depressedBgColor_override': '46 214 140 255', 'defaultFgColor_override': '226 226 220 255',
         'armedFgColor_override': '255 255 255 255', 'depressedFgColor_override': '8 9 10 255',
         'sound_depressed': 'UI/buttonclick.wav', 'sound_released': 'UI/buttonclickrelease.wav'})
-    note(motd, 'HM_PopupNote1', 201, 'Ammo / stickies gone? Fire or tap F once.', 124)
-    note(motd, 'HM_PopupNote2', 211, 'Else this reloads the HUD (hud_reloadscheme).', 124)
 
 
 def note(motd, name, y, text, x=22):
@@ -450,6 +464,8 @@ def scoreboard(root):
     for n in ('ServerLabelNew', 'MapName'):
         kv.set(kv.find(body, n), 'wide', 245)
     kv.setmany(kv.find(body, 'classmodelpanel'), xpos=-6, ypos=205, wide=118, tall=240)
+    # 2D mode (cl_hud_playerclass_use_playermodel 0) shows the class art instead, where the model stands
+    kv.setmany(kv.find(body, 'ClassImage'), xpos=4, ypos=332, wide=108, tall=108)
     # the torn tag's left edge slants in ~17 at the top: the name starts inside it
     kv.set(kv.find(body, 'PlayerNameLabel'), 'xpos', 130)
     add(body, 'HM_ScoreKanji', image('HM_ScoreKanji', 606, 380, 14, 28, T + 'kanji_huecomundo', z=6,

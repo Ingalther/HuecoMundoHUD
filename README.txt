@@ -92,6 +92,9 @@ health / ammo layout:
 It applies instantly. It uses TF2's cl_hud_minmode cvar (CENTERED = 0, CORNERS = 1), so it can also
 be set from the console. In this HUD minmode does not give TF2's "minimal HUD"; it only switches
 between these two layouts.
+PLAYER CHARACTER switches the player in the bottom left between the live 3D model and TF2's own 2D
+class art (same as cl_hud_playerclass_use_playermodel 1 / 0 in the console). It applies instantly and
+also switches the class picture on the scoreboard.
 If the ammo / sticky counter (or the uber and item cards) disappears in a match, it is almost always
 TF2's inspect card: a quick tap of F (inspect) while looking at a teammate shows their item at the
 bottom right, and the game hides those counters until the card closes. Fire or tap F once to close it.

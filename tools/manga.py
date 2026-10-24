@@ -1212,17 +1212,18 @@ def seal(txt, seed, size=(224, 256)):
     return card
 
 
-def popup_bg(seed, size=(1024, 650)):
-    """HUD Settings popup (HUD 372x236): torn ink sheet, screentone header band, emerald rule under the title."""
+def popup_bg(seed, size=(1024, 798)):
+    """HUD Settings popup (HUD 372x290): torn ink sheet, screentone header band, emerald rule under the title.
+    The header is measured off the width, so it stays put under the title whatever the popup's height."""
     w, h = size
     pts = [(14, 10), (w - 10, 16), (w - 16, h - 10), (8, h - 14)]
     content = rgba(size, (8, 9, 10), 248)
-    band = arr(tone_fill((w, int(h * 0.2)), 1.0, (40, 44, 46), period=8, vertical=True, lo=1.0, hi=0.2))
+    band = arr(tone_fill((w, int(w * 0.127)), 1.0, (40, 44, 46), period=8, vertical=True, lo=1.0, hi=0.2))
     content.alpha_composite(Image.fromarray((band * 255).astype(np.uint8), 'RGBA'))
     lines = arr(speed_lines(size, w, 0, n=80, seed=seed, alpha=0.07, inner=0.2))
     content.alpha_composite(Image.fromarray((lines * 255).astype(np.uint8), 'RGBA'))
     card = panel(size, pts, seed, content=content)
-    card.alpha_composite(rule(int(w * 0.5), 18, thick=5), (int(w * 0.06), int(h * 0.165)))
+    card.alpha_composite(rule(int(w * 0.5), 18, thick=5), (int(w * 0.06), int(w * 0.1045)))
     return card
 
 
