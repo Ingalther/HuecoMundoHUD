@@ -1212,8 +1212,8 @@ def seal(txt, seed, size=(224, 256)):
     return card
 
 
-def popup_bg(seed, size=(1024, 798)):
-    """HUD Settings popup (HUD 372x290): torn ink sheet, screentone header band, emerald rule under the title.
+def popup_bg(seed, size=(1024, 727)):
+    """HUD Settings popup (HUD 372x264): torn ink sheet, screentone header band, emerald rule under the title.
     The header is measured off the width, so it stays put under the title whatever the popup's height."""
     w, h = size
     pts = [(14, 10), (w - 10, 16), (w - 16, h - 10), (8, h - 14)]

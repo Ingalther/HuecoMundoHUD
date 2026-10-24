@@ -98,8 +98,6 @@ also switches the class picture on the scoreboard.
 If the ammo / sticky counter (or the uber and item cards) disappears in a match, it is almost always
 TF2's inspect card: a quick tap of F (inspect) while looking at a teammate shows their item at the
 bottom right, and the game hides those counters until the card closes. Fire or tap F once to close it.
-RELOAD HUD at its bottom reloads the HUD (same as hud_reloadscheme in the console) for anything else
-(ESC brings the main menu up in game).
 The popup replaces the main menu's news (MOTD) panel, which is why the MOTD icon is gone.
 
 VAC / SAFETY

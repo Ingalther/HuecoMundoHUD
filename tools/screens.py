@@ -148,7 +148,7 @@ LAYOUT_OPTIONS = [  # (button, preview art, cl_hud_minmode, name, description)
     ('HM_LayoutCentered', 'layout_centered', 0, 'CENTERED', 'Pulled in toward the crosshair (default)'),
     ('HM_LayoutCorners', 'layout_corners', 1, 'CORNERS', 'Health and ammo in the bottom corners'),
 ]
-POPUP_W, POPUP_H = 372, 290
+POPUP_W, POPUP_H = 372, 264
 CHARACTER_OPTIONS = (('HM_Char3D', '3D MODEL', 1), ('HM_Char2D', '2D IMAGE', 0))  # cl_hud_playerclass_use_playermodel
 
 
@@ -207,11 +207,6 @@ def hud_settings_popup(motd):
     for i, (name, text, value) in enumerate(CHARACTER_OPTIONS):
         popup_button(motd, name, 22 + i * 100, 218, text, f'engine cl_hud_playerclass_use_playermodel {value}')
     note(motd, 'HM_PopupNote3', 238, 'Same as cl_hud_playerclass_use_playermodel 1 / 0 in the console.')
-    # RELOAD HUD: hud_reloadscheme. A counter (ammo, stickies...) that goes missing mid-match is almost always the
-    # inspect card (an F tap on a teammate), which closes on fire or another F tap (build.patch_inspect)
-    popup_button(motd, 'HM_ReloadButton', 22, 258, 'RELOAD HUD', 'engine hud_reloadscheme')
-    note(motd, 'HM_PopupNote1', 257, 'Ammo / stickies gone? Fire or tap F once.', 124)
-    note(motd, 'HM_PopupNote2', 267, 'Else this reloads the HUD (hud_reloadscheme).', 124)
 
 
 def popup_button(motd, name, x, y, text, command):
