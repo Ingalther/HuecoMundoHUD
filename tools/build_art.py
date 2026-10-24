@@ -347,7 +347,7 @@ def hud_settings_art(out):
         wx, wy = build.weapon_pos(alt)
         wx = 853.33 - float(wx[1:])
         d = build.pc(*build.DIGITS, alt=alt)
-        pieces = [(shard, build.pc(0, 0, 130, build.PLAYER_H, alt=alt)),
+        pieces = [(shard, build.pc(*build.SHARD, alt=alt)),
                   (band, build.pc(*build.BAND, alt=alt)),
                   (digits, (d[0] + 4, d[1] + 12, 26 * digits.width / digits.height, 26)),
                   (streak, build.pc(*build.STREAK, alt=alt)),

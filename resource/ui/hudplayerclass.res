@@ -345,7 +345,7 @@
 		"ypos"		"311"
 		"zpos"		"1"
 		"wide"		"130"
-		"tall"		"125"
+		"tall"		"130"
 		"visible"		"1"
 		"enabled"		"1"
 		"scaleImage"		"1"
@@ -356,7 +356,7 @@
 		"xpos_minmode"		"8"
 		"ypos_minmode"		"337"
 		"wide_minmode"		"130"
-		"tall_minmode"		"125"
+		"tall_minmode"		"130"
 	}
 	"HM_PlayerShardBase"
 	{
@@ -366,7 +366,7 @@
 		"ypos"		"311"
 		"zpos"		"4"
 		"wide"		"130"
-		"tall"		"125"
+		"tall"		"130"
 		"visible"		"1"
 		"enabled"		"1"
 		"scaleImage"		"1"
@@ -375,6 +375,6 @@
 		"xpos_minmode"		"8"
 		"ypos_minmode"		"337"
 		"wide_minmode"		"130"
-		"tall_minmode"		"125"
+		"tall_minmode"		"130"
 	}
 }

@@ -437,28 +437,35 @@ def _watermark(card, ch, box, alpha=0.13):
     card.alpha_composite(art.solid_with_alpha(BONE, a), (x + (w - g.width) // 2, y + (h - g.height) // 2))
 
 
-def _shard_pts(w, h):
-    # the base is level: the game cuts the model / class art off with a straight line, and that line runs along it
-    return [(0.52 * w, 0.03 * h), (0.97 * w, 0.97 * h), (0.03 * w, 0.97 * h)]
+SHARD_H = 492  # the triangle's own height on its 512x512 canvas: the rows below hold the base's offset shadow
 
 
-def shard(tint, seed, size=(512, 492)):
-    """Player cluster base (HUD 130x125): torn triangle in team screentone, the model stands on it (Weirdcore's
-    triangle, inked)."""
+def _shard_pts(w, h=SHARD_H):
+    # the base is level: the game cuts the model / class art off with a straight line, and that line runs along it.
+    # The corners keep clear of the canvas edges, or the edge's offset shadow would be cut flat there
+    return [(0.52 * w, 0.03 * h), (0.96 * w, 0.97 * h), (0.03 * w, 0.97 * h)]
+
+
+def shard(tint, seed, size=(512, 512)):
+    """Player cluster base (HUD 130x130, build.SHARD): torn triangle in team screentone, the model stands on it
+    (Weirdcore's triangle, inked)."""
     w, h = size
-    content = tone_fill(size, 1.0, tint, period=8, vertical=True, lo=0.12, hi=1.0)
-    content.alpha_composite(speed_lines(size, int(w * 0.5), int(h * 0.35), n=60, seed=seed, alpha=0.10, inner=0.3))
-    return panel(size, _shard_pts(w, h), seed, content=content)
+    content = rgba(size)
+    tone = tone_fill((w, SHARD_H), 1.0, tint, period=8, vertical=True, lo=0.12, hi=1.0)
+    tone.alpha_composite(speed_lines((w, SHARD_H), int(w * 0.5), int(SHARD_H * 0.35), n=60, seed=seed, alpha=0.10,
+                                     inner=0.3))
+    content.paste(tone, (0, 0))
+    return panel(size, _shard_pts(w), seed, content=content)
 
 
-def shard_base(seed, size=(512, 492)):
+def shard_base(seed, size=(512, 512)):
     """The shard's torn bottom edge alone, drawn over the model / class art to hide the straight line the game cuts
     them off with. A little thicker than the shard's own edge (one px up, two down) so it covers that line
     everywhere along the base."""
     w, h = size
-    outer, inner = torn(poly_mask(size, _shard_pts(w, h)), seed)
+    outer, inner = torn(poly_mask(size, _shard_pts(w)), seed)
     edge = outer * (1 - inner)
-    edge[:int(h * 0.9)] = 0
+    edge[:int(SHARD_H * 0.9)] = 0
     thick = edge.copy()
     thick[:-1] = np.maximum(thick[:-1], edge[1:])
     thick[1:] = np.maximum(thick[1:], edge[:-1])

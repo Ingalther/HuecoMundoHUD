@@ -405,6 +405,7 @@ def team_img(name, x, y, w, h, image, z=1):
 #   weapon cluster (WEAPON_W x WEAPON_H): a torn ink blade pointing right, big clip digits, reserve beside them
 # Coordinates below are design units relative to each cluster's top-left, drawn at CARD_K.
 PLAYER_W, PLAYER_H = 210, 125
+SHARD = (0, 0, 130, 130)  # the triangle (manga.shard): runs 5 units below the cluster, where its base's shadow falls
 WEAPON_W, WEAPON_H = 130, 76
 # Two layouts, picked from the main menu. The default one lives in the plain keys, the other in *_minmode keys and
 # the menu buttons flip cl_hud_minmode; stock minmode variants are stripped (strip_minmode) so the cvar moves
@@ -515,10 +516,8 @@ def patch_class(root):
         kv.setmany(kv.find(body, n), xpos=0, ypos=0, wide=0, tall=0)
     for n in ('PlayerStatusSpyImage', 'PlayerStatusSpyOutlineImage'):
         place(kv.find(body, n), (4, 92, 28, 28), zpos=8)
-    add_placed(body, 'HM_PlayerShard', team_img('HM_PlayerShard', *pc(0, 0, 130, PLAYER_H), 'shard', z=1),
-               (0, 0, 130, PLAYER_H))
-    add_placed(body, 'HM_PlayerShardBase', img_panel('HM_PlayerShardBase', *pc(0, 0, 130, PLAYER_H), 'shard_base',
-                                                     z=4), (0, 0, 130, PLAYER_H))
+    add_placed(body, 'HM_PlayerShard', team_img('HM_PlayerShard', *pc(*SHARD), 'shard', z=1), SHARD)
+    add_placed(body, 'HM_PlayerShardBase', img_panel('HM_PlayerShardBase', *pc(*SHARD), 'shard_base', z=4), SHARD)
 
 
 def patch_ammo(root):
