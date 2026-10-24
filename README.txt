@@ -22,6 +22,8 @@ WHAT CHANGES
 ------------
 - Main menu: Hueco Mundo backdrop (Las Noches, quartz trees, crescent moon), ULQUIORRA logo,
   ink-black buttons with an emerald edge on hover.
+  On TF2's holidays the main menu changes by itself: on full-moon nights the crescent over Hueco
+  Mundo is full, for Scream Fortress bats fly across a green-haloed moon, for Smissmas it snows.
 - Every menu (loadout, backpack, store, options, scoreboard, class / team select, death screen,
   notifications): TF2's tan / orange tones replaced with a black - grey - emerald palette;
   fonts are Bahnschrift / Constantia.

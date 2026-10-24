@@ -107,11 +107,83 @@ def kanji(txt, size, vertical=False):
     return art.fit(g, size)
 
 
+MENU_VARIANTS = ('fullmoon', 'halloween', 'christmas')  # TF2's holiday conditions on the main menu (screens.mainmenu)
+
+
+def menu_scene(variant=None):
+    """The main menu's 16:9 scene as its 2048x1024 texture; variant: one of MENU_VARIANTS."""
+    scene = art.hueco_mundo_scene(1920, 1080, variant=variant)
+    if variant == 'fullmoon':
+        # Ulquiorra's last words beside the moon, pre-rendered (its fonts are not Windows fonts). It is part of the
+        # scene, not a panel: the game hides the scene in a match, a panel would float over the game's ESC menu
+        import manga
+        quote = Image.open(os.path.join(manga.LOGO_DIR, 'moon_quote.png')).convert('RGBA')
+        scene = scene.convert('RGBA')
+        scene.alpha_composite(quote.resize((270, 360), Image.LANCZOS), (1537, 68))
+        scene = scene.convert('RGB')
+    return scene.resize((2048, 1024), Image.LANCZOS)
+
+
 def scene_images(out):
-    wide = art.hueco_mundo_scene(1920, 1080)
-    out.console('background_huecomundo_widescreen', wide.resize((2048, 1024), Image.LANCZOS))
+    out.console('background_huecomundo_widescreen', menu_scene())
     sq = art.hueco_mundo_scene(1440, 1080)
     out.console('background_huecomundo', sq.resize((1024, 1024), Image.LANCZOS))
+    for v in MENU_VARIANTS:
+        out.console(f'background_huecomundo_{v}_widescreen', menu_scene(v))
+
+
+def _runs(mask_cols, gap):
+    """Column runs of a boolean column mask, split where the gap between set columns exceeds gap."""
+    cols = np.nonzero(mask_cols)[0]
+    runs, start, prev = [], cols[0], cols[0]
+    for c in cols[1:]:
+        if c - prev > gap:
+            runs.append((start, prev))
+            start = c
+        prev = c
+    return runs + [(start, prev)]
+
+
+def logo_variant(logo, variant):
+    """The menu title on TF2's holidays, drawn over the finished title (works on any build of it): the small crescent
+    beside BLEACH becomes the full moon (in a green halo with a bat crossing it on Halloween), or the A of ULQUIORRA
+    gets a Santa hat (Smissmas)."""
+    im = logo.copy()
+    a = np.asarray(im)[..., 3] > 200
+    if variant in ('fullmoon', 'halloween'):
+        top = a[:52]  # the BLEACH line; ULQUIORRA starts lower
+        x0, x1 = _runs(top.any(0), 6)[-1]  # the crescent: the last shape right of B L E A C H
+        ys, xs = np.nonzero(top[:, x0:x1 + 1])
+        xs = xs + x0
+        r = 16  # menu_logo draws art.crescent(16)
+        # the disc it was cut from: the centres whose radius-r disc covers the whole crescent, averaged
+        fits = []
+        for cy in np.arange(ys.min() - r, ys.max() + r, 0.5):
+            for cx in np.arange(xs.min() - r, xs.max() + r, 0.5):
+                fits.append((np.count_nonzero((xs - cx) ** 2 + (ys - cy) ** 2 > (r + 0.7) ** 2), cx, cy))
+        least = min(f[0] for f in fits)
+        cx = np.mean([f[1] for f in fits if f[0] == least])
+        cy = np.mean([f[2] for f in fits if f[0] == least])
+        moon = art.crescent(r, phase=None, glow_color=(140, 232, 186) if variant == 'halloween' else (200, 214, 208))
+        layer = rgba(im.size)
+        layer.alpha_composite(moon, (int(round(cx - moon.width / 2)), int(round(cy - moon.height / 2))))
+        # the full disc's glow reaches past the title's top edge: fade it out above the disc instead of cutting it
+        top = max(1, int(cy - r))
+        la = np.array(layer)
+        la[:top, :, 3] = (la[:top, :, 3] * (np.arange(top) / top)[:, None]).astype(np.uint8)
+        im.alpha_composite(Image.fromarray(la, 'RGBA'))
+        if variant == 'halloween':
+            b = art.bat(int(r * 2.3))
+            im.alpha_composite(b, (int(round(cx - b.width * 0.42)), int(round(cy - b.height * 0.05))))
+    elif variant == 'christmas':
+        # on the apex of the last letter, the A: the only letter with free sky above it
+        rows = a[55:200]
+        x0, x1 = _runs(rows.any(0), 3)[-1]
+        apex = np.nonzero(rows[:, x0:x1 + 1].any(1))[0].min()
+        ax = x0 + np.mean(np.nonzero(rows[apex:apex + 3, x0:x1 + 1].any(0))[0])
+        hat = art.santa_hat(int((x1 - x0) * 0.72)).rotate(-10, expand=True, resample=Image.BICUBIC)
+        im.alpha_composite(hat, (int(ax - hat.width * 0.45), int(55 + apex + 12 - hat.height)))
+    return im
 
 
 def panels(out):
@@ -352,7 +424,10 @@ def build(root, preview=None, portraits=None):
     hud_settings_art(out)
     extras_art(out)
     out.thumb('emblem', emblem())
-    out.thumb('logo', menu_logo())
+    logo = menu_logo()
+    out.thumb('logo', logo)
+    for v in MENU_VARIANTS:
+        out.thumb('logo_' + v, logo_variant(logo, v))
     out.thumb('aura_l', aura(512, 128, 21))
     out.thumb('aura_r', aura(512, 128, 22, mirror=True))
     out.thumb('wing_l', art.bat_wing(512, 256, seed=5))

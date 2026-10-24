@@ -155,6 +155,18 @@
 		"image"		"../console/background_huecomundo_widescreen"
 		"scaleImage"		"1"
 		"proportionaltoparent"		"1"
+		"if_fullmoon"
+		{
+			"image"		"../console/background_huecomundo_fullmoon_widescreen"
+		}
+		"if_halloween"
+		{
+			"image"		"../console/background_huecomundo_halloween_widescreen"
+		}
+		"if_christmas"
+		{
+			"image"		"../console/background_huecomundo_christmas_widescreen"
+		}
 	}
 	"TFLogoImage"
 	{
@@ -170,6 +182,18 @@
 		"image"		"replay/thumbnails/hm/logo"
 		"scaleImage"		"1"
 		"mouseinputenabled"		"0"
+		"if_fullmoon"
+		{
+			"image"		"replay/thumbnails/hm/logo_fullmoon"
+		}
+		"if_halloween"
+		{
+			"image"		"replay/thumbnails/hm/logo_halloween"
+		}
+		"if_christmas"
+		{
+			"image"		"replay/thumbnails/hm/logo_christmas"
+		}
 	}
 	"TFCharacterImage"
 	{

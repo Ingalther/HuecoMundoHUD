@@ -86,7 +86,16 @@ def mainmenu(root):
     add(body, 'HM_Sidebar', image('HM_Sidebar', 0, 0, 310, 'f0', T + 'sidebar', z=-60))
     add(body, 'HM_MenuKanji', image('HM_MenuKanji', 'r34', 200, 16, 32, T + 'kanji_huecomundo', z=-50,
                                     drawcolor='226 226 220 90'))
-    kv.setmany(kv.find(body, 'TFLogoImage'), xpos=20, ypos=34, wide=240, tall=60, image=T + 'logo')
+    logo = kv.find(body, 'TFLogoImage')
+    kv.setmany(logo, xpos=20, ypos=34, wide=240, tall=60, image=T + 'logo')
+
+    # TF2's holidays: the game loads this file with if_fullmoon (real full-moon nights), if_halloween or if_christmas
+    # set, one at a time. Hueco Mundo's eternal crescent turns full (with Ulquiorra's last words beside it), the
+    # Halloween night gets bats, green mist and Hollow masks, Smissmas snow and a star on Las Noches (build_art)
+    from build_art import MENU_VARIANTS
+    for v in MENU_VARIANTS:
+        kv.add_block(bg, f'if_{v}', {'image': f'../console/background_huecomundo_{v}_widescreen'})
+        kv.add_block(logo, f'if_{v}', {'image': T + 'logo_' + v})
     kv.setmany(kv.find(body, 'TFCharacterImage'), visible=0, wide=0, tall=0)
 
     # profile / rank block: stock is centre-anchored, re-anchor it to the sidebar (absolute, any aspect ratio)

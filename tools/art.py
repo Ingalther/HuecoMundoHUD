@@ -148,7 +148,8 @@ def fit(im, size, anchor='center'):
 
 
 # ---------------------------------------------------------------- motifs
-def crescent(r, color=BONE, glow=True, phase=0.62, tilt=-28):
+def crescent(r, color=BONE, glow=True, phase=0.62, tilt=-28, glow_color=(200, 214, 208)):
+    """The moon: a crescent, or the full disc with phase=None (the holiday menus)."""
     s = int(r * 2 + r * 5)
     ss = 4
     big = Image.new('L', (s * ss, s * ss), 0)
@@ -156,10 +157,11 @@ def crescent(r, color=BONE, glow=True, phase=0.62, tilt=-28):
     c = s * ss / 2
     R = r * ss
     d.ellipse((c - R, c - R, c + R, c + R), fill=255)
-    ang = math.radians(tilt)
-    off = R * phase
-    ox, oy = off * math.cos(ang), off * math.sin(ang)
-    d.ellipse((c - R * 0.96 + ox, c - R * 0.96 + oy, c + R * 0.96 + ox, c + R * 0.96 + oy), fill=0)
+    if phase is not None:
+        ang = math.radians(tilt)
+        off = R * phase
+        ox, oy = off * math.cos(ang), off * math.sin(ang)
+        d.ellipse((c - R * 0.96 + ox, c - R * 0.96 + oy, c + R * 0.96 + ox, c + R * 0.96 + oy), fill=0)
     m = big.resize((s, s), Image.LANCZOS)
     # faint surface texture
     tex = noise2d(s, s, 7, scale=max(4, r // 3), octaves=3)
@@ -173,8 +175,96 @@ def crescent(r, color=BONE, glow=True, phase=0.62, tilt=-28):
     g = m.filter(ImageFilter.GaussianBlur(r * 0.35))
     g2 = m.filter(ImageFilter.GaussianBlur(r * 1.1))
     ga = np.asarray(g, np.float32) / 255 * 0.55 + np.asarray(g2, np.float32) / 255 * 0.35
-    out = solid_with_alpha((200, 214, 208), ga)
+    out = solid_with_alpha(glow_color, ga)
     out.alpha_composite(moon)
+    return out
+
+
+def bat(w, color=INK):
+    """Murcielago: a small bat silhouette, wings spread, scalloped trailing edge (the Halloween menus)."""
+    ss = 4
+    W, H = w * ss, max(2, int(w * 0.5)) * ss
+    half = [(0.00, -0.30), (0.06, -0.62), (0.10, -0.30), (0.25, -0.38), (0.55, -0.62), (1.00, -0.55),
+            (0.82, -0.05), (0.70, 0.12), (0.58, -0.02), (0.45, 0.22), (0.30, 0.05), (0.16, 0.30), (0.06, 0.55),
+            (0.00, 0.60)]
+    pts = [(W / 2 + x * W / 2, H / 2 + y * H / 2) for x, y in half]
+    pts += [(W / 2 - x * W / 2, H / 2 + y * H / 2) for x, y in reversed(half)]
+    im = Image.new('L', (W, H), 0)
+    ImageDraw.Draw(im).polygon(pts, fill=255)
+    return solid_with_alpha(color, np.asarray(im.resize((W // ss, H // ss), Image.LANCZOS), np.float32) / 255)
+
+
+def hollow_mask(h, color=BONE):
+    """A small bone Hollow mask: rounded brow, pointed jaw, slanted eye holes, a row of teeth (Halloween menus)."""
+    ss = 4
+    W, H = int(h * 0.78) * ss, h * ss
+    im = Image.new('L', (W, H), 0)
+    d = ImageDraw.Draw(im)
+    d.polygon([(W * 0.5, 0), (W * 0.85, H * 0.08), (W * 0.98, H * 0.35), (W * 0.86, H * 0.62), (W * 0.66, H * 0.84),
+               (W * 0.5, H), (W * 0.34, H * 0.84), (W * 0.14, H * 0.62), (W * 0.02, H * 0.35), (W * 0.15, H * 0.08)],
+              fill=255)
+    d.polygon([(W * 0.20, H * 0.38), (W * 0.42, H * 0.44), (W * 0.40, H * 0.53), (W * 0.22, H * 0.48)], fill=0)
+    d.polygon([(W * 0.80, H * 0.38), (W * 0.58, H * 0.44), (W * 0.60, H * 0.53), (W * 0.78, H * 0.48)], fill=0)
+    lw = max(1, int(W * 0.014))
+    d.line((W * 0.30, H * 0.70, W * 0.70, H * 0.70), fill=0, width=lw)
+    for i in range(7):
+        x = W * (0.32 + i * 0.06)
+        d.line((x, H * 0.66, x, H * 0.80), fill=0, width=lw)
+    m = np.asarray(im.resize((W // ss, H // ss), Image.LANCZOS), np.float32) / 255
+    # lit from the moon (upper right): the left cheek falls into shadow
+    xs = np.linspace(0, 1, m.shape[1])[None, :]
+    shade = np.clip(0.62 + xs * 0.45, 0, 1)[..., None]
+    rgb = np.array(color, np.float32)[None, None] * shade * np.ones_like(m)[..., None]
+    return Image.fromarray(np.concatenate([rgb, m[..., None] * 255], -1).clip(0, 255).astype(np.uint8), 'RGBA')
+
+
+def santa_hat(w):
+    """A small manga Santa hat (the Smissmas menu title): red cone drooping to the right, bone brim and pom-pom."""
+    ss = 4
+    W, H = w * ss, int(w * 0.92) * ss
+    cone = [(W * 0.10, H * 0.78), (W * 0.22, H * 0.40), (W * 0.40, H * 0.14), (W * 0.62, H * 0.08),
+            (W * 0.84, H * 0.22), (W * 0.93, H * 0.42), (W * 0.84, H * 0.40), (W * 0.74, H * 0.30),
+            (W * 0.66, H * 0.40), (W * 0.90, H * 0.78)]
+    layers = []
+    for pts, col, kind in ((cone, (184, 38, 44), 'poly'), (None, (240, 240, 234), 'brim'), (None, (240, 240, 234), 'pom')):
+        m = Image.new('L', (W, H), 0)
+        d = ImageDraw.Draw(m)
+        if kind == 'poly':
+            d.polygon(pts, fill=255)
+        elif kind == 'brim':
+            d.rounded_rectangle((W * 0.02, H * 0.70, W * 0.98, H * 0.98), radius=H * 0.12, fill=255)
+        else:
+            d.ellipse((W * 0.83, H * 0.36, W * 1.0, H * 0.53), fill=255)
+        layers.append((np.asarray(m.resize((W // ss, H // ss), Image.LANCZOS), np.float32) / 255, col))
+    w2, h2 = W // ss, H // ss
+    out = np.zeros((h2, w2, 4), np.float32)
+    sil = np.zeros((h2, w2), np.float32)
+    lit = np.clip(1.05 - np.linspace(0, 1, w2)[None, :] * 0.35, 0, 1)  # lit from the upper left
+    for m, col in layers:
+        rgb = np.array(col, np.float32)[None, None] * lit[..., None]
+        out[..., :3] = out[..., :3] * (1 - m[..., None]) + rgb * m[..., None]
+        out[..., 3] = np.maximum(out[..., 3], m)
+        sil = np.maximum(sil, m)
+    # thin ink outline around the whole hat, like the rest of the manga art
+    edge = np.asarray(Image.fromarray((sil * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(3)), np.float32) / 255
+    ring = np.clip(edge - sil, 0, 1)
+    out[..., :3] = out[..., :3] * (1 - ring[..., None]) + np.array(INK, np.float32) * ring[..., None]
+    out[..., 3] = np.maximum(out[..., 3], ring) * 255
+    return Image.fromarray(out.clip(0, 255).astype(np.uint8), 'RGBA')
+
+
+def star_glint(r, color=(255, 222, 150)):
+    """A four-point star with a soft glow (the Smissmas menu: on top of Las Noches)."""
+    s = r * 6
+    ss = 4
+    im = Image.new('L', (s * ss, s * ss), 0)
+    c, R, t = s * ss / 2, r * ss * 2.4, r * ss * 0.32
+    ImageDraw.Draw(im).polygon([(c, c - R), (c + t, c - t), (c + R, c), (c + t, c + t), (c, c + R), (c - t, c + t),
+                                (c - R, c), (c - t, c - t)], fill=255)
+    m = im.resize((s, s), Image.LANCZOS)
+    glow = np.asarray(m.filter(ImageFilter.GaussianBlur(r * 1.2)), np.float32) / 255 * 0.8
+    out = solid_with_alpha(color, np.clip(glow, 0, 1))
+    out.alpha_composite(solid_with_alpha((255, 248, 230), np.asarray(m, np.float32) / 255))
     return out
 
 
@@ -356,8 +446,12 @@ def ulq_eye(size, seed=11):
 
 
 # ---------------------------------------------------------------- background scene
-def hueco_mundo_scene(W=1920, H=1080, seed=3, menu_shade=True):
+def hueco_mundo_scene(W=1920, H=1080, seed=3, menu_shade=True, variant=None):
+    """Hueco Mundo by night. variant (the main menu on TF2's holidays, same landscape): None, the eternal crescent;
+    'fullmoon', the moon full; 'halloween', a full moon in a green halo, bats across it, green mist, Hollow masks
+    sunk in the sand; 'christmas', snowfall and a star on Las Noches."""
     r = rng(seed)
+    rv = rng(seed + 101)  # the variants' own random stream: the shared landscape stays identical
     yy = np.linspace(0, 1, H)[:, None]
     horizon = 0.60
     sky = np.zeros((H, W, 3), np.float32)
@@ -376,8 +470,18 @@ def hueco_mundo_scene(W=1920, H=1080, seed=3, menu_shade=True):
     img.alpha_composite(solid_with_alpha((200, 210, 215), np.clip(st, 0, 1)))
 
     # moon
-    moon = crescent(int(H * 0.085), phase=0.58, tilt=-150)
-    img.alpha_composite(moon, (int(W * 0.74) - moon.width // 2, int(H * 0.21) - moon.height // 2))
+    mx, my = int(W * 0.74), int(H * 0.21)
+    if variant in ('fullmoon', 'halloween'):
+        moon = crescent(int(H * 0.085), phase=None,
+                        glow_color=(140, 232, 186) if variant == 'halloween' else (200, 214, 208))
+    else:
+        moon = crescent(int(H * 0.085), phase=0.58, tilt=-150)
+    img.alpha_composite(moon, (mx - moon.width // 2, my - moon.height // 2))
+    if variant == 'halloween':  # Murcielago: bats across the moon
+        for dx, dy, s in ((-0.035, -0.010, 0.030), (0.020, 0.040, 0.022), (0.045, -0.055, 0.017), (-0.075, 0.060, 0.016),
+                          (0.090, 0.015, 0.013), (-0.010, -0.095, 0.012), (0.130, -0.070, 0.010)):
+            b = bat(int(W * s))
+            img.alpha_composite(b, (int(mx + W * dx) - b.width // 2, int(my + H * dy) - b.height // 2))
 
     # Las Noches on the horizon: flat dome + thin towers, hazed into the sky
     ln = Image.new('L', (W, H), 0)
@@ -391,6 +495,9 @@ def hueco_mundo_scene(W=1920, H=1080, seed=3, menu_shade=True):
         d.polygon([(x - tw, hy - H * th), (x + tw, hy - H * th), (x, hy - H * th - tw * 3)], fill=255)
     lna = np.asarray(ln.filter(ImageFilter.GaussianBlur(1.2)), np.float32) / 255
     img.alpha_composite(solid_with_alpha((30, 32, 36), lna * 0.95))
+    if variant == 'christmas':  # a star on the tallest tower
+        star = star_glint(max(3, int(H * 0.006)))
+        img.alpha_composite(star, (int(hx + 0.12 * dw) - star.width // 2, int(hy - H * 0.19 - 7 * 3) - star.height // 2))
 
     # dunes: smooth layered heightfields, lit from the moon side (upper right)
     layers = [
@@ -415,6 +522,12 @@ def hueco_mundo_scene(W=1920, H=1080, seed=3, menu_shade=True):
         crest = np.clip(1 - np.abs(Y - prof[None, :] - 1.5) / 2.5, 0, 1) * light[None, :] ** 2
         col = col + crest[..., None] * 34
         arr = np.concatenate([col.clip(0, 255), (mask * 255)[..., None]], -1)
+        if variant == 'halloween' and sd == 13:
+            # Hollow masks behind this dune line, so its sand hides their lower half
+            for tx, th, rot in ((0.47, 0.050, -14), (0.70, 0.040, 10), (0.84, 0.056, -7)):
+                x0 = int(W * tx)
+                hm = hollow_mask(int(H * th)).rotate(rot, expand=True, resample=Image.BICUBIC)
+                img.alpha_composite(hm, (x0 - hm.width // 2, int(prof[x0]) - int(hm.height * 0.55)))
         img.alpha_composite(Image.fromarray(arr.astype(np.uint8), 'RGBA'))
 
         if sd == 12:
@@ -424,10 +537,23 @@ def hueco_mundo_scene(W=1920, H=1080, seed=3, menu_shade=True):
                 tree = quartz_tree(int(H * th), seed=int(tx * 1000))
                 img.alpha_composite(tree, (x0 - tree.width // 2, int(prof[x0]) + 4 - tree.height))
 
-    # low mist over the horizon
-    mist = np.exp(-((yy - horizon - 0.03) / 0.05) ** 2) * 0.22
+    # low mist over the horizon (green and thicker on Halloween)
+    halloween = variant == 'halloween'
+    mist = np.exp(-((yy - horizon - 0.03) / (0.07 if halloween else 0.05)) ** 2) * (0.30 if halloween else 0.22)
     mist = mist * np.clip(0.8 + noise2d(W, H, 21, scale=240, octaves=3)[..., None][..., 0] * 1.4, 0, 1.2)
-    img.alpha_composite(solid_with_alpha((170, 176, 180), np.clip(mist, 0, 1)))
+    img.alpha_composite(solid_with_alpha((96, 214, 156) if halloween else (170, 176, 180), np.clip(mist, 0, 1)))
+
+    if variant == 'christmas':  # snowfall: soft flakes, bigger and brighter toward the viewer
+        n = W * H // 1400
+        fx, fy = rv.uniform(0, W, n), rv.uniform(0, H, n)
+        near = rv.uniform(0, 1, n) ** 2.2
+        snow = Image.new('L', (W, H), 0)
+        d = ImageDraw.Draw(snow)
+        for x, y, k in zip(fx, fy, near):
+            rad = (0.6 + k * 2.4) * H / 1080
+            d.ellipse((x - rad, y - rad, x + rad, y + rad), fill=int(110 + 145 * k))
+        sa = np.asarray(snow.filter(ImageFilter.GaussianBlur(0.7 * H / 1080)), np.float32) / 255
+        img.alpha_composite(solid_with_alpha((238, 242, 246), np.clip(sa * 1.25, 0, 1)))
 
     # left shade for the menu column + vignette + grain
     xx = np.linspace(0, 1, W)[None, :]
