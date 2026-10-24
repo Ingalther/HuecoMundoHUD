@@ -504,16 +504,21 @@ def patch_class(root):
     """The live model standing on a torn team-toned triangle; the model's legs end at the triangle's base."""
     body = kv.find(root, 'Resource/UI/HudPlayerClass.res')
     kv.setmany(kv.find(body, 'HudPlayerClass'), xpos=0, ypos=0)
+    # the game cuts the model (and the 2D art) off with a straight line at the bottom of its panel: both panels end
+    # on the triangle's level base (y 121 of 125), and HM_PlayerShardBase draws the torn base edge over that line
     place(kv.find(body, 'classmodelpanel'), (-6, PLAYER_H - 4 - 260, 130, 260), zpos=3)
     # 2D mode (HUD Settings > PLAYER CHARACTER, i.e. cl_hud_playerclass_use_playermodel 0): TF2's own class art
-    # where the model stands, the same size as the model, its base on the triangle's base, its chest under the band
-    place(kv.find(body, 'PlayerStatusClassImage'), (-4, 9, 116, 116), zpos=3)
+    # where the model stands, about the model's size, its chest under the band. Narrower than the model panel: the
+    # art reaches its frame's edges, and its bottom must stay within the base edge (x 6-127)
+    place(kv.find(body, 'PlayerStatusClassImage'), (6, PLAYER_H - 4 - 106, 106, 106), zpos=3)
     for n in ('classmodelpanelBG', 'PlayerStatusClassImageBG'):
         kv.setmany(kv.find(body, n), xpos=0, ypos=0, wide=0, tall=0)
     for n in ('PlayerStatusSpyImage', 'PlayerStatusSpyOutlineImage'):
         place(kv.find(body, n), (4, 92, 28, 28), zpos=8)
     add_placed(body, 'HM_PlayerShard', team_img('HM_PlayerShard', *pc(0, 0, 130, PLAYER_H), 'shard', z=1),
                (0, 0, 130, PLAYER_H))
+    add_placed(body, 'HM_PlayerShardBase', img_panel('HM_PlayerShardBase', *pc(0, 0, 130, PLAYER_H), 'shard_base',
+                                                     z=4), (0, 0, 130, PLAYER_H))
 
 
 def patch_ammo(root):

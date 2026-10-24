@@ -285,6 +285,7 @@ def hud_cards(out):
     red, blue = (150, 50, 54), (56, 90, 140)
     out.thumb('shard_red', manga.shard(red, 411))
     out.thumb('shard_blue', manga.shard(blue, 411))
+    out.thumb('shard_base', manga.shard_base(411))
     out.thumb('hp_band', manga.hp_band(412))
     out.thumb('ammo_blade', manga.ammo_blade(413))
     out.thumb('tag_streak', manga.tag(414, '殺'))
