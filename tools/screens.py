@@ -494,9 +494,9 @@ def winpanel(root):
         blk = kv.find(body, n)
         kv.remove(blk, 'fillcolor')
         kv.setmany(blk, image=T + 'notice_rule', scaleImage=1, ypos=int(kv.get(blk, 'ypos')) - 2, tall=5)
-    # the page is see-through, so the card row at the bottom center (uber, metal, item cards) showed through the
-    # MVP list: the bar behind the list is solid ink
-    kv.set(kv.find(body, 'ShadedBar'), 'fillcolor', '8 9 10 235')
+    # a light shade on purpose: solid ink here turned the lower half of the see-through page into a black box (and
+    # the bottom-center cards still showed through it, only darker)
+    kv.set(kv.find(body, 'ShadedBar'), 'fillcolor', '0 0 0 70')
     for n in ('WinningTeamLabel', 'AdvancingTeamLabel'):
         kv.set(kv.find(body, n), 'font', 'HM_Title')
     for n in ('WinningTeamLabelDropshadow', 'AdvancingTeamLabelDropshadow'):

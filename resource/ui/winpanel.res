@@ -390,7 +390,7 @@
 		"visible"		"1"
 		"enabled"		"1"
 		"tabPosition"		"0"
-		"fillcolor"		"8 9 10 235"
+		"fillcolor"		"0 0 0 70"
 		"PaintBackgroundType"		"0"
 	}
 	"TopPlayersLabel"
