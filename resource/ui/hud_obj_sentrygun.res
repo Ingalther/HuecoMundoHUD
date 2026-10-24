@@ -165,7 +165,7 @@
 			"zpos"		"-2"
 			"wide"		"44"
 			"tall"		"60"
-			"visible"		"1"
+			"visible"		"0"
 			"enabled"		"1"
 			"icon"		"obj_status_alert_background_tall"
 		}
@@ -173,8 +173,8 @@
 		{
 			"ControlName"		"CIconPanel"
 			"fieldName"		"WrenchIcon"
-			"xpos"		"121"
-			"ypos"		"18"
+			"xpos"		"116"
+			"ypos"		"17"
 			"zpos"		"1"
 			"wide"		"27"
 			"tall"		"27"
@@ -182,14 +182,14 @@
 			"enabled"		"1"
 			"scaleImage"		"1"
 			"icon"		"obj_status_icon_wrench"
-			"iconColor"		"255 255 255 255"
+			"iconColor"		"226 226 220 255"
 		}
 		"SapperIcon"
 		{
 			"ControlName"		"CIconPanel"
 			"fieldName"		"SapperIcon"
-			"xpos"		"117"
-			"ypos"		"12"
+			"xpos"		"112"
+			"ypos"		"13"
 			"zpos"		"1"
 			"wide"		"35"
 			"tall"		"35"
@@ -197,7 +197,7 @@
 			"enabled"		"1"
 			"scaleImage"		"1"
 			"icon"		"obj_status_icon_sapper"
-			"iconColor"		"255 255 255 255"
+			"iconColor"		"210 70 64 255"
 		}
 		"Health"
 		{

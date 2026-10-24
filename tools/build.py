@@ -608,6 +608,17 @@ def patch_meter(root):
         lift(blk)
 
 
+def patch_tracker(root):
+    """Contract tracker ("Contract Inactive / Press [ F2 ] to view") at the top right.
+    - It sat at the height of the kill feed's fifth row (44 + 4 x 19), so a full kill feed covered it: it starts
+      below the feed now.
+    - The game sizes its box from the header's width plus stats_buffer_width. Our header font is condensed and the
+      "Press [ F2 ]" line kept its wide stock font, so that line ran under the folder icon: more buffer."""
+    body = next(e[1] for e in root if isinstance(e[1], list))
+    kv.set(kv.find(body, 'ItemAttributeTracker'), 'stats_buffer_width', 50)
+    kv.set(kv.find(body, 'QuestsStatusContainer'), 'ypos', 146)
+
+
 def patch_inspect(root):
     """An F tap on a teammate opens the inspect card (their item), and the game hides the ammo, sticky, uber and item
     meter counters while it is open: it locks their render group when the card shows and unlocks it when the card
@@ -1109,10 +1120,22 @@ def patch_building(root, rel):
             kv.setmany(ent[1], visible=0, wide=0, tall=0)
     kind = next((k for k in build_art.BUILDING_KANJI if k in rel), None)
     kv.add_block(body, 'HM_BldCard', team_img('HM_BldCard', 0, 0, w, h, 'bld', z=-2))
+    s = h - 6
     if kind:
-        s = h - 6
         kv.add_block(body, 'HM_BldKanji', img_panel('HM_BldKanji', w - s - 4, 3, s, s, 'bld_k_' + kind, z=-1,
                                                     drawcolor='226 226 220 34'))
+    # alerts (low ammo / health, sapper): the stock tray slid a bright white tab over the card's kanji end. It stays
+    # hidden (the game still runs its slide, which is what shows the icons), and the icons sit on the kanji instead:
+    # the wrench in bone, the sapper in crimson
+    for ent in kv.walk(body):
+        if not isinstance(ent[1], list):
+            continue
+        if (kv.get(ent[1], 'ControlName') or '').lower() == 'cbuildingstatusalerttray':
+            kv.set(ent[1], 'visible', 0)
+        elif ent[0] in ('WrenchIcon', 'SapperIcon'):
+            iw, ih = int(kv.get(ent[1], 'wide') or 27), int(kv.get(ent[1], 'tall') or 27)
+            kv.setmany(ent[1], xpos=w - s // 2 - 4 - iw // 2, ypos=3 + s // 2 - ih // 2,
+                       iconColor='226 226 220 255' if ent[0] == 'WrenchIcon' else '210 70 64 255')
 
 
 def patch_spec_health(root):
@@ -1512,6 +1535,7 @@ def main():
         'resource/ui/controlpointprogressbar.res': patch_cp_progress,
         'resource/ui/hudrocketpack.res': patch_rocketpack,
         'resource/ui/hudinspectpanel.res': patch_inspect,
+        'resource/ui/huditemattributetracker.res': patch_tracker,
     }
     medic = os.path.join(work, 'resource', 'ui', 'hudmediccharge.res')
     if not os.path.exists(medic):

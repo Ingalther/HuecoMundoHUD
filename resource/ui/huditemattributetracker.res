@@ -11,14 +11,14 @@
 		"wide"		"f0"
 		"tall"		"f0"
 		"PaintBackgroundType"		"0"
-		"stats_buffer_width"		"30"
+		"stats_buffer_width"		"50"
 	}
 	"QuestsStatusContainer"
 	{
 		"ControlName"		"EditablePanel"
 		"fieldName"		"QuestsStatusContainer"
 		"xpos"		"rs1-10"
-		"ypos"		"120"
+		"ypos"		"146"
 		"wide"		"110"
 		"tall"		"20"
 		"proportionaltoparent"		"1"

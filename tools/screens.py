@@ -368,6 +368,10 @@ def loadout_sub(root):
                  ('ShowTradeButton', 100), ('ShowPaintkitsButton', 230)):
         kv.set(kv.find(body, n), 'ypos', 262)
     kv.set(kv.find(body, 'SelectLabel'), 'ypos', 238)
+    # the game grows the class cards near the mouse (z up to 100) over these lines; our cards are opaque, so the
+    # red "changes take effect on respawn" note vanished under them: both lines draw above the cards
+    for n in ('SelectLabel', 'LoadoutChangesLabel'):
+        kv.set(kv.find(body, n), 'zpos', 150)
 
 
 def overlay_page(name):
@@ -463,7 +467,9 @@ def winpanel(root):
         blk = kv.find(body, n)
         kv.remove(blk, 'fillcolor')
         kv.setmany(blk, image=T + 'notice_rule', scaleImage=1, ypos=int(kv.get(blk, 'ypos')) - 2, tall=5)
-    kv.set(kv.find(body, 'ShadedBar'), 'fillcolor', '0 0 0 70')
+    # the page is see-through, so the card row at the bottom center (uber, metal, item cards) showed through the
+    # MVP list: the bar behind the list is solid ink
+    kv.set(kv.find(body, 'ShadedBar'), 'fillcolor', '8 9 10 235')
     for n in ('WinningTeamLabel', 'AdvancingTeamLabel'):
         kv.set(kv.find(body, n), 'font', 'HM_Title')
     for n in ('WinningTeamLabelDropshadow', 'AdvancingTeamLabelDropshadow'):
