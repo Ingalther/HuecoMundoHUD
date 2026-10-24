@@ -145,7 +145,7 @@
 	{
 		"ControlName"		"ScalableImagePanel"
 		"fieldName"		"Background"
-		"xpos"		"cs-0.5"
+		"xpos"		"rs1"
 		"ypos"		"0"
 		"zpos"		"-200"
 		"wide"		"o1.778"
@@ -155,16 +155,6 @@
 		"image"		"../console/background_huecomundo_widescreen"
 		"scaleImage"		"1"
 		"proportionaltoparent"		"1"
-		"if_wider"
-		{
-			"wide"		"f0"
-			"tall"		"o0.5625"
-		}
-		"if_taller"
-		{
-			"wide"		"o1.778"
-			"tall"		"f0"
-		}
 	}
 	"TFLogoImage"
 	{

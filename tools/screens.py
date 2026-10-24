@@ -75,11 +75,13 @@ def nav_button(blk, y, label=None):
 # ------------------------------------------------------------------ main menu
 def mainmenu(root):
     body = kv.find(root, 'Resource/UI/MainMenuOverride.res')
+    # the 16:9 scene fills the height at every aspect ratio, right-aligned: TF2's if_wider is any ratio >= 1.6, and a
+    # width-filling scene left 16:10 screens a black band along the bottom. Narrower screens lose the scene's left
+    # edge, ultrawide ones get black left of it; both under the sidebar, where the scene is shaded to ink anyway
     bg = kv.find(body, 'Background')
-    bg[:] = [e for e in bg if not (isinstance(e[1], list) and e[0].lower().startswith(('if_halloween', 'if_fullmoon', 'if_christmas')))]
-    kv.setmany(bg, visible=1, image=SCENE, wide='o1.778', tall='f0')
-    kv.setmany(kv.find(bg, 'if_wider'), wide='f0', tall='o0.5625')
-    kv.setmany(kv.find(bg, 'if_taller'), wide='o1.778', tall='f0')
+    bg[:] = [e for e in bg if not (isinstance(e[1], list) and e[0].lower().startswith(
+        ('if_halloween', 'if_fullmoon', 'if_christmas', 'if_wider', 'if_taller')))]
+    kv.setmany(bg, visible=1, image=SCENE, xpos='rs1', wide='o1.778', tall='f0')
 
     add(body, 'HM_Sidebar', image('HM_Sidebar', 0, 0, 310, 'f0', T + 'sidebar', z=-60))
     add(body, 'HM_MenuKanji', image('HM_MenuKanji', 'r34', 200, 16, 32, T + 'kanji_huecomundo', z=-50,
