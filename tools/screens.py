@@ -88,7 +88,10 @@ def mainmenu(root):
     kv.setmany(kv.find(body, 'TFCharacterImage'), visible=0, wide=0, tall=0)
 
     # profile / rank block: stock is centre-anchored, re-anchor it to the sidebar (absolute, any aspect ratio)
-    kv.setmany(kv.find(body, 'RankModelPanel'), xpos=-442, ypos=-378)
+    # the medal model is drawn over the name labels, and a high-level medal (wings, spikes, stars) reached 12 units
+    # into the name / "Casual" / "Level" lines and up over the logo's credit line. Its panel is 85 % size (the model
+    # scales with it) and centred at (45, 127): the medal fills x 10..82, y 98..159, left of the text, under the logo
+    kv.setmany(kv.find(body, 'RankModelPanel'), xpos=-380, ypos=-298, wide=850, tall=850)
     kv.setmany(kv.find(body, 'CycleRankTypeButton'), xpos=262, ypos=101)
     kv.setmany(kv.find(body, 'RankTooltipPanel'), xpos=29, ypos=101)
     kv.setmany(kv.find(body, 'NoGCMessage'), xpos=24, ypos=96)
@@ -324,10 +327,12 @@ def teammenu(root):
         kv.remove(body, name)
         body.append([name, blk, None])
         card_button(body, blk, img, x, y, w, h, cmd)
-    kv.setmany(kv.find(body, 'BlueCount'), xpos='c-236', ypos=380, wide=176, tall=30, textAlignment='center',
-               fgcolor='128 160 200 255', font='HM_ScoreBig')
-    kv.setmany(kv.find(body, 'RedCount'), xpos='c60', ypos=380, wide=176, tall=30, textAlignment='center',
-               fgcolor='208 92 92 255', font='HM_ScoreBig')
+    # team player counts on the lower end of each card (behind the card, only the bottom of the digit showed below
+    # its edge as a small half circle); no mouse input, so clicks still reach the card's button
+    kv.setmany(kv.find(body, 'BlueCount'), xpos='c-236', ypos=356, zpos=7, wide=176, tall=44, textAlignment='center',
+               fgcolor='128 160 200 255', font='HM_ScoreBig', mouseinputenabled=0)
+    kv.setmany(kv.find(body, 'RedCount'), xpos='c60', ypos=356, zpos=7, wide=176, tall=44, textAlignment='center',
+               fgcolor='208 92 92 255', font='HM_ScoreBig', mouseinputenabled=0)
     kv.setmany(kv.find(body, 'TeamMenuSelect'), font='HM_Title', xpos='c-200', ypos=14, wide=400, tall=30,
                textAlignment='center', fgcolor='226 226 220 255')
     add(body, 'HM_TeamKanji', image('HM_TeamKanji', 'c-9', 120, 18, 36, T + 'kanji_huecomundo', z=2,
