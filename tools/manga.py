@@ -475,8 +475,8 @@ def shard_base(seed, size=(512, 512)):
 
 def tf_emblem(size=256, seed=31, tilt=-4):
     """The game icon: TF2's round emblem (a disc cut in four by a cross, a hole at the hub) as a Hueco Mundo manga
-    piece: bone segments with a light screentone in a torn ink edge, a hard shadow, Ulquiorra's emerald eye in the
-    hub and his tear mark running down the lower gap."""
+    piece: bone segments with a light screentone in a torn ink edge, a hard shadow, and Ulquiorra's emerald tear
+    mark running down the lower gap."""
     S, ss = size, 4
     c, R = S * 0.47, S * 0.41  # a little up-left of centre: the shadow falls down-right
     hub, gap = R * 0.36, R * 0.21
@@ -501,23 +501,7 @@ def tf_emblem(size=256, seed=31, tilt=-4):
                       paper=BONE) / 255  # lit from the upper left, like the moon side of the menu
     im[..., :3] = im[..., :3] * (1 - inner[..., None]) + tone * inner[..., None]
     out = Image.fromarray((im * 255).clip(0, 255).astype(np.uint8), 'RGBA')
-    # the hub: an ink socket with the emerald eye in it
-    sock = Image.new('L', (S * ss, S * ss), 0)
-    r0 = hub * 0.86 * ss
-    ImageDraw.Draw(sock).ellipse((C - r0, C - r0, C + r0, C + r0), fill=255)
-    out.alpha_composite(art.solid_with_alpha(INK, arr(sock.resize((S, S), Image.LANCZOS))))
-    ri = hub * 0.58
-    dist = np.hypot(xx * S - c, yy * S - c) / ri
-    iris = np.clip((1 - dist) * ri * 0.9, 0, 1)
-    col = np.array(art.EMERALD_DEEP, np.float32) + (np.array(EMERALD, np.float32) - art.EMERALD_DEEP) * \
-        np.clip(1.25 - dist, 0, 1)[..., None]
-    out.alpha_composite(Image.fromarray(np.concatenate([col, iris[..., None] * 255], -1).clip(0, 255).astype(np.uint8)))
-    glow = Image.fromarray((iris * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(ri * 0.5))
-    out.alpha_composite(art.solid_with_alpha(EMERALD, arr(glow) * 0.35))
-    pupil = Image.new('L', (S * ss, S * ss), 0)
-    ImageDraw.Draw(pupil).ellipse((C - ri * 0.2 * ss, C - ri * 0.78 * ss, C + ri * 0.2 * ss, C + ri * 0.78 * ss), fill=255)
-    out.alpha_composite(art.solid_with_alpha((5, 12, 9), arr(pupil.resize((S, S), Image.LANCZOS))))
-    # the tear: from under the eye down the lower gap, past the rim
+    # the tear: from the hub down the lower gap, past the rim
     th = int(R * 0.92)  # ends just past the rim, inside the canvas
     t = art.tear_streak(th, max(4, int(gap * 0.42)), seed=seed).rotate(-tilt, expand=True, resample=Image.BICUBIC)
     sx, sy = -math.sin(a), math.cos(a)  # the lower bar's direction
