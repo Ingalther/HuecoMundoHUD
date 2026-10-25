@@ -249,9 +249,10 @@ def nav(hover):
 
 
 def app_icon(path):
-    """Single 256x256 PNG entry: the engine only takes the first image of resource/game.ico."""
-    eye = art.ulq_eye(256)
-    eye.save(path, format='ICO', sizes=[(256, 256)])
+    """TF2's round emblem in the HUD's style (manga.tf_emblem), so the game still reads as TF2 in the taskbar and on
+    the desktop shortcut. Single 256x256 PNG entry: the engine only takes the first image of resource/game.ico."""
+    import manga
+    manga.tf_emblem(256).save(path, format='ICO', sizes=[(256, 256)])
 
 
 def objective_icons(out, pdir):

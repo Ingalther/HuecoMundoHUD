@@ -473,6 +473,59 @@ def shard_base(seed, size=(512, 512)):
     return art.solid_with_alpha(BONE, thick)
 
 
+def tf_emblem(size=256, seed=31, tilt=-4):
+    """The game icon: TF2's round emblem (a disc cut in four by a cross, a hole at the hub) as a Hueco Mundo manga
+    piece: bone segments with a light screentone in a torn ink edge, a hard shadow, Ulquiorra's emerald eye in the
+    hub and his tear mark running down the lower gap."""
+    S, ss = size, 4
+    c, R = S * 0.47, S * 0.41  # a little up-left of centre: the shadow falls down-right
+    hub, gap = R * 0.36, R * 0.21
+    big = Image.new('L', (S * ss, S * ss), 0)
+    d = ImageDraw.Draw(big)
+    C = c * ss
+    d.ellipse((C - R * ss, C - R * ss, C + R * ss, C + R * ss), fill=255)
+    d.ellipse((C - hub * ss, C - hub * ss, C + hub * ss, C + hub * ss), fill=0)
+    a = math.radians(tilt)
+    for dx, dy in ((math.cos(a), math.sin(a)), (-math.sin(a), math.cos(a))):  # the two bars of the cross
+        L, hw = R * ss * 1.2, gap * ss / 2
+        d.polygon([(C + dx * L - dy * hw, C + dy * L + dx * hw), (C + dx * L + dy * hw, C + dy * L - dx * hw),
+                   (C - dx * L + dy * hw, C - dy * L - dx * hw), (C - dx * L - dy * hw, C - dy * L + dx * hw)], fill=0)
+    outer, inner = torn(big.resize((S, S), Image.LANCZOS), seed, grow=3, shrink=1.5)
+    im = np.zeros((S, S, 4), np.float32)
+    o = max(2, S // 36)
+    im[o:, o:, 3] = outer[:-o, :-o] * 0.85  # hard offset shadow, ink
+    im[..., :3] = im[..., :3] * (1 - outer[..., None]) + np.array(INK, np.float32) / 255 * outer[..., None]
+    im[..., 3] = np.maximum(im[..., 3], outer)
+    yy, xx = np.mgrid[0:S, 0:S].astype(np.float32) / S
+    tone = screentone(np.clip(1.08 - (xx + yy) * 0.28, 0, 1), period=max(3, S // 48), dot_color=(166, 168, 164),
+                      paper=BONE) / 255  # lit from the upper left, like the moon side of the menu
+    im[..., :3] = im[..., :3] * (1 - inner[..., None]) + tone * inner[..., None]
+    out = Image.fromarray((im * 255).clip(0, 255).astype(np.uint8), 'RGBA')
+    # the hub: an ink socket with the emerald eye in it
+    sock = Image.new('L', (S * ss, S * ss), 0)
+    r0 = hub * 0.86 * ss
+    ImageDraw.Draw(sock).ellipse((C - r0, C - r0, C + r0, C + r0), fill=255)
+    out.alpha_composite(art.solid_with_alpha(INK, arr(sock.resize((S, S), Image.LANCZOS))))
+    ri = hub * 0.58
+    dist = np.hypot(xx * S - c, yy * S - c) / ri
+    iris = np.clip((1 - dist) * ri * 0.9, 0, 1)
+    col = np.array(art.EMERALD_DEEP, np.float32) + (np.array(EMERALD, np.float32) - art.EMERALD_DEEP) * \
+        np.clip(1.25 - dist, 0, 1)[..., None]
+    out.alpha_composite(Image.fromarray(np.concatenate([col, iris[..., None] * 255], -1).clip(0, 255).astype(np.uint8)))
+    glow = Image.fromarray((iris * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(ri * 0.5))
+    out.alpha_composite(art.solid_with_alpha(EMERALD, arr(glow) * 0.35))
+    pupil = Image.new('L', (S * ss, S * ss), 0)
+    ImageDraw.Draw(pupil).ellipse((C - ri * 0.2 * ss, C - ri * 0.78 * ss, C + ri * 0.2 * ss, C + ri * 0.78 * ss), fill=255)
+    out.alpha_composite(art.solid_with_alpha((5, 12, 9), arr(pupil.resize((S, S), Image.LANCZOS))))
+    # the tear: from under the eye down the lower gap, past the rim
+    th = int(R * 0.92)  # ends just past the rim, inside the canvas
+    t = art.tear_streak(th, max(4, int(gap * 0.42)), seed=seed).rotate(-tilt, expand=True, resample=Image.BICUBIC)
+    sx, sy = -math.sin(a), math.cos(a)  # the lower bar's direction
+    mx, my = c + sx * (hub * 0.9 + th / 2), c + sy * (hub * 0.9 + th / 2)
+    out.alpha_composite(t, (int(mx - t.width / 2), int(my - t.height / 2)))
+    return out
+
+
 def hp_band(seed, size=(512, 206)):
     """Slanted ink band for the health digits (HUD 114x46). The right end (x 0.77-0.87) stays plain ink for the
     health gauge and its mask."""

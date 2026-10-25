@@ -47,5 +47,7 @@ artwork are all in tools\.
 UNINSTALL
 ---------
 Delete the HUD folder from tf\custom and restart TF2.
+If you used update.bat, it also gave your desktop TF2 shortcut the HUD's icon; recreate the
+shortcut in Steam (right-click TF2 > Manage > Add desktop shortcut) to get the stock one back.
 
 Licence: CC BY-NC-SA 4.0 (see LICENSE.txt).
