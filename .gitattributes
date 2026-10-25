@@ -1,2 +1,4 @@
 # cmd.exe misreads batch files with LF line endings, so check them out with CRLF everywhere
 *.bat text eol=crlf
+# GitHub takes .res for ReScript; here they are Valve KeyValues files (TF2's HUD layouts)
+*.res linguist-language=vdf linguist-detectable=true
