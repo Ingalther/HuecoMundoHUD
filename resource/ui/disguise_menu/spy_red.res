@@ -43,7 +43,7 @@
 		"zpos"		"0"
 		"wide"		"0"
 		"tall"		"0"
-		"visible"		"0"
+		"visible"		"1"
 		"enabled"		"1"
 		"scaleImage"		"1"
 		"icon"		"ico_key_blank"
@@ -57,7 +57,7 @@
 		"fgcolor"		"Black"
 		"xpos"		"15"
 		"ypos"		"90"
-		"zpos"		"3"
+		"zpos"		"5"
 		"wide"		"15"
 		"tall"		"15"
 		"autoResize"		"0"
@@ -68,6 +68,8 @@
 		"textAlignment"		"Center"
 		"dulltext"		"1"
 		"brighttext"		"0"
+		"border"		"HM_KeyChip"
+		"paintborder"		"1"
 	}
 	"NumberLabel"
 	{
@@ -77,7 +79,7 @@
 		"fgcolor"		"Black"
 		"xpos"		"15"
 		"ypos"		"90"
-		"zpos"		"3"
+		"zpos"		"5"
 		"wide"		"15"
 		"tall"		"15"
 		"autoResize"		"0"
@@ -88,20 +90,7 @@
 		"textAlignment"		"Center"
 		"dulltext"		"1"
 		"brighttext"		"0"
-	}
-	"HM_NumberBg"
-	{
-		"ControlName"		"ImagePanel"
-		"fieldName"		"HM_NumberBg"
-		"xpos"		"15"
-		"ypos"		"90"
-		"zpos"		"0"
-		"wide"		"15"
-		"tall"		"15"
-		"visible"		"1"
-		"enabled"		"1"
-		"scaleImage"		"1"
-		"image"		"replay/thumbnails/hm/menu_key"
-		"mouseinputenabled"		"0"
+		"border"		"HM_KeyChip"
+		"paintborder"		"1"
 	}
 }

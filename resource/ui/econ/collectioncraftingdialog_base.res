@@ -422,7 +422,7 @@
 			"tall"		"p0.4"
 			"visible"		"1"
 			"enabled"		"1"
-			"image"		"item_carousel_bg"
+			"image"		"replay/thumbnails/hm/inspect_bg"
 			"scaleImage"		"1"
 			"proportionaltoparent"		"1"
 		}

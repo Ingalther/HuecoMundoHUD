@@ -49,6 +49,9 @@ C = {
     'HM_Amber': '255 196 48 255',
     'HM_TeamRed': '208 92 92 255',
     'HM_TeamBlue': '128 160 200 255',
+    # kill feed names: mid tones that read on the ink rows and on your own bone-jade rows (about 4:1 on both)
+    'HM_FeedRed': '214 66 66 255',
+    'HM_FeedBlue': '64 122 214 255',
 }
 
 SCHEME_COLORS = {
@@ -117,6 +120,9 @@ FONT_REMAP = {
     'tf2': 'Bahnschrift SemiCondensed',
     'tf2 professor': 'Constantia',
 }
+# FONT_REMAP leaves Verdana alone, and these stock fonts are Verdana on every screen of 600+ lines: the chat kept
+# the stock look at 900p / 1080p
+CHAT_FONTS = ('ChatFont', 'ChatMiniFont')
 
 
 def font_block(name, tall, weight=400, italic=0, outline=0, dropshadow=0, antialias=1):
@@ -132,8 +138,8 @@ HM_FONTS = {
     # damage numbers: bold italic manga lettering with an ink outline, big hits bigger
     'HM_Damage': font_block('Bahnschrift Bold Condensed', 21, 800, italic=1, outline=1),
     'HM_DamageBig': font_block('Bahnschrift Bold Condensed', 32, 800, italic=1, outline=1),
-    # kill feed: manga SFX lettering (bold condensed italic, ink outline so team colours read on ink and paper)
-    'HM_Killfeed': font_block('Bahnschrift SemiBold Condensed', 12, 600, italic=1, outline=1),
+    # kill feed: manga SFX lettering (bold condensed italic). No outline: on your own light rows it smeared the names
+    'HM_Killfeed': font_block('Bahnschrift SemiBold Condensed', 12, 600, italic=1),
     'HM_Small': font_block('Bahnschrift SemiCondensed', 8, 400),
     'HM_Menu': font_block('Bahnschrift SemiCondensed', 12, 400),
     'HM_Title': font_block('Constantia', 20, 400),
@@ -149,6 +155,7 @@ HM_FONTS = {
     'HM_NoticeTitle': font_block('Bahnschrift SemiBold Condensed', 17, 600),
     'HM_NoticeBody': font_block('Bahnschrift SemiCondensed', 11, 400),
     'HM_SpecHealth': font_block('Bahnschrift SemiBold Condensed', 10, 600, outline=1),
+    'HM_KillerHealth': font_block('Bahnschrift SemiBold Condensed', 12, 600, outline=1),  # killcam health tile
     # spectator key hints / tip / map name: outlined, they float over the map now that the black bars are gone
     'HM_SpecHint': font_block('Bahnschrift SemiCondensed', 10, 500, outline=1),
     'HM_SpecMap': font_block('Bahnschrift SemiBold Condensed', 14, 600, outline=1),
@@ -174,6 +181,7 @@ HM_BORDERS = {
     'HM_TopBand': scalable_border('top_band', 0, 0),
     'HM_StreakCard': scalable_border('streak_card', 40, 4, draw_h=3),  # only as tall as its text; text starts 5 in
     'HM_RespawnCard': scalable_border('respawn_card', 0, 0),  # the respawn label's own border (patch_spectator)
+    'HM_KeyChip': scalable_border('menu_key', 0, 0),  # build / disguise menu number labels (patch_menu)
 }
 HM_BORDERS['HM_Card_none'] = scalable_border('blank', 0, 0)
 for _c in screens.CARD_BORDERS:  # whole-image borders: zero corners stretch the art over the button
@@ -279,6 +287,10 @@ def build_scheme(src_text):
                 for e in sub[1]:
                     if e[0].lower() == 'name' and e[1].lower() in FONT_REMAP:
                         e[1] = FONT_REMAP[e[1].lower()]
+    for name in CHAT_FONTS:
+        for sub in kv.find(fonts, name) or []:
+            if isinstance(sub[1], list):
+                kv.set(sub[1], 'name', 'Bahnschrift SemiCondensed')
     for name, blk in HM_FONTS.items():
         kv.remove(fonts, name)
         fonts.append([name, blk, None])
@@ -332,6 +344,7 @@ IMAGE_MAP = {
     '../hud/character_red_bg_lodef_clipped': T + 'blank', '../hud/character_blue_bg_lodef_clipped': T + 'blank',
     '../hud/ammo_red_bg': T + 'blank', '../hud/ammo_blue_bg': T + 'blank',
     '../hud/ammo_red_bg_lodef': T + 'blank', '../hud/ammo_blue_bg_lodef': T + 'blank',
+    'item_carousel_bg': T + 'inspect_bg',  # the tan backdrop of the backpack's item inspection
 }
 for _t in ('red', 'blue'):
     for _v in ('', '_lodef', '_horiz1', '_horiz2', '_horiz1_lodef', '_horiz2_lodef', '_vert', '_vert_lodef'):
@@ -951,8 +964,8 @@ def patch_streak_notice(root):
 PORTRAIT_COLORS = {
     'color_portrait_bg_red': '156 70 70 255', 'color_portrait_bg_blue': '84 114 150 255',  # alive: bright enough to read
     'color_portrait_bg_red_dead': '40 32 32 255', 'color_portrait_bg_blue_dead': '30 34 40 255',
-    'color_bar_health_high': '46 214 140 255', 'color_bar_health_med': '214 196 120 255',
-    'color_bar_health_low': '200 64 64 255', 'color_portrait_blend_dead_red': '150 150 150 255',
+    'color_bar_health_high': '46 214 140 255', 'color_bar_health_med': '255 196 48 255',
+    'color_bar_health_low': '238 64 76 255', 'color_portrait_blend_dead_red': '150 150 150 255',
     'color_portrait_blend_dead_blue': '150 150 150 255',
 }
 
@@ -967,10 +980,15 @@ def patch_matchstatus(root):
     if pp is None:
         return
     kv.setmany(pp, **PORTRAIT_COLORS)
-    for n, bg in (('healthbar', '12 12 14 255'), ('overhealbar', None)):
+    # allies' health under their portraits: what a bar has lost shows ink crimson (it vanished into the dark strip, so
+    # a hit didn't read), and the bars are a unit thicker
+    for n in ('healthbar', 'overhealbar'):
         blk = kv.find(pp, n)
-        if blk is not None and bg:
-            kv.set(blk, 'bgcolor_override', bg)
+        if blk is not None:
+            kv.set(blk, 'tall', 3)
+    blk = kv.find(pp, 'healthbar')
+    if blk is not None:
+        kv.set(blk, 'bgcolor_override', HEALTH_LOST)
     blk = kv.find(pp, 'overhealbar')
     if blk is not None:
         kv.set(blk, 'fgcolor_override', '170 240 206 200')
@@ -1012,6 +1030,8 @@ def patch_freezepanel(root):
     kv.setmany(kv.find(base, 'FreezeLabel'), xpos=44, ypos=160, font='HM_NoticeBody', fgcolor_override='HM_BoneMid')
     kv.setmany(kv.find(base, 'FreezeLabelKiller'), ypos=172, tall=20, font='HM_NoticeTitle')
     kv.set(kv.find(base, 'AvatarImage'), 'zpos', 2)
+    # the killer's health tile (patch_killer_health), centred on the card's toned end
+    kv.setmany(kv.find(base, 'FreezePanelHealth'), xpos=6, ypos=159, wide=34, tall=34)
 
 
 def patch_statpanel(root):
@@ -1144,17 +1164,49 @@ def patch_building(root, rel):
                        iconColor='226 226 220 255' if ent[0] == 'WrenchIcon' else '210 70 64 255')
 
 
-def patch_spec_health(root):
-    """Target-ID / spectator health: its fill is our bone texture now (hud/health_color), so the stock cross
-    outline behind it becomes the plain gauge tile."""
+HEALTH_LOST = '104 24 34 255'  # what a health gauge has lost: ink crimson, so a hit shows at a glance
+
+
+def patch_spec_health(root, font='HM_SpecHealth'):
+    """Health tiles (target ID, spectator, tournament panels, killcam): our bone fill (hud/health_color) rises in the
+    plain gauge tile instead of the stock cross. The part it has lost shows ink crimson underneath (on the dark tile a
+    drop barely showed); the pulse over max health / near death is a soft square halo instead of the stock plus sign;
+    a building gets the same tile (no stock equipment frame)."""
     body = next(e[1] for e in root if isinstance(e[1], list))
-    bg = kv.find(body, 'PlayerStatusHealthImageBG')
-    if bg is not None:
-        kv.set(bg, 'image', T + 'hp_track')
-    # the grey number vanished on the bone fill: bone lettering with an ink outline reads on fill and track
+    for name, z, img in (('PlayerStatusHealthBonusImage', 1, 'hp_glow'), ('PlayerStatusHealthImageBG', 2, 'hp_track')):
+        blk = kv.find(body, name)
+        if blk is not None:
+            kv.setmany(blk, zpos=z, image=T + img)
+    bld = kv.find(body, 'BuildingStatusHealthImageBG')
+    if bld is not None:
+        kv.setmany(bld, wide=0, tall=0)
+    fill = kv.find(body, 'PlayerStatusHealthImage')
+    if fill is not None:
+        kv.set(fill, 'zpos', 4)
+        kv.add_block(body, 'HM_HealthLost', {
+            'ControlName': 'ImagePanel', 'fieldName': 'HM_HealthLost', 'xpos': kv.get(fill, 'xpos'),
+            'ypos': kv.get(fill, 'ypos'), 'zpos': 3, 'wide': kv.get(fill, 'wide'), 'tall': kv.get(fill, 'tall'),
+            'visible': 1, 'enabled': 1, 'fillcolor': HEALTH_LOST, 'mouseinputenabled': 0})
+    # the grey number vanished on the bone fill: bone lettering with an ink outline reads on fill and track. Full
+    # width, so a boss's five digits still fit
     val = kv.find(body, 'PlayerStatusHealthValue')
     if val is not None:
-        kv.setmany(val, font='HM_SpecHealth', fgcolor='HM_Bone')
+        kv.setmany(val, xpos=0, zpos=5, wide='f0', font=font, fgcolor='HM_Bone')
+
+
+def patch_killer_health(root):
+    """Killcam: the killer's health (FreezePanelKillerHealth.res), the target-ID tile a size up for the death card.
+    The stock file drew the plus-sign gauge with a grey number, which vanished on our bone fill, so only a cross
+    showed. Laid out from scratch: whatever the stock file holds doesn't matter."""
+    body = next(e[1] for e in root if isinstance(e[1], list))
+    del body[:]
+    for name, x, w, vis in (('PlayerStatusHealthBonusImage', 3, 28, 0), ('PlayerStatusHealthImageBG', 3, 28, 1),
+                            ('PlayerStatusHealthImage', 5, 24, 1)):
+        kv.add_block(body, name, {'ControlName': 'ImagePanel', 'fieldName': name, 'xpos': x, 'ypos': x, 'zpos': 0,
+                                  'wide': w, 'tall': w, 'visible': vis, 'enabled': 1, 'scaleImage': 1})
+    kv.add_block(body, 'PlayerStatusHealthValue', label('PlayerStatusHealthValue', 0, 11, 34, 12, '%Health%',
+                                                        'HM_KillerHealth', 'HM_Bone', align='center'))
+    patch_spec_health(root, font='HM_KillerHealth')
 
 
 def patch_flagpanel(root):
@@ -1225,13 +1277,14 @@ def patch_hudlayout(root):
     for n, y in (('HudTeamGoal', 65), ('HudTeamSwitch', 75), ('HudAlert', 130)):
         kv.setmany(kv.find(body, n), xpos='c-%d' % (NOTICE_W // 2), ypos=y, wide=NOTICE_W, tall=NOTICE_H + 8)
     # kill feed: the game draws each row as a plain box (no art possible), so it is styled as stacked manga strips:
-    # sharp ink strips, your own kills on bone-jade paper, bold outlined lettering, tight gutters. The info text on
-    # your rows ("is DOMINATING"...) is emerald: ink text inside the ink outline closed up. The feed starts below
-    # the casual team strip (portraits + dead skull tags reach ~40), which covered long rows
+    # sharp ink strips, your own kills on bone-jade paper (the game draws dark icons on them), bold lettering, tight
+    # gutters. Names take the same team colour on both kinds of row, so they are mid tones (HM_Feed*); the info text
+    # on your rows ("is DOMINATING"...) is deep emerald. The feed starts below the casual team strip (portraits +
+    # dead skull tags reach ~40), which covered long rows
     dn = kv.find(body, 'HudDeathNotice')
     kv.setmany(dn, xpos='r640', ypos=44, wide=630, tall=430, MaxDeathNotices=5, IconScale='0.33', LineHeight=17,
-               LineSpacing=2, CornerRadius=0, RightJustify=1, TextFont='HM_Killfeed', TeamBlue='HM_TeamBlue',
-               TeamRed='HM_TeamRed', IconColor='HM_Bone', LocalPlayerColor='30 140 92 255',
+               LineSpacing=2, CornerRadius=0, RightJustify=1, TextFont='HM_Killfeed', TeamBlue='HM_FeedBlue',
+               TeamRed='HM_FeedRed', IconColor='HM_Bone', LocalPlayerColor='30 140 92 255',
                BaseBackgroundColor='8 8 10 225', LocalBackgroundColor='214 232 222 240')
     # hitmarker: flashed by the DamagedPlayer animation (ANIMS_HITMARKER)
     hm = kv.add_block(body, 'HM_Hitmarker', img_panel('HM_Hitmarker', 'c-12', 'c-12', 24, 24, 'hitmarker', z=10))
@@ -1255,6 +1308,8 @@ def redirect_objective_materials():
     # the health gauge fill is drawn by the game from hud/health_color (bottom-up), so point it at our bone fill
     # (ignored on sv_pure servers; hp_mask keeps the gauge looking the same with the stock fill)
     write(os.path.join(OUT, 'materials', 'hud', 'health_color.vmt'), HUD_VMT % 'hp_fill')
+    # ...and a dead player's tile (the killcam when the killer died too) is ours instead of the stock grey cross
+    write(os.path.join(OUT, 'materials', 'hud', 'health_dead.vmt'), HUD_VMT % 'hp_dead')
     # server-sent HUD notifications set these backgrounds in code (not from a .res): our notification cards
     for stock, ours in (('score_panel_red_bg', 'notif_red'), ('score_panel_blue_bg', 'notif_blue'),
                         ('notification_black', 'notif_ink')):
@@ -1420,37 +1475,48 @@ def patch_spectator(root):
 
 
 MENU_DIRS = ('resource/ui/build_menu/', 'resource/ui/destroy_menu/', 'resource/ui/disguise_menu/')
-MENU_ICONS = {'hud_menu_bg': 'menu_bg', 'ico_key_blank': 'menu_key'}
+MENU_ICONS = {'hud_menu_bg': 'menu_bg'}
 MENU_STATES = (('cant_afford', 'red'), ('already_built', 'dim'), ('unavailable', 'dim'), ('inactive', 'dim'))
+BOX = ('xpos', 'ypos', 'wide', 'tall')
 
 
 def patch_menu(root, rel):
-    """Engineer build / destroy and spy disguise menus. Their tan backgrounds, slot cards and key chips are
-    icons from the game's texture list (CIconPanel), so they are hidden and torn manga art is laid in their place:
-    ink sheet, slot cards toned by state (emerald ready, grey built / unavailable, crimson not enough metal),
-    emerald key chips."""
+    """Engineer build / destroy and spy disguise menus. Their tan backgrounds and slot cards are icons from the
+    game's texture list (CIconPanel), so they are hidden and torn manga art is laid in their place: ink sheet, slot
+    cards toned by state (emerald ready, grey built / unavailable, crimson not enough metal). The key chips are such
+    icons too: hidden, and each number label carries an emerald chip as its own border (HM_KeyChip). The game shows
+    and hides chips and numbers separately (the disguise menu's simple mode switches them per step), so a chip of its
+    own showed up empty, or covered its number."""
     body = next((e[1] for e in root if isinstance(e[1], list)), None)
     if body is None or '/pipboy/' in rel:  # the PDA skin's menus keep their own art
         return
     state = next((st for key, st in MENU_STATES if key in rel.split('/')[-1]), 'on')
+    chips = {}  # chip box by name suffix: NumberBg -> NumberLabel / NewNumberLabel, NumberBg1 -> NumberLabel1
     for ent in list(body):
         blk = ent[1]
         if not isinstance(blk, list):
             continue
         icon = (kv.get(blk, 'icon') or '').lower()
+        if icon == 'ico_key_blank':
+            if kv.get(blk, 'wide') != '0':
+                chips[ent[0].lower()[len('numberbg'):]] = [kv.get(blk, key) for key in BOX]
+            kv.setmany(blk, wide=0, tall=0)
+            continue
         img = MENU_ICONS.get(icon) or ('menu_item_' + state if icon.startswith('hud_menu_item_bg') else None)
         if ent[0] == 'Divider':
             kv.setmany(blk, fillcolor='46 214 140 200', tall=1)
-        # blocks the stock file hides are shown by code only in some modes (the disguise menu's group chips, over
-        # the 2 / 5 / 8 slots): an always-visible copy would cover those slots' numbers, so they keep the stock art
         if img is None or kv.get(blk, 'visible') == '0':
             continue
-        x, y, w, h, z = (kv.get(blk, key) or '0' for key in ('xpos', 'ypos', 'wide', 'tall', 'zpos'))
+        x, y, w, h, z = (kv.get(blk, key) or '0' for key in BOX + ('zpos',))
         kv.setmany(blk, visible=0, wide=0, tall=0)
         kv.add_block(body, 'HM_' + ent[0], img_panel('HM_' + ent[0], x, y, w, h, img, z=z))
-    for ent in body:  # the key numbers share the chip's zpos in some menus (disguise), so lift them over it
-        if isinstance(ent[1], list) and 'numberlabel' in (kv.get(ent[1], 'fieldName') or ent[0]).lower():
-            kv.set(ent[1], 'zpos', 3)
+    for ent in body:  # the numbers move onto their chip's box (the engineer menus centre them across the slot)
+        name = ent[0].lower()
+        if isinstance(ent[1], list) and 'numberlabel' in (kv.get(ent[1], 'fieldName') or name).lower():
+            chip = chips.get(name[name.find('numberlabel') + len('numberlabel'):])
+            if chip:
+                kv.setmany(ent[1], **dict(zip(BOX, chip)))
+            kv.setmany(ent[1], zpos=5, border='HM_KeyChip', paintborder=1)
 
 
 def patch_disguise_status(root):
@@ -1523,6 +1589,7 @@ def main():
         'resource/ui/statsummary.res': screens.statsummary,
         'resource/ui/spectatorguihealth.res': patch_spec_health,
         'resource/ui/spectatortournamentguihealth.res': patch_spec_health,
+        'resource/ui/freezepanelkillerhealth.res': patch_killer_health,
         'resource/ui/huddemomanpipes.res': patch_pipes,
         'resource/ui/hudmediccharge.res': patch_uber,
         'resource/ui/hudkillstreaknotice.res': patch_streak_notice,
@@ -1546,6 +1613,9 @@ def main():
     medic = os.path.join(work, 'resource', 'ui', 'hudmediccharge.res')
     if not os.path.exists(medic):
         write(medic, STOCK_MEDIC)
+    killer = os.path.join(work, 'resource', 'ui', 'freezepanelkillerhealth.res')
+    if not os.path.exists(killer):  # laid out from scratch anyway (patch_killer_health)
+        write(killer, '"Resource/UI/FreezePanelKillerHealth.res"\n{\n}\n')
     shipped = 0
     for dirpath, _, files in os.walk(work):
         for fn in files:

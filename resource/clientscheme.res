@@ -172,6 +172,8 @@
 		"HM_Amber"		"255 196 48 255"
 		"HM_TeamRed"		"208 92 92 255"
 		"HM_TeamBlue"		"128 160 200 255"
+		"HM_FeedRed"		"214 66 66 255"
+		"HM_FeedBlue"		"64 122 214 255"
 	}
 	"BaseSettings"
 	{
@@ -1760,7 +1762,7 @@
 			}
 			"2"
 			{
-				"name"		"Verdana"
+				"name"		"Bahnschrift SemiCondensed"
 				"tall"		"13"
 				"weight"		"700"
 				"yres"		"600 767"
@@ -1768,7 +1770,7 @@
 			}
 			"3"
 			{
-				"name"		"Verdana"
+				"name"		"Bahnschrift SemiCondensed"
 				"tall"		"14"
 				"weight"		"700"
 				"yres"		"768 1023"
@@ -1776,7 +1778,7 @@
 			}
 			"4"
 			{
-				"name"		"Verdana"
+				"name"		"Bahnschrift SemiCondensed"
 				"tall"		"20"
 				"weight"		"700"
 				"yres"		"1024 1199"
@@ -1784,7 +1786,7 @@
 			}
 			"5"
 			{
-				"name"		"Verdana"
+				"name"		"Bahnschrift SemiCondensed"
 				"tall"		"24"
 				"weight"		"700"
 				"yres"		"1200 10000"
@@ -1795,7 +1797,7 @@
 		{
 			"1"
 			{
-				"name"		"Verdana"
+				"name"		"Bahnschrift SemiCondensed"
 				"tall"		"10"
 				"weight"		"700"
 				"yres"		"480 599"
@@ -1803,7 +1805,7 @@
 			}
 			"2"
 			{
-				"name"		"Verdana"
+				"name"		"Bahnschrift SemiCondensed"
 				"tall"		"10"
 				"weight"		"700"
 				"yres"		"600 767"
@@ -1811,7 +1813,7 @@
 			}
 			"3"
 			{
-				"name"		"Verdana"
+				"name"		"Bahnschrift SemiCondensed"
 				"tall"		"13"
 				"weight"		"700"
 				"yres"		"768 1023"
@@ -1819,7 +1821,7 @@
 			}
 			"4"
 			{
-				"name"		"Verdana"
+				"name"		"Bahnschrift SemiCondensed"
 				"tall"		"14"
 				"weight"		"700"
 				"yres"		"1024 1199"
@@ -1827,7 +1829,7 @@
 			}
 			"5"
 			{
-				"name"		"Verdana"
+				"name"		"Bahnschrift SemiCondensed"
 				"tall"		"15"
 				"weight"		"700"
 				"yres"		"1200 10000"
@@ -2948,7 +2950,7 @@
 				"additive"		"0"
 				"antialias"		"1"
 				"italic"		"1"
-				"outline"		"1"
+				"outline"		"0"
 				"dropshadow"		"0"
 			}
 		}
@@ -3148,6 +3150,34 @@
 				"dropshadow"		"0"
 			}
 		}
+		"HM_SpecHealth"
+		{
+			"1"
+			{
+				"name"		"Bahnschrift SemiBold Condensed"
+				"tall"		"10"
+				"weight"		"600"
+				"additive"		"0"
+				"antialias"		"1"
+				"italic"		"0"
+				"outline"		"1"
+				"dropshadow"		"0"
+			}
+		}
+		"HM_KillerHealth"
+		{
+			"1"
+			{
+				"name"		"Bahnschrift SemiBold Condensed"
+				"tall"		"12"
+				"weight"		"600"
+				"additive"		"0"
+				"antialias"		"1"
+				"italic"		"0"
+				"outline"		"1"
+				"dropshadow"		"0"
+			}
+		}
 		"HM_SpecHint"
 		{
 			"1"
@@ -3168,20 +3198,6 @@
 			{
 				"name"		"Bahnschrift SemiBold Condensed"
 				"tall"		"14"
-				"weight"		"600"
-				"additive"		"0"
-				"antialias"		"1"
-				"italic"		"0"
-				"outline"		"1"
-				"dropshadow"		"0"
-			}
-		}
-		"HM_SpecHealth"
-		{
-			"1"
-			{
-				"name"		"Bahnschrift SemiBold Condensed"
-				"tall"		"10"
 				"weight"		"600"
 				"additive"		"0"
 				"antialias"		"1"
@@ -5620,6 +5636,26 @@
 			"draw_corner_width"		"4"
 			"draw_corner_height"		"3"
 		}
+		"HM_RespawnCard"
+		{
+			"bordertype"		"scalable_image"
+			"backgroundtype"		"2"
+			"image"		"replay/thumbnails/hm/respawn_card"
+			"src_corner_height"		"0"
+			"src_corner_width"		"0"
+			"draw_corner_width"		"0"
+			"draw_corner_height"		"0"
+		}
+		"HM_KeyChip"
+		{
+			"bordertype"		"scalable_image"
+			"backgroundtype"		"2"
+			"image"		"replay/thumbnails/hm/menu_key"
+			"src_corner_height"		"0"
+			"src_corner_width"		"0"
+			"draw_corner_width"		"0"
+			"draw_corner_height"		"0"
+		}
 		"HM_Card_none"
 		{
 			"bordertype"		"scalable_image"
@@ -5945,16 +5981,6 @@
 			"bordertype"		"scalable_image"
 			"backgroundtype"		"2"
 			"image"		"replay/thumbnails/hm/layout_corners_h"
-			"src_corner_height"		"0"
-			"src_corner_width"		"0"
-			"draw_corner_width"		"0"
-			"draw_corner_height"		"0"
-		}
-		"HM_RespawnCard"
-		{
-			"bordertype"		"scalable_image"
-			"backgroundtype"		"2"
-			"image"		"replay/thumbnails/hm/respawn_card"
 			"src_corner_height"		"0"
 			"src_corner_width"		"0"
 			"draw_corner_width"		"0"

@@ -577,6 +577,27 @@ def hp_fill(size=(64, 256)):
     return Image.fromarray(np.concatenate([t, np.full((h, w, 1), 255.)], -1).clip(0, 255).astype(np.uint8), 'RGBA')
 
 
+def hp_glow(size=(64, 64)):
+    """Pulse of the target-ID / killcam health tiles (their PlayerStatusHealthBonusImage): a soft white square halo
+    instead of the stock plus sign. The game tints it (white over max health, red near death) and grows it past the
+    tile, which covers its middle."""
+    w, h = size
+    yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
+    d = np.maximum(np.abs(xx + 0.5 - w / 2), np.abs(yy + 0.5 - h / 2)) / (w / 2)  # 0 middle .. 1 edge, square
+    return art.solid_with_alpha((255, 255, 255), np.clip((1 - d) / 0.4, 0, 1) ** 1.5)
+
+
+def hp_dead(size=(64, 64)):
+    """hud/health_dead override, the health tiles' dead state (the killcam when the killer died too, dead players
+    in tournament panels): the empty gauge tile struck through with one crimson slash."""
+    w, h = size
+    im = hp_track(size)
+    m = Image.new('L', size, 0)
+    ImageDraw.Draw(m).polygon([(w - 17, 7), (w - 7, 7), (17, h - 7), (7, h - 7)], fill=255)
+    im.alpha_composite(art.solid_with_alpha((222, 58, 72), arr(m.filter(ImageFilter.GaussianBlur(0.8)))))
+    return im
+
+
 def hp_mask(size=(64, 256), slot=(0.39, 0.61)):
     """Card-ink cover drawn over the health fill, with one vertical slot cut down the middle.
     The game draws the fill from hud/health_color; sv_pure servers ignore our override of that material and draw

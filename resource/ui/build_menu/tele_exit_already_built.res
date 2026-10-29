@@ -9,6 +9,8 @@
 	"NumberLabel"
 	{
 		"labelText"		"4"
-		"zpos"		"3"
+		"zpos"		"5"
+		"border"		"HM_KeyChip"
+		"paintborder"		"1"
 	}
 }

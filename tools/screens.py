@@ -110,11 +110,13 @@ def mainmenu(root):
     kv.setmany(kv.find(body, 'RankBorder'), xpos=24, ypos=96)
     kv.setmany(kv.find(body, 'RankPanel'), xpos=-36, ypos=74)
 
-    # vertical navigation
+    # vertical navigation. The stock icon buttons had no text, so their labels are the game's own tooltip / menu
+    # strings: they come out in the player's language like ITEMS and SHOP above them
     y = 172
-    for name, lbl in (('CharacterSetupButton', None), ('GeneralStoreButton', None), ('SettingsButton', 'Options'),
-                      ('TF2SettingsButton', 'Advanced Options'), ('AchievementsButton', 'Achievements'),
-                      ('WorkshopButton', 'Workshop'), ('ReplayButton', 'Replays')):
+    for name, lbl in (('CharacterSetupButton', None), ('GeneralStoreButton', None),
+                      ('SettingsButton', '#MMenu_Tooltip_Options'), ('TF2SettingsButton', '#MMenu_Tooltip_AdvOptions'),
+                      ('AchievementsButton', '#MMenu_Achievements'), ('WorkshopButton', '#MMenu_Tooltip_Workshop'),
+                      ('ReplayButton', '#MMenu_Tooltip_Replay')):
         blk = kv.find(body, name)
         if blk is not None:
             nav_button(blk, y, lbl)
@@ -128,9 +130,24 @@ def mainmenu(root):
             kv.set(blk, 'xpos', OFF)
 
     # small icon rows at the foot of the sidebar
-    # the MOTD panel is the HUD Settings popup now (hud_settings_popup), so its own icon goes
-    for i, name in enumerate(('Notifications_ShowButtonPanel', 'QuestLogButton', 'WatchStreamButton')):
-        kv.setmany(kv.find(body, name), xpos=24 + i * 34, ypos=436, wide=28, tall=28)
+    # the MOTD panel is the HUD Settings popup now (hud_settings_popup), so its own icon goes. Notifications, contracts
+    # and TF2 TV were whole stock button pictures (tan plates): the game's glyphs instead, bone like the in-game icon
+    # row above them, emerald on hover
+    for i, (name, sub, glyph) in enumerate((('Notifications_ShowButtonPanel', 'Notifications_ShowButtonPanel_SB',
+                                             'glyph_alert'), ('QuestLogButton', 'SubButton', 'glyph_quest_icon'),
+                                            ('WatchStreamButton', 'SubButton', 'glyph_tv'))):
+        blk = kv.find(body, name)
+        kv.setmany(blk, xpos=24 + i * 34, ypos=436, wide=28, tall=28)
+        btn = kv.find(blk, sub)
+        if btn is None:
+            continue
+        kv.setmany(btn, xpos=0, ypos=0, wide='f0', tall='f0', paintbackground=0, paintborder=0,
+                   image_drawcolor='208 209 209 255', image_armedcolor='46 214 140 255')
+        img = kv.find(btn, 'SubImage')
+        if img is not None:
+            kv.setmany(img, xpos='cs-0.5', ypos='cs-0.5', wide=18, tall=18, image=glyph, proportionaltoparent=1)
+    for n in ('SubImage', 'Notifications_CountLabel'):  # the unread badge, pulled inside the narrower button
+        kv.set(kv.find(kv.find(body, 'Notifications_ShowButtonPanel'), n), 'xpos', 12)
     kv.set(kv.find(body, 'MOTD_ShowButtonPanel'), 'xpos', OFF)
     for i, name in enumerate(('ReportPlayerButton', 'CallVoteButton', 'MutePlayersButton', 'RequestCoachButton')):
         kv.setmany(kv.find(body, name), xpos=24 + i * 30, ypos=400)

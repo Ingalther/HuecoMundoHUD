@@ -308,6 +308,8 @@ def hud_cards(out):
     out.thumb('hp_track', manga.hp_track(), mips=False)
     out.thumb('hp_fill', manga.hp_fill(), mips=False)
     out.thumb('hp_mask', manga.hp_mask())
+    out.thumb('hp_glow', manga.hp_glow())
+    out.thumb('hp_dead', manga.hp_dead())
     out.thumb('notice_red', manga.notice_card(red, 416))
     out.thumb('notice_blue', manga.notice_card(blue, 416))
     out.thumb('notif_red', manga.notif_card(red, 421))  # HUD notifications (flag dropped / taken / returned...)
@@ -368,6 +370,8 @@ def extras_art(out):
         out.thumb('menu_item_' + state, manga.menu_item(state, 455 + i))
     out.thumb('menu_key', manga.menu_key())
     out.thumb('disguise_card', manga.notice_card((84, 86, 88), 459, size=(1024, 176)))
+    # backpack item inspection: the item turns in the middle of a speed-line burst (the countdown's panel, bigger)
+    out.thumb('inspect_bg', manga.countdown_card(seed=461, size=(512, 512)))
     out.thumb('escort_strip', manga.escort_strip())
     out.thumb('cp_rim', manga.cp_rim())
 
