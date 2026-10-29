@@ -49,6 +49,10 @@ C = {
     'HM_Amber': '255 196 48 255',
     'HM_TeamRed': '208 92 92 255',
     'HM_TeamBlue': '128 160 200 255',
+    # kill feed names: a touch darker than the team colours, as below 1440 lines they have no outline and must still
+    # read on your own bone-jade rows
+    'HM_FeedRed': '220 76 76 255',
+    'HM_FeedBlue': '76 136 226 255',
 }
 
 SCHEME_COLORS = {
@@ -131,15 +135,15 @@ def font_block(name, tall, weight=400, italic=0, outline=0, dropshadow=0, antial
 RES_BANDS = (1, 600, 720, 768, 800, 864, 900, 960, 1024, 1050, 1080, 1200, 1440, 1600, 2160)  # screen heights
 
 
-def banded_font(tall, low, high, split=1080, low_tall=None, **flags):
-    """A font whose face changes with the screen height: low = (name, weight) below `split` lines (at low_tall),
-    high from there up. Entries with a "yres" range take their size in pixels (the game scales only range-less
-    fonts), so each band gets the proportional size of its lowest height, the same size a plain font has there."""
+def banded_font(low, high, split=1080, **flags):
+    """A font that changes with the screen height: low below `split` lines, high from there up, each a
+    (name, tall, weight, outline) with tall in 480-line units. Entries with a "yres" range take their size in pixels
+    (the game scales only range-less fonts), so each band gets the proportional size of its lowest height."""
     entries = []
     for i, lo in enumerate(RES_BANDS):
         hi = RES_BANDS[i + 1] - 1 if i + 1 < len(RES_BANDS) else 10000
-        (name, weight), size = (low, low_tall or tall) if lo < split else (high, tall)
-        blk = font_block(name, round(size * max(lo, 480) / 480), weight, **flags)[0][1]
+        name, tall, weight, outline = low if lo < split else high
+        blk = font_block(name, round(tall * max(lo, 480) / 480), weight, outline=outline, **flags)[0][1]
         entries.append([str(i + 1), blk + [['yres', f'{lo} {hi}', None]], None])
     return entries
 
@@ -152,11 +156,10 @@ HM_FONTS = {
     'HM_Damage': font_block('Bahnschrift Bold Condensed', 21, 800, italic=1, outline=1),
     'HM_DamageBig': font_block('Bahnschrift Bold Condensed', 32, 800, italic=1, outline=1),
     # kill feed: manga SFX lettering (condensed italic, ink outline). The outline is one screen pixel at any
-    # resolution: below 1440 lines it ate the strokes and joined neighbouring letters (names smeared on your own
-    # light rows), even in the Bold Condensed cut. There the names take the wider Bold SemiCondensed cut, a size up,
-    # so the letters stay apart (Windows files it as the Bold style of the "Bahnschrift SemiCondensed" family)
-    'HM_Killfeed': banded_font(12, ('Bahnschrift SemiCondensed', 700), ('Bahnschrift SemiBold Condensed', 600),
-                               split=1440, low_tall=13, italic=1, outline=1),
+    # resolution: below 1440 lines it crowded the letters and smeared the names on your own light rows (bolder cuts
+    # only closed them up further), so there the same face goes without it, a size up
+    'HM_Killfeed': banded_font(('Bahnschrift SemiBold Condensed', 13, 600, 0),
+                               ('Bahnschrift SemiBold Condensed', 12, 600, 1), split=1440, italic=1),
     'HM_Small': font_block('Bahnschrift SemiCondensed', 8, 400),
     'HM_Menu': font_block('Bahnschrift SemiCondensed', 12, 400),
     'HM_Title': font_block('Constantia', 20, 400),
@@ -1303,12 +1306,13 @@ def patch_hudlayout(root):
         kv.setmany(kv.find(body, n), xpos='c-%d' % (NOTICE_W // 2), ypos=y, wide=NOTICE_W, tall=NOTICE_H + 8)
     # kill feed: the game draws each row as a plain box (no art possible), so it is styled as stacked manga strips:
     # sharp ink strips, your own kills on bone-jade paper (the game draws dark icons on them), bold outlined
-    # lettering (HM_Killfeed), tight gutters. The info text on your rows ("is DOMINATING"...) is deep emerald. The
-    # feed starts below the casual team strip (portraits + dead skull tags reach ~40), which covered long rows
+    # lettering (HM_Killfeed), tight gutters. Names take the same colour on both kinds of row (HM_Feed*); the info
+    # text on your rows ("is DOMINATING"...) is deep emerald. The feed starts below the casual team strip (portraits
+    # + dead skull tags reach ~40), which covered long rows
     dn = kv.find(body, 'HudDeathNotice')
     kv.setmany(dn, xpos='r640', ypos=44, wide=630, tall=430, MaxDeathNotices=5, IconScale='0.33', LineHeight=17,
-               LineSpacing=2, CornerRadius=0, RightJustify=1, TextFont='HM_Killfeed', TeamBlue='HM_TeamBlue',
-               TeamRed='HM_TeamRed', IconColor='HM_Bone', LocalPlayerColor='30 140 92 255',
+               LineSpacing=2, CornerRadius=0, RightJustify=1, TextFont='HM_Killfeed', TeamBlue='HM_FeedBlue',
+               TeamRed='HM_FeedRed', IconColor='HM_Bone', LocalPlayerColor='30 140 92 255',
                BaseBackgroundColor='8 8 10 225', LocalBackgroundColor='214 232 222 240')
     # hitmarker: flashed by the DamagedPlayer animation (ANIMS_HITMARKER)
     hm = kv.add_block(body, 'HM_Hitmarker', img_panel('HM_Hitmarker', 'c-12', 'c-12', 24, 24, 'hitmarker', z=10))
