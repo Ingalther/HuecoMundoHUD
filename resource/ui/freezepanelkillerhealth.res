@@ -42,10 +42,10 @@
 		"enabled"		"1"
 		"scaleImage"		"1"
 	}
-	"PlayerStatusHealthValue"
+	"HM_HealthValue"
 	{
 		"ControlName"		"CExLabel"
-		"fieldName"		"PlayerStatusHealthValue"
+		"fieldName"		"HM_HealthValue"
 		"xpos"		"0"
 		"ypos"		"11"
 		"zpos"		"5"

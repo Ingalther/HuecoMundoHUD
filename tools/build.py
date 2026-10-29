@@ -152,11 +152,11 @@ HM_FONTS = {
     'HM_Damage': font_block('Bahnschrift Bold Condensed', 21, 800, italic=1, outline=1),
     'HM_DamageBig': font_block('Bahnschrift Bold Condensed', 32, 800, italic=1, outline=1),
     # kill feed: manga SFX lettering (condensed italic, ink outline). The outline is one screen pixel at any
-    # resolution, and below 1080 lines it ate the SemiBold strokes (names smeared on your own light rows), so smaller
+    # resolution, and below 1440 lines it ate the SemiBold strokes (names smeared on your own light rows), so smaller
     # screens get the Bold cut of the same face, a size up. Windows files that cut as the Bold style of the
     # "Bahnschrift Condensed" family (there is no "Bahnschrift Bold Condensed" family, unlike SemiBold Condensed)
     'HM_Killfeed': banded_font(12, ('Bahnschrift Condensed', 700), ('Bahnschrift SemiBold Condensed', 600),
-                               low_tall=13, italic=1, outline=1),
+                               split=1440, low_tall=13, italic=1, outline=1),
     'HM_Small': font_block('Bahnschrift SemiCondensed', 8, 400),
     'HM_Menu': font_block('Bahnschrift SemiCondensed', 12, 400),
     'HM_Title': font_block('Constantia', 20, 400),
@@ -1206,8 +1206,14 @@ def patch_spec_health(root, font='HM_SpecHealth'):
             'visible': 1, 'enabled': 1, 'fillcolor': HEALTH_LOST, 'mouseinputenabled': 0})
     # the grey number vanished on the bone fill: bone lettering with an ink outline reads on fill and track. As wide
     # as the tile with its margins, so a boss's five digits still fit (a number, not "f0": without
-    # proportionaltoparent that is the screen's width, and the centred number ended up far off the tile)
-    val, bg = kv.find(body, 'PlayerStatusHealthValue'), kv.find(body, 'PlayerStatusHealthImageBG')
+    # proportionaltoparent that is the screen's width, and the centred number ended up far off the tile). It has a
+    # name of its own: the main health digits' flash (HudHealthDyingPulse) finds its label by name and turned this
+    # number red on the red fill near death. The game fills it through %Health%, not by name
+    for ent in body:
+        if ent[0] == 'PlayerStatusHealthValue' and isinstance(ent[1], list):
+            ent[0] = 'HM_HealthValue'
+            kv.set(ent[1], 'fieldName', 'HM_HealthValue')
+    val, bg = kv.find(body, 'HM_HealthValue'), kv.find(body, 'PlayerStatusHealthImageBG')
     if val is not None and bg is not None:
         kv.setmany(val, xpos=0, zpos=5, wide=2 * int(kv.get(bg, 'xpos')) + int(kv.get(bg, 'wide')), font=font,
                    fgcolor='HM_Bone')

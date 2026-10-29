@@ -3062,9 +3062,9 @@
 			}
 			"11"
 			{
-				"name"		"Bahnschrift SemiBold Condensed"
-				"tall"		"27"
-				"weight"		"600"
+				"name"		"Bahnschrift Condensed"
+				"tall"		"29"
+				"weight"		"700"
 				"additive"		"0"
 				"antialias"		"1"
 				"italic"		"1"
@@ -3074,9 +3074,9 @@
 			}
 			"12"
 			{
-				"name"		"Bahnschrift SemiBold Condensed"
-				"tall"		"30"
-				"weight"		"600"
+				"name"		"Bahnschrift Condensed"
+				"tall"		"32"
+				"weight"		"700"
 				"additive"		"0"
 				"antialias"		"1"
 				"italic"		"1"
