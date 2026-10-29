@@ -131,15 +131,15 @@ def font_block(name, tall, weight=400, italic=0, outline=0, dropshadow=0, antial
 RES_BANDS = (1, 600, 720, 768, 800, 864, 900, 960, 1024, 1050, 1080, 1200, 1440, 1600, 2160)  # screen heights
 
 
-def banded_font(tall, low, high, split=1080, **flags):
-    """A font whose face changes with the screen height: low = (name, weight) below `split` lines, high from there
-    up. Entries with a "yres" range take their size in pixels (the game scales only range-less fonts), so each band
-    gets the proportional size of its lowest height, the same size a plain font of `tall` has there."""
+def banded_font(tall, low, high, split=1080, low_tall=None, **flags):
+    """A font whose face changes with the screen height: low = (name, weight) below `split` lines (at low_tall),
+    high from there up. Entries with a "yres" range take their size in pixels (the game scales only range-less
+    fonts), so each band gets the proportional size of its lowest height, the same size a plain font has there."""
     entries = []
     for i, lo in enumerate(RES_BANDS):
         hi = RES_BANDS[i + 1] - 1 if i + 1 < len(RES_BANDS) else 10000
-        name, weight = low if lo < split else high
-        blk = font_block(name, round(tall * max(lo, 480) / 480), weight, **flags)[0][1]
+        (name, weight), size = (low, low_tall or tall) if lo < split else (high, tall)
+        blk = font_block(name, round(size * max(lo, 480) / 480), weight, **flags)[0][1]
         entries.append([str(i + 1), blk + [['yres', f'{lo} {hi}', None]], None])
     return entries
 
@@ -153,9 +153,10 @@ HM_FONTS = {
     'HM_DamageBig': font_block('Bahnschrift Bold Condensed', 32, 800, italic=1, outline=1),
     # kill feed: manga SFX lettering (condensed italic, ink outline). The outline is one screen pixel at any
     # resolution, and below 1080 lines it ate the SemiBold strokes (names smeared on your own light rows), so smaller
-    # screens get the Bold cut of the same face
-    'HM_Killfeed': banded_font(12, ('Bahnschrift Bold Condensed', 700), ('Bahnschrift SemiBold Condensed', 600),
-                               italic=1, outline=1),
+    # screens get the Bold cut of the same face, a size up. Windows files that cut as the Bold style of the
+    # "Bahnschrift Condensed" family (there is no "Bahnschrift Bold Condensed" family, unlike SemiBold Condensed)
+    'HM_Killfeed': banded_font(12, ('Bahnschrift Condensed', 700), ('Bahnschrift SemiBold Condensed', 600),
+                               low_tall=13, italic=1, outline=1),
     'HM_Small': font_block('Bahnschrift SemiCondensed', 8, 400),
     'HM_Menu': font_block('Bahnschrift SemiCondensed', 12, 400),
     'HM_Title': font_block('Constantia', 20, 400),

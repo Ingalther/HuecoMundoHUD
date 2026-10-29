@@ -2942,8 +2942,8 @@
 		{
 			"1"
 			{
-				"name"		"Bahnschrift Bold Condensed"
-				"tall"		"12"
+				"name"		"Bahnschrift Condensed"
+				"tall"		"13"
 				"weight"		"700"
 				"additive"		"0"
 				"antialias"		"1"
@@ -2954,8 +2954,8 @@
 			}
 			"2"
 			{
-				"name"		"Bahnschrift Bold Condensed"
-				"tall"		"15"
+				"name"		"Bahnschrift Condensed"
+				"tall"		"16"
 				"weight"		"700"
 				"additive"		"0"
 				"antialias"		"1"
@@ -2966,8 +2966,8 @@
 			}
 			"3"
 			{
-				"name"		"Bahnschrift Bold Condensed"
-				"tall"		"18"
+				"name"		"Bahnschrift Condensed"
+				"tall"		"20"
 				"weight"		"700"
 				"additive"		"0"
 				"antialias"		"1"
@@ -2978,8 +2978,8 @@
 			}
 			"4"
 			{
-				"name"		"Bahnschrift Bold Condensed"
-				"tall"		"19"
+				"name"		"Bahnschrift Condensed"
+				"tall"		"21"
 				"weight"		"700"
 				"additive"		"0"
 				"antialias"		"1"
@@ -2990,8 +2990,8 @@
 			}
 			"5"
 			{
-				"name"		"Bahnschrift Bold Condensed"
-				"tall"		"20"
+				"name"		"Bahnschrift Condensed"
+				"tall"		"22"
 				"weight"		"700"
 				"additive"		"0"
 				"antialias"		"1"
@@ -3002,8 +3002,8 @@
 			}
 			"6"
 			{
-				"name"		"Bahnschrift Bold Condensed"
-				"tall"		"22"
+				"name"		"Bahnschrift Condensed"
+				"tall"		"23"
 				"weight"		"700"
 				"additive"		"0"
 				"antialias"		"1"
@@ -3014,8 +3014,8 @@
 			}
 			"7"
 			{
-				"name"		"Bahnschrift Bold Condensed"
-				"tall"		"22"
+				"name"		"Bahnschrift Condensed"
+				"tall"		"24"
 				"weight"		"700"
 				"additive"		"0"
 				"antialias"		"1"
@@ -3026,8 +3026,8 @@
 			}
 			"8"
 			{
-				"name"		"Bahnschrift Bold Condensed"
-				"tall"		"24"
+				"name"		"Bahnschrift Condensed"
+				"tall"		"26"
 				"weight"		"700"
 				"additive"		"0"
 				"antialias"		"1"
@@ -3038,8 +3038,8 @@
 			}
 			"9"
 			{
-				"name"		"Bahnschrift Bold Condensed"
-				"tall"		"26"
+				"name"		"Bahnschrift Condensed"
+				"tall"		"28"
 				"weight"		"700"
 				"additive"		"0"
 				"antialias"		"1"
@@ -3050,8 +3050,8 @@
 			}
 			"10"
 			{
-				"name"		"Bahnschrift Bold Condensed"
-				"tall"		"26"
+				"name"		"Bahnschrift Condensed"
+				"tall"		"28"
 				"weight"		"700"
 				"additive"		"0"
 				"antialias"		"1"
