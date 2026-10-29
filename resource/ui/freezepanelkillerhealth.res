@@ -49,7 +49,7 @@
 		"xpos"		"0"
 		"ypos"		"11"
 		"zpos"		"5"
-		"wide"		"f0"
+		"wide"		"34"
 		"tall"		"12"
 		"visible"		"1"
 		"enabled"		"1"

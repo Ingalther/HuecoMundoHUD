@@ -49,9 +49,6 @@ C = {
     'HM_Amber': '255 196 48 255',
     'HM_TeamRed': '208 92 92 255',
     'HM_TeamBlue': '128 160 200 255',
-    # kill feed names: mid tones that read on the ink rows and on your own bone-jade rows (about 4:1 on both)
-    'HM_FeedRed': '214 66 66 255',
-    'HM_FeedBlue': '64 122 214 255',
 }
 
 SCHEME_COLORS = {
@@ -131,6 +128,22 @@ def font_block(name, tall, weight=400, italic=0, outline=0, dropshadow=0, antial
                    ['outline', str(outline), None], ['dropshadow', str(dropshadow), None]], None]]
 
 
+RES_BANDS = (1, 600, 720, 768, 800, 864, 900, 960, 1024, 1050, 1080, 1200, 1440, 1600, 2160)  # screen heights
+
+
+def banded_font(tall, low, high, split=1080, **flags):
+    """A font whose face changes with the screen height: low = (name, weight) below `split` lines, high from there
+    up. Entries with a "yres" range take their size in pixels (the game scales only range-less fonts), so each band
+    gets the proportional size of its lowest height, the same size a plain font of `tall` has there."""
+    entries = []
+    for i, lo in enumerate(RES_BANDS):
+        hi = RES_BANDS[i + 1] - 1 if i + 1 < len(RES_BANDS) else 10000
+        name, weight = low if lo < split else high
+        blk = font_block(name, round(tall * max(lo, 480) / 480), weight, **flags)[0][1]
+        entries.append([str(i + 1), blk + [['yres', f'{lo} {hi}', None]], None])
+    return entries
+
+
 HM_FONTS = {
     'HM_Health': font_block('Bahnschrift SemiBold Condensed', 40, 600, italic=1),
     'HM_Ammo': font_block('Bahnschrift SemiBold Condensed', 40, 600, italic=1),
@@ -138,8 +151,11 @@ HM_FONTS = {
     # damage numbers: bold italic manga lettering with an ink outline, big hits bigger
     'HM_Damage': font_block('Bahnschrift Bold Condensed', 21, 800, italic=1, outline=1),
     'HM_DamageBig': font_block('Bahnschrift Bold Condensed', 32, 800, italic=1, outline=1),
-    # kill feed: manga SFX lettering (bold condensed italic). No outline: on your own light rows it smeared the names
-    'HM_Killfeed': font_block('Bahnschrift SemiBold Condensed', 12, 600, italic=1),
+    # kill feed: manga SFX lettering (condensed italic, ink outline). The outline is one screen pixel at any
+    # resolution, and below 1080 lines it ate the SemiBold strokes (names smeared on your own light rows), so smaller
+    # screens get the Bold cut of the same face
+    'HM_Killfeed': banded_font(12, ('Bahnschrift Bold Condensed', 700), ('Bahnschrift SemiBold Condensed', 600),
+                               italic=1, outline=1),
     'HM_Small': font_block('Bahnschrift SemiCondensed', 8, 400),
     'HM_Menu': font_block('Bahnschrift SemiCondensed', 12, 400),
     'HM_Title': font_block('Constantia', 20, 400),
@@ -1187,11 +1203,13 @@ def patch_spec_health(root, font='HM_SpecHealth'):
             'ControlName': 'ImagePanel', 'fieldName': 'HM_HealthLost', 'xpos': kv.get(fill, 'xpos'),
             'ypos': kv.get(fill, 'ypos'), 'zpos': 3, 'wide': kv.get(fill, 'wide'), 'tall': kv.get(fill, 'tall'),
             'visible': 1, 'enabled': 1, 'fillcolor': HEALTH_LOST, 'mouseinputenabled': 0})
-    # the grey number vanished on the bone fill: bone lettering with an ink outline reads on fill and track. Full
-    # width, so a boss's five digits still fit
-    val = kv.find(body, 'PlayerStatusHealthValue')
-    if val is not None:
-        kv.setmany(val, xpos=0, zpos=5, wide='f0', font=font, fgcolor='HM_Bone')
+    # the grey number vanished on the bone fill: bone lettering with an ink outline reads on fill and track. As wide
+    # as the tile with its margins, so a boss's five digits still fit (a number, not "f0": without
+    # proportionaltoparent that is the screen's width, and the centred number ended up far off the tile)
+    val, bg = kv.find(body, 'PlayerStatusHealthValue'), kv.find(body, 'PlayerStatusHealthImageBG')
+    if val is not None and bg is not None:
+        kv.setmany(val, xpos=0, zpos=5, wide=2 * int(kv.get(bg, 'xpos')) + int(kv.get(bg, 'wide')), font=font,
+                   fgcolor='HM_Bone')
 
 
 def patch_killer_health(root):
@@ -1277,14 +1295,13 @@ def patch_hudlayout(root):
     for n, y in (('HudTeamGoal', 65), ('HudTeamSwitch', 75), ('HudAlert', 130)):
         kv.setmany(kv.find(body, n), xpos='c-%d' % (NOTICE_W // 2), ypos=y, wide=NOTICE_W, tall=NOTICE_H + 8)
     # kill feed: the game draws each row as a plain box (no art possible), so it is styled as stacked manga strips:
-    # sharp ink strips, your own kills on bone-jade paper (the game draws dark icons on them), bold lettering, tight
-    # gutters. Names take the same team colour on both kinds of row, so they are mid tones (HM_Feed*); the info text
-    # on your rows ("is DOMINATING"...) is deep emerald. The feed starts below the casual team strip (portraits +
-    # dead skull tags reach ~40), which covered long rows
+    # sharp ink strips, your own kills on bone-jade paper (the game draws dark icons on them), bold outlined
+    # lettering (HM_Killfeed), tight gutters. The info text on your rows ("is DOMINATING"...) is deep emerald. The
+    # feed starts below the casual team strip (portraits + dead skull tags reach ~40), which covered long rows
     dn = kv.find(body, 'HudDeathNotice')
     kv.setmany(dn, xpos='r640', ypos=44, wide=630, tall=430, MaxDeathNotices=5, IconScale='0.33', LineHeight=17,
-               LineSpacing=2, CornerRadius=0, RightJustify=1, TextFont='HM_Killfeed', TeamBlue='HM_FeedBlue',
-               TeamRed='HM_FeedRed', IconColor='HM_Bone', LocalPlayerColor='30 140 92 255',
+               LineSpacing=2, CornerRadius=0, RightJustify=1, TextFont='HM_Killfeed', TeamBlue='HM_TeamBlue',
+               TeamRed='HM_TeamRed', IconColor='HM_Bone', LocalPlayerColor='30 140 92 255',
                BaseBackgroundColor='8 8 10 225', LocalBackgroundColor='214 232 222 240')
     # hitmarker: flashed by the DamagedPlayer animation (ANIMS_HITMARKER)
     hm = kv.add_block(body, 'HM_Hitmarker', img_panel('HM_Hitmarker', 'c-12', 'c-12', 24, 24, 'hitmarker', z=10))
@@ -1439,6 +1456,7 @@ event HM_HitmarkerFlash
 # ------------------------------------------------------------------ respawn card, menus, objectives
 SPEC_HINTS = ('ClassOrTeamLabel', 'SwitchCamModeKeyLabel', 'SwitchCamModeLabel', 'CycleTargetFwdKeyLabel',
               'CycleTargetFwdLabel', 'CycleTargetRevKeyLabel', 'CycleTargetRevLabel', 'TipLabel')
+SPEC_KEYS = re.compile(r'SwitchCamMode|CycleTarget|ClassOrTeam', re.I)  # key hint labels (+ controller icons)
 
 
 def patch_spectator(root):
@@ -1463,6 +1481,16 @@ def patch_spectator(root):
     blk = kv.find(body, 'MapLabel')
     if blk is not None:
         kv.set(blk, 'font', 'HM_SpecMap')
+    # the camera key hints were on the top bar: without it they ran over the engineer's building cards (top left, also
+    # shown while dead), so the group moves to the bottom left and ends right above the tip (r67). Only the stock
+    # top-left group moves (numeric ypos), not the centred "change class" line
+    group = [e[1] for e in body if isinstance(e[1], list) and SPEC_KEYS.search(e[0])
+             and not (kv.get(e[1], 'xpos') or 'c').lower().startswith(('c', 'r'))
+             and (kv.get(e[1], 'ypos') or '').isdigit()]
+    if group:
+        bottom = max(int(kv.get(b, 'ypos')) + int(kv.get(b, 'tall') or 0) for b in group)
+        for b in group:
+            kv.set(b, 'ypos', 'r%d' % (70 + bottom - int(kv.get(b, 'ypos'))))
     kv.remove(body, 'HM_RespawnCard')  # older builds drew the card as a separate (always visible) image
     lbl = kv.find(body, 'ReinforcementsLabel')
     if lbl is None:
