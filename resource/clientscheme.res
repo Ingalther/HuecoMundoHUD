@@ -2942,7 +2942,7 @@
 		{
 			"1"
 			{
-				"name"		"Bahnschrift Condensed"
+				"name"		"Bahnschrift SemiCondensed"
 				"tall"		"13"
 				"weight"		"700"
 				"additive"		"0"
@@ -2954,7 +2954,7 @@
 			}
 			"2"
 			{
-				"name"		"Bahnschrift Condensed"
+				"name"		"Bahnschrift SemiCondensed"
 				"tall"		"16"
 				"weight"		"700"
 				"additive"		"0"
@@ -2966,7 +2966,7 @@
 			}
 			"3"
 			{
-				"name"		"Bahnschrift Condensed"
+				"name"		"Bahnschrift SemiCondensed"
 				"tall"		"20"
 				"weight"		"700"
 				"additive"		"0"
@@ -2978,7 +2978,7 @@
 			}
 			"4"
 			{
-				"name"		"Bahnschrift Condensed"
+				"name"		"Bahnschrift SemiCondensed"
 				"tall"		"21"
 				"weight"		"700"
 				"additive"		"0"
@@ -2990,7 +2990,7 @@
 			}
 			"5"
 			{
-				"name"		"Bahnschrift Condensed"
+				"name"		"Bahnschrift SemiCondensed"
 				"tall"		"22"
 				"weight"		"700"
 				"additive"		"0"
@@ -3002,7 +3002,7 @@
 			}
 			"6"
 			{
-				"name"		"Bahnschrift Condensed"
+				"name"		"Bahnschrift SemiCondensed"
 				"tall"		"23"
 				"weight"		"700"
 				"additive"		"0"
@@ -3014,7 +3014,7 @@
 			}
 			"7"
 			{
-				"name"		"Bahnschrift Condensed"
+				"name"		"Bahnschrift SemiCondensed"
 				"tall"		"24"
 				"weight"		"700"
 				"additive"		"0"
@@ -3026,7 +3026,7 @@
 			}
 			"8"
 			{
-				"name"		"Bahnschrift Condensed"
+				"name"		"Bahnschrift SemiCondensed"
 				"tall"		"26"
 				"weight"		"700"
 				"additive"		"0"
@@ -3038,7 +3038,7 @@
 			}
 			"9"
 			{
-				"name"		"Bahnschrift Condensed"
+				"name"		"Bahnschrift SemiCondensed"
 				"tall"		"28"
 				"weight"		"700"
 				"additive"		"0"
@@ -3050,7 +3050,7 @@
 			}
 			"10"
 			{
-				"name"		"Bahnschrift Condensed"
+				"name"		"Bahnschrift SemiCondensed"
 				"tall"		"28"
 				"weight"		"700"
 				"additive"		"0"
@@ -3062,7 +3062,7 @@
 			}
 			"11"
 			{
-				"name"		"Bahnschrift Condensed"
+				"name"		"Bahnschrift SemiCondensed"
 				"tall"		"29"
 				"weight"		"700"
 				"additive"		"0"
@@ -3074,7 +3074,7 @@
 			}
 			"12"
 			{
-				"name"		"Bahnschrift Condensed"
+				"name"		"Bahnschrift SemiCondensed"
 				"tall"		"32"
 				"weight"		"700"
 				"additive"		"0"

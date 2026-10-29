@@ -152,10 +152,10 @@ HM_FONTS = {
     'HM_Damage': font_block('Bahnschrift Bold Condensed', 21, 800, italic=1, outline=1),
     'HM_DamageBig': font_block('Bahnschrift Bold Condensed', 32, 800, italic=1, outline=1),
     # kill feed: manga SFX lettering (condensed italic, ink outline). The outline is one screen pixel at any
-    # resolution, and below 1440 lines it ate the SemiBold strokes (names smeared on your own light rows), so smaller
-    # screens get the Bold cut of the same face, a size up. Windows files that cut as the Bold style of the
-    # "Bahnschrift Condensed" family (there is no "Bahnschrift Bold Condensed" family, unlike SemiBold Condensed)
-    'HM_Killfeed': banded_font(12, ('Bahnschrift Condensed', 700), ('Bahnschrift SemiBold Condensed', 600),
+    # resolution: below 1440 lines it ate the strokes and joined neighbouring letters (names smeared on your own
+    # light rows), even in the Bold Condensed cut. There the names take the wider Bold SemiCondensed cut, a size up,
+    # so the letters stay apart (Windows files it as the Bold style of the "Bahnschrift SemiCondensed" family)
+    'HM_Killfeed': banded_font(12, ('Bahnschrift SemiCondensed', 700), ('Bahnschrift SemiBold Condensed', 600),
                                split=1440, low_tall=13, italic=1, outline=1),
     'HM_Small': font_block('Bahnschrift SemiCondensed', 8, 400),
     'HM_Menu': font_block('Bahnschrift SemiCondensed', 12, 400),
