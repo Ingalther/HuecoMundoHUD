@@ -1256,13 +1256,13 @@ def patch_flagpanel(root):
     kv.setmany(kv.find(body, 'BlueFlag'), xpos='c-202', ypos='r58')
     kv.setmany(kv.find(body, 'RedFlag'), xpos='c42', ypos='r58')
     # carrying the intel: the stock 100x100 briefcase over an 80x80 compass sat in the middle, over the sticky and
-    # meter cards. Here they make one more flag ring, right of the red one and its size: the compass to your capture
-    # zone with the intel card (hud/objectives_flagpanel_carried_*, manga.intel_card) inside, where the flag rings
-    # keep their briefcases (patch_flagstatus). The stock hybrid / Special Delivery spots were the old middle ones.
+    # meter cards. The game hides the flag rings while you carry, so the compass to your capture zone sits on the
+    # score strip's middle instead, between the scores, with the intel card (hud/objectives_flagpanel_carried_*,
+    # manga.intel_card) inside. The stock hybrid / Special Delivery spots were the old middle ones.
     capture = kv.find(body, 'CaptureFlag')
-    kv.setmany(capture, xpos='c154', ypos='r58', wide=56, tall=56)
+    kv.setmany(capture, xpos='c-20', ypos='r%d' % (CTF_STRIP + 1), wide=40, tall=40)
     for n in ('CarriedImage', 'SpecCarriedImage'):
-        kv.setmany(kv.find(body, n), xpos='c168', ypos='r44', wide=28, tall=28)
+        kv.setmany(kv.find(body, n), xpos='c-12', ypos='r%d' % (CTF_STRIP - 7), wide=24, tall=24)
     for blk in (capture, kv.find(body, 'CarriedImage')):
         for cond in ('if_hybrid', 'if_specialdelivery'):
             kv.remove(blk, cond)
