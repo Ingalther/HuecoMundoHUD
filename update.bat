@@ -13,7 +13,7 @@ echo.
 echo  TF2 must be closed. Press any key to continue.
 pause >nul
 rem Git, Python 3, Pillow and numpy are checked before anything changes;
-rem a missing one is named with where to get it.
+rem a missing one is named and can be installed.
 call :tools
 if errorlevel 1 exit /b 1
 echo.
@@ -54,24 +54,46 @@ pause
 exit /b 0
 
 :tools
-rem Finds Python 3 (PY) and checks for Git, Python 3, Pillow and numpy. When one is missing it says which
-rem and how to get it, and returns 1.
-set "PY="
-set "HM_NOGIT="
-set "HM_NOPKG="
-git --version >nul 2>&1 || set "HM_NOGIT=1"
-python -c "import sys; sys.exit(sys.version_info[0] != 3)" >nul 2>&1 && set "PY=python"
-if not defined PY py -3 -c "import sys" >nul 2>&1 && set "PY=py -3"
-if defined PY %PY% -c "import PIL, numpy" >nul 2>&1 || set "HM_NOPKG=1"
+rem Checks for Git, Python 3 (found as PY), Pillow and numpy. Missing ones are offered for install (Git and
+rem Python through winget, Windows' own installer; Pillow and numpy through pip), or else named with where
+rem to get them. Returns 1 while one is still missing.
+set "HM_TRIED="
+:tools_check
+call :findtools
 if not defined HM_NOGIT if defined PY if not defined HM_NOPKG exit /b 0
-set "HM_PIP=%PY%"
-if not defined PY set "HM_PIP=py"
-if not defined PY set "HM_NOPKG=1"
 echo.
 echo  update.bat needs a few free tools to download and build the HUD, and this PC is missing:
+if defined HM_NOGIT echo   - Git
+if not defined PY echo   - Python 3
+if defined HM_NOPKG echo   - Pillow and numpy, two add-ons for Python
+if defined HM_TRIED goto tools_manual
+set "HM_WINGET="
+if defined HM_NOGIT set "HM_WINGET=1"
+if not defined PY set "HM_WINGET=1"
+if defined HM_WINGET winget --version >nul 2>&1 || goto tools_manual
+echo.
+echo  update.bat can download and install them for you now, free and from their official sources.
+echo  Windows may ask for permission.
+choice /c YN /n /m " Install them now? [Y/N] "
+if errorlevel 2 goto tools_manual
+set "HM_TRIED=1"
+if defined HM_NOGIT winget install --id Git.Git -e --source winget --accept-package-agreements --accept-source-agreements
+if not defined PY winget install --id Python.Python.3.13 -e --source winget --accept-package-agreements --accept-source-agreements
+rem What winget installed is on the PATH of new windows only: take the PATH over from the registry.
+for /f "usebackq delims=" %%P in (`powershell -NoProfile -Command "[Environment]::GetEnvironmentVariable('Path', 'Machine') + ';' + [Environment]::GetEnvironmentVariable('Path', 'User')"`) do set "PATH=%%P"
+call :findtools
+if defined PY if defined HM_NOPKG %PY% -m pip install --disable-pip-version-check pillow numpy
+goto tools_check
+
+:tools_manual
+set "HM_PIP=%PY%"
+if not defined PY set "HM_PIP=py"
+echo.
+if defined HM_TRIED echo  Not everything could be installed. If something was installed just now, close this window and
+if defined HM_TRIED echo  run update.bat again. Otherwise get it by hand:
 if defined HM_NOGIT echo   - Git: get it from https://git-scm.com/download/win and install it with the default options.
 if not defined PY echo   - Python 3: get it from https://www.python.org/downloads/ and install it with the default options.
-if defined HM_NOPKG echo   - Pillow and numpy, two add-ons for Python: open a Command Prompt and run   %HM_PIP% -m pip install pillow numpy
+if defined HM_NOPKG echo   - Pillow and numpy: open a Command Prompt and run   %HM_PIP% -m pip install pillow numpy
 echo  Then run update.bat again.
 echo.
 echo  Without these tools you can update by hand: download the newest ZIP from
@@ -79,6 +101,21 @@ echo  https://github.com/Ingalther/HuecoMundoHUD/releases/latest and put its fol
 echo  in place of this one.
 pause
 exit /b 1
+
+:findtools
+rem Sets PY to the Python 3 command, and HM_NOGIT / HM_NOPKG when Git / Pillow and numpy are missing.
+set "PY="
+set "HM_NOGIT="
+set "HM_NOPKG="
+git --version >nul 2>&1 || if exist "%ProgramFiles%\Git\cmd\git.exe" set "PATH=%PATH%;%ProgramFiles%\Git\cmd"
+git --version >nul 2>&1 || set "HM_NOGIT=1"
+python -c "import sys; sys.exit(sys.version_info[0] != 3)" >nul 2>&1 && set "PY=python"
+if not defined PY py -3 -c "import sys" >nul 2>&1 && set "PY=py -3"
+if not defined PY if exist "%LOCALAPPDATA%\Programs\Python\Python313\python.exe" set PY="%LOCALAPPDATA%\Programs\Python\Python313\python.exe"
+if not defined PY if exist "%ProgramFiles%\Python313\python.exe" set PY="%ProgramFiles%\Python313\python.exe"
+if defined PY %PY% -c "import PIL, numpy" >nul 2>&1 || set "HM_NOPKG=1"
+if not defined PY set "HM_NOPKG=1"
+exit /b 0
 
 :wrongplace
 echo.
