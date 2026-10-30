@@ -1372,6 +1372,83 @@ def glyph(stock, size=256):
     return im
 
 
+def briefcase(tint, size=256):
+    """The intel as a manga drawing: a briefcase in the flag's team colour, its lid lit, screentone deepening towards
+    the bottom, the lid seam, bone latches and corner guards, a dark handle and a heavy ink outline."""
+    ss = 3
+    S = size * ss
+
+    def mask(x0, y0, x1, y1, r):
+        m = Image.new('L', (S, S), 0)
+        ImageDraw.Draw(m).rounded_rectangle((x0 * S, y0 * S, x1 * S, y1 * S), radius=r * S, fill=255)
+        return arr(m)
+
+    body = mask(0.08, 0.34, 0.92, 0.84, 0.07)
+    grip = np.clip(mask(0.34, 0.15, 0.66, 0.38, 0.07) - mask(0.42, 0.23, 0.58, 0.39, 0.03), 0, 1)
+    sil = np.maximum(body, grip)
+    yy = np.mgrid[0:S, 0:S][0].astype(np.float32) / S
+    ink = np.array(INK, np.float32) / 255
+    bone = np.array(BONE, np.float32) / 255
+    tc = np.array(tint, np.float32) / 255
+    col = np.clip(tc * np.clip(1.3 - (yy - 0.34) * 1.1, 0.7, 1.3)[..., None], 0, 1)
+    lid = (yy < 0.47)[..., None]
+    col = np.where(lid, np.clip(col * 0.75 + bone * 0.25, 0, 1), col)
+    shade = np.clip((yy - 0.58) / 0.26, 0, 1)
+    dots = tuple(int(v * 0.4) for v in tint)
+    tone = screentone(np.clip(1 - shade * 0.8, 0, 1), period=6 * ss, dot_color=dots, paper=(255, 255, 255)) / 255
+    col = col * np.where((shade > 0.02)[..., None], tone, 1)
+    seam = (np.abs(yy - 0.48) < 0.012)[..., None]
+    col = np.where(seam, ink, col)
+    out = np.zeros((S, S, 4), np.float32)
+    out[..., :3] = col * body[..., None]
+    out[..., 3] = body
+    handle = np.array((64, 64, 68), np.float32) / 255
+    out[..., :3] = out[..., :3] * (1 - grip[..., None]) + handle * grip[..., None]
+    out[..., 3] = np.maximum(out[..., 3], grip)
+    img = Image.fromarray((out.clip(0, 1) * 255).astype(np.uint8), 'RGBA')
+    # corner guards (clipped to the case's rounded corners), latches, lit edges
+    guards = Image.new('RGBA', (S, S), (0, 0, 0, 0))
+    g = ImageDraw.Draw(guards)
+    w = int(S * 0.012)
+    for (cx, cy, dx, dy) in ((0.08, 0.34, 1, 1), (0.92, 0.34, -1, 1), (0.08, 0.84, 1, -1), (0.92, 0.84, -1, -1)):
+        tri = [(cx * S, cy * S), ((cx + dx * 0.13) * S, cy * S), (cx * S, (cy + dy * 0.13) * S)]
+        g.polygon(tri, fill=(200, 200, 194, 255))
+        g.line(tri[1:], fill=INK + (255,), width=w)
+    ga = arr(guards)
+    ga[..., 3] *= body
+    img.alpha_composite(Image.fromarray((ga * 255).astype(np.uint8), 'RGBA'))
+    d = ImageDraw.Draw(img)
+    for x0 in (0.21, 0.68):
+        d.rounded_rectangle((x0 * S, 0.42 * S, (x0 + 0.11) * S, 0.55 * S), radius=0.02 * S, fill=BONE + (255,),
+                            outline=INK + (255,), width=w)
+        d.rectangle(((x0 + 0.035) * S, 0.47 * S, (x0 + 0.075) * S, 0.51 * S), fill=INK + (255,))
+    d.line((0.17 * S, 0.375 * S, 0.62 * S, 0.375 * S), fill=BONE + (230,), width=int(S * 0.014))
+    d.line((0.4 * S, 0.18 * S, 0.6 * S, 0.18 * S), fill=(150, 150, 154, 255), width=int(S * 0.012))
+    # heavy ink outline round the whole silhouette
+    oa = arr(img)
+    silm = Image.fromarray((sil * 255).astype(np.uint8))
+    outline = np.clip(arr(silm.filter(ImageFilter.MaxFilter(int(S * 0.035) | 1))) - sil, 0, 1)
+    oa[..., :3] = oa[..., :3] * (1 - outline[..., None]) + ink * outline[..., None]
+    oa[..., 3] = np.maximum(oa[..., 3], outline)
+    img = Image.fromarray((oa * 255).astype(np.uint8), 'RGBA')
+    return img.resize((size, size), Image.LANCZOS)
+
+
+def intel_card(tint, seed, size=128):
+    """Carried intel (hud/objectives_flagpanel_carried_*): the team's briefcase on a torn ink square, with the emerald
+    rim the meter cards give their logos (tag_with_icon). The game shows it inside the compass ring that points to
+    the capture zone."""
+    pts = [(10, 12), (118, 8), (120, 118), (8, 120)]
+    im = panel((size, size), pts, seed, shadow=False)
+    case = briefcase(tint).resize((int(size * 0.84),) * 2, Image.LANCZOS)
+    pos = ((size - case.width) // 2, (size - case.height) // 2)
+    halo = case.getchannel('A').point(lambda v: 255 if v > 40 else 0).filter(ImageFilter.MaxFilter(5))
+    halo = halo.filter(ImageFilter.GaussianBlur(0.8))
+    im.alpha_composite(art.solid_with_alpha((36, 168, 112), np.clip(arr(halo) * 1.3, 0, 1) * 0.85), pos)
+    im.alpha_composite(case, pos)
+    return im
+
+
 def cp_icon(stock, team, seed, size=128):
     """Control point icon: torn ink square, team screentone, the stock icon's bone-coloured symbol kept."""
     tint = {'blu': (60, 100, 160), 'red': (170, 56, 60)}.get(team, (90, 92, 94))

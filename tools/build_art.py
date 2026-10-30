@@ -275,6 +275,9 @@ def objective_icons(out, pdir):
     for g in ('home', 'home_alt', 'dropped', 'moving', 'moving_alt'):
         out.thumb(f'obj/objectives_flagpanel_ico_flag_{g}',
                   manga.glyph(read_vtf(os.path.join(hud, f'objectives_flagpanel_ico_flag_{g}.vtf'))))
+    # the intel you carry (the game picks the flag's team colour): a manga briefcase card
+    for name, tint in (('red', (170, 56, 60)), ('blue', (60, 100, 160))):
+        out.thumb(f'obj/objectives_flagpanel_carried_{name}', manga.intel_card(tint, 640 + len(name)))
 
 
 BUILDING_KANJI = {'sentry': '砲', 'dispenser': '補', 'tele_entrance': '入', 'tele_exit': '出', 'sapper': '破'}

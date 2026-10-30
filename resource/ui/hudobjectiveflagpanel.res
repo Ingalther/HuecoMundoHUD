@@ -245,35 +245,26 @@
 		"ypos"		"r127" [$WIN32]
 		"ypos"		"r148" [$X360]
 		"zpos"		"9"
-		"wide"		"100"
-		"tall"		"50"
-		"visible"		"1"
+		"wide"		"0"
+		"tall"		"0"
+		"visible"		"0"
 		"enabled"		"1"
-		"image"		"../hud/objectives_flagpanel_carried_outline"
+		"image"		"replay/thumbnails/hm/blank"
 		"scaleImage"		"1"
 	}
 	"CarriedImage"
 	{
 		"ControlName"		"ImagePanel"
 		"fieldName"		"CarriedImage"
-		"xpos"		"c-50"
-		"ypos"		"r137" [$WIN32]
-		"ypos"		"r158" [$X360]
+		"xpos"		"c168"
+		"ypos"		"r44"
 		"zpos"		"10"
-		"wide"		"100"
-		"tall"		"100"
+		"wide"		"28"
+		"tall"		"28"
 		"visible"		"0"
 		"enabled"		"1"
 		"image"		"../hud/objectives_flagpanel_carried_red"
 		"scaleImage"		"1"
-		"if_hybrid"
-		{
-			"ypos"		"r142"
-		}
-		"if_specialdelivery"
-		{
-			"visible"		"r142"
-		}
 	}
 	"PlayingTo"
 	{
@@ -412,22 +403,13 @@
 	{
 		"ControlName"		"CTFArrowPanel"
 		"fieldName"		"CaptureFlag"
-		"xpos"		"c-40"
-		"ypos"		"r95" [$WIN32]
-		"ypos"		"r116" [$X360]
+		"xpos"		"c154"
+		"ypos"		"r58"
 		"zpos"		"5"
-		"wide"		"80"
-		"tall"		"80"
+		"wide"		"56"
+		"tall"		"56"
 		"visible"		"0"
 		"enabled"		"1"
-		"if_hybrid"
-		{
-			"ypos"		"r100"
-		}
-		"if_specialdelivery"
-		{
-			"ypos"		"r100"
-		}
 	}
 	"PoisonIcon"
 	{
@@ -463,12 +445,11 @@
 	{
 		"ControlName"		"ImagePanel"
 		"fieldName"		"SpecCarriedImage"
-		"xpos"		"c-50"
-		"ypos"		"r137" [$WIN32]
-		"ypos"		"r158" [$X360]
+		"xpos"		"c168"
+		"ypos"		"r44"
 		"zpos"		"10"
-		"wide"		"100"
-		"tall"		"100"
+		"wide"		"28"
+		"tall"		"28"
 		"visible"		"0"
 		"enabled"		"1"
 		"image"		"../hud/objectives_flagpanel_carried_red"

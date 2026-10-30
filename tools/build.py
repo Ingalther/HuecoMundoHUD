@@ -1251,6 +1251,19 @@ def patch_flagpanel(root):
                fgcolor='HM_Ash')
     kv.setmany(kv.find(body, 'BlueFlag'), xpos='c-202', ypos='r58')
     kv.setmany(kv.find(body, 'RedFlag'), xpos='c42', ypos='r58')
+    # carrying the intel: the stock 100x100 briefcase over an 80x80 compass sat in the middle, over the sticky and
+    # meter cards. Here they make one more flag ring, right of the red one and its size: the compass to your capture
+    # zone with the intel card (hud/objectives_flagpanel_carried_*, manga.intel_card) inside, where the flag rings
+    # keep their briefcases (patch_flagstatus). The stock hybrid / Special Delivery spots were the old middle ones.
+    capture = kv.find(body, 'CaptureFlag')
+    kv.setmany(capture, xpos='c154', ypos='r58', wide=56, tall=56)
+    for n in ('CarriedImage', 'SpecCarriedImage'):
+        kv.setmany(kv.find(body, n), xpos='c168', ypos='r44', wide=28, tall=28)
+    for blk in (capture, kv.find(body, 'CarriedImage')):
+        for cond in ('if_hybrid', 'if_specialdelivery'):
+            kv.remove(blk, cond)
+    # the pickup flash (FlagOutline) animates this one at the old spot: nothing left to draw
+    kv.setmany(kv.find(body, 'OutlineImage'), wide=0, tall=0, visible=0, image=T + 'blank')
 
 
 def patch_flagstatus(root):
