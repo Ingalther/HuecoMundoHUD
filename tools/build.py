@@ -888,6 +888,12 @@ def patch_pipes(root):
             if blk is not None:
                 kv.setmany(blk, xpos=38 + dx, ypos=4 + dx, wide=30, tall=26, font='HM_Sticky', fgcolor=fg,
                            textAlignment='west')
+    # Switching layouts reloads the HUD, and the game only refreshes the count (and which panel shows) once it
+    # changes: both panels showed until then, the raw %activepipes% on top. The count panel now waits hidden for
+    # the game, and the none-out panel, shown only at 0, says 0 by itself.
+    kv.set(kv.find(body, 'PipesPresentPanel'), 'visible', 0)
+    for n in ('NumPipesLabel', 'NumPipesLabelDropshadow'):
+        kv.set(kv.find(kv.find(body, 'NoPipesPresentPanel'), n), 'labelText', '0')
 
 
 # ÜberCharge (Vaccinator included) as a card in the sticky slot: medic-cross logo, the charge % above an emerald bar
