@@ -10,7 +10,7 @@
 		"wide"		"70"
 		"tall"		"34"
 		"xpos_minmode"		"c-35"
-		"ypos_minmode"		"388"
+		"ypos_minmode"		"356"
 	}
 	"ItemEffectMeterBG"
 	{

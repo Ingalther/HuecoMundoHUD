@@ -850,13 +850,17 @@ def patch_meter_style(root):
 # with a manga stickybomb
 # (team band, reiatsu aura) breaking out of its left edge and the count beside it; the bomb dims when none are out
 PIPES_W, PIPES_H = 70, 34
+CTF_STRIP = 48  # CTF's score strip (patch_flagpanel) starts this far above the screen's bottom
+CHARGE_H = 8    # the stock sticky / bow / flame-rocket charge bars, right under the card (patch_hudlayout)
 
 
 def pipes_pos(alt=False):
-    """Centered on the screen, level with the middle of the health band / ammo blade row of each layout."""
+    """Centered on the screen, level with the middle of the health band / ammo blade row of each layout, but high
+    enough that the charge bar under it clears CTF's score strip: in the corners layout the row sat on the strip."""
     band_mid = pc(*BAND, alt=alt)[1] + k(BAND[3]) / 2
     blade_mid = weapon_pos(alt)[1] + k(WEAPON_H) / 2
-    return "c-%d" % (PIPES_W // 2), round((band_mid + blade_mid) / 2 + 20 - PIPES_H / 2)
+    y = round((band_mid + blade_mid) / 2 + 20 - PIPES_H / 2)
+    return "c-%d" % (PIPES_W // 2), min(y, 480 - CTF_STRIP - 2 - CHARGE_H - 2 - PIPES_H)
 
 
 def patch_pipes(root):
@@ -1240,7 +1244,7 @@ def patch_killer_health(root):
 def patch_flagpanel(root):
     """CTF: compact torn manga score strip (blue | red tone), flags in torn rings on either side."""
     body = next(e[1] for e in root if isinstance(e[1], list))
-    kv.setmany(kv.find(body, 'LeftSideBG'), xpos='c-90', ypos='r48', wide=180, tall=39, image=T + 'ctf_bar')
+    kv.setmany(kv.find(body, 'LeftSideBG'), xpos='c-90', ypos='r%d' % CTF_STRIP, wide=180, tall=39, image=T + 'ctf_bar')
     for n in ('RightSideBG', 'OutlineBG', 'PlayingToBG'):
         kv.setmany(kv.find(body, n), wide=0, tall=0, visible=0)
     for n, x, fg in (('BlueScore', 'c-80', 'HM_Bone'), ('BlueScoreShadow', 'c-79', 'HM_Shadow'),
