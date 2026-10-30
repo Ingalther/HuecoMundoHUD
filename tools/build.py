@@ -1592,6 +1592,9 @@ def patch_cp_progress(root):
 
 def main():
     install = '--install' in sys.argv
+    if not os.path.isfile(os.path.join(vpk.TF, 'tf2_misc_dir.vpk')):  # update.bat shows this and stops
+        sys.exit(f"TF2's game files are not in {vpk.TF}\n"
+                 'Put this HUD folder into ...\\Team Fortress 2\\tf\\custom and run update.bat from there.')
     work = tempfile.mkdtemp(prefix='hm_stock_')
     vpk.extract('../hl2/hl2_misc', ['resource/ui/basechat.res'], work)
     n = vpk.extract('tf2_misc', ['resource/*.res', 'resource/ui/*.res', 'resource/ui/*/*.res',
