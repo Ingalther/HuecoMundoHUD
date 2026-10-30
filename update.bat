@@ -80,7 +80,7 @@ set "HM_TRIED=1"
 if defined HM_NOGIT winget install --id Git.Git -e --source winget --accept-package-agreements --accept-source-agreements
 if not defined PY winget install --id Python.Python.3.13 -e --source winget --accept-package-agreements --accept-source-agreements
 rem What winget installed is on the PATH of new windows only: take the PATH over from the registry.
-for /f "usebackq delims=" %%P in (`powershell -NoProfile -Command "[Environment]::GetEnvironmentVariable('Path', 'Machine') + ';' + [Environment]::GetEnvironmentVariable('Path', 'User')"`) do set "PATH=%%P"
+for /f "usebackq delims=" %%P in (`%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -Command "[Environment]::GetEnvironmentVariable('Path', 'Machine') + ';' + [Environment]::GetEnvironmentVariable('Path', 'User')"`) do set "PATH=%%P"
 call :findtools
 if defined PY if defined HM_NOPKG %PY% -m pip install --disable-pip-version-check pillow numpy
 goto tools_check
