@@ -1599,7 +1599,7 @@
 			"labelText"		"PRACTICE MAP"
 			"font"		"HM_Menu"
 			"textAlignment"		"center"
-			"Command"		"engine map itemtest"
+			"Command"		"engine r_skin 0; map itemtest"
 			"actionsignallevel"		"2"
 			"paintbackground"		"1"
 			"defaultBgColor_override"		"14 46 34 235"

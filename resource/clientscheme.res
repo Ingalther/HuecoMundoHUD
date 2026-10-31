@@ -5825,6 +5825,16 @@
 			"draw_corner_width"		"0"
 			"draw_corner_height"		"0"
 		}
+		"HM_ItemCard"
+		{
+			"bordertype"		"scalable_image"
+			"backgroundtype"		"2"
+			"image"		"replay/thumbnails/hm/item_card"
+			"src_corner_height"		"40"
+			"src_corner_width"		"40"
+			"draw_corner_width"		"7"
+			"draw_corner_height"		"7"
+		}
 		"HM_Card_none"
 		{
 			"bordertype"		"scalable_image"
@@ -6150,6 +6160,46 @@
 			"bordertype"		"scalable_image"
 			"backgroundtype"		"2"
 			"image"		"replay/thumbnails/hm/layout_corners_h"
+			"src_corner_height"		"0"
+			"src_corner_width"		"0"
+			"draw_corner_width"		"0"
+			"draw_corner_height"		"0"
+		}
+		"HM_Card_team_tag_blu"
+		{
+			"bordertype"		"scalable_image"
+			"backgroundtype"		"2"
+			"image"		"replay/thumbnails/hm/team_tag_blu"
+			"src_corner_height"		"0"
+			"src_corner_width"		"0"
+			"draw_corner_width"		"0"
+			"draw_corner_height"		"0"
+		}
+		"HM_Card_team_tag_blu_h"
+		{
+			"bordertype"		"scalable_image"
+			"backgroundtype"		"2"
+			"image"		"replay/thumbnails/hm/team_tag_blu_h"
+			"src_corner_height"		"0"
+			"src_corner_width"		"0"
+			"draw_corner_width"		"0"
+			"draw_corner_height"		"0"
+		}
+		"HM_Card_team_tag_red"
+		{
+			"bordertype"		"scalable_image"
+			"backgroundtype"		"2"
+			"image"		"replay/thumbnails/hm/team_tag_red"
+			"src_corner_height"		"0"
+			"src_corner_width"		"0"
+			"draw_corner_width"		"0"
+			"draw_corner_height"		"0"
+		}
+		"HM_Card_team_tag_red_h"
+		{
+			"bordertype"		"scalable_image"
+			"backgroundtype"		"2"
+			"image"		"replay/thumbnails/hm/team_tag_red_h"
 			"src_corner_height"		"0"
 			"src_corner_width"		"0"
 			"draw_corner_width"		"0"

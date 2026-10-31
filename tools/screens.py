@@ -190,6 +190,9 @@ QUICK_FIXES = [
     ('DEMO PLAYER', 'demoui', 'Opens the demo player'),
     ('RECONNECT', 'retry', 'Reconnects to the last server'),
 ]
+# what a button runs when it is more than the command it shows: after the loadout's BLU preview (r_skin 1, see
+# class_loadout) every model on the practice map would be drawn blue
+QUICK_FIX_RUN = {'map itemtest': 'r_skin 0; map itemtest'}
 
 
 def hud_settings_button(body, y):
@@ -259,7 +262,7 @@ def hud_settings_popup(motd):
                                    'font': 'HM_Menu', 'fgcolor': '46 214 140 255'})
     for i, (text, command, desc) in enumerate(QUICK_FIXES):
         y = 60 + i * 31
-        popup_button(motd, f'HM_Fix{i}', QUICK_X, y, text, f'engine {command}')
+        popup_button(motd, f'HM_Fix{i}', QUICK_X, y, text, f'engine {QUICK_FIX_RUN.get(command, command)}')
         for suffix, dy, label_text, color in (('Desc', -1, desc, '184 186 180 255'),
                                               ('Cmd', 9, command, '46 214 140 200')):
             add(motd, f'HM_Fix{i}{suffix}', {'ControlName': 'CExLabel', 'fieldName': f'HM_Fix{i}{suffix}',
@@ -339,7 +342,8 @@ def card_button(body, blk, img, x, y, w, h, command=None):
 
 
 CARD_BORDERS = ['cls_' + c for c, _ in [('scout', 0), ('soldier', 0), ('pyro', 0), ('demoman', 0), ('heavyweapons', 0),
-                                          ('engineer', 0), ('medic', 0), ('sniper', 0), ('spy', 0), ('random', 0)]] +                ['team_blu', 'team_red', 'team_auto', 'team_spec', 'layout_centered', 'layout_corners']
+                                          ('engineer', 0), ('medic', 0), ('sniper', 0), ('spy', 0), ('random', 0)]] +                ['team_blu', 'team_red', 'team_auto', 'team_spec', 'layout_centered', 'layout_corners',
+                'team_tag_blu', 'team_tag_red']
 
 
 def classselection(root):
@@ -464,6 +468,40 @@ def overlay_page(name):
         add(body, 'HM_SceneShade', image('HM_SceneShade', 0, -36, 'f0', 480, T + 'shade_full', z=-29,
                                          drawcolor='255 255 255 205'), first=True)
     return patch
+
+
+# the loadout shows every class in RED; these switch the preview between the teams. r_skin forces a model skin (0:
+# off, the RED default; 1: BLU) and is a cheat setting, so the button turns sv_cheats on first: that works when no
+# match is running (a server keeps its own sv_cheats), and joining a match turns cheat settings back off by itself
+TEAM_PREVIEW = (('HM_TeamBlu', 'team_tag_blu', 'BLU', 'sv_cheats 1; r_skin 1'),
+                ('HM_TeamRed', 'team_tag_red', 'RED', 'sv_cheats 1; r_skin 0'))
+
+
+def class_loadout(root):
+    """Class loadout: the scene backdrop, and the BLU / RED preview switch right of the items / taunts page buttons
+    (c-25 and c2, c90, 25 wide)."""
+    overlay_page('class_loadout_panel')(root)
+    body = _root(root)
+    for i, (name, img, text, command) in enumerate(TEAM_PREVIEW):
+        tag_button(body, name, img, f'c{38 + i * 52}', 'c91', 46, 23, text, command)
+    add(body, 'HM_TeamPreviewNote', {'ControlName': 'CExLabel', 'fieldName': 'HM_TeamPreviewNote', 'xpos': 'c38',
+                                     'ypos': 'c80', 'zpos': 5, 'wide': 98, 'tall': 10, 'visible': 1, 'enabled': 1,
+                                     'labelText': 'Works outside matches', 'textAlignment': 'east',
+                                     'font': 'HM_Small', 'fgcolor': '122 124 124 255', 'mouseinputenabled': 0})
+
+
+def tag_button(body, name, img, x, y, w, h, text, command):
+    """Small card button with a label the game draws in the HUD's menu font: the card is a static image underneath
+    and its hover art the armed border, as in card_button."""
+    add(body, name + 'Card', image(name + 'Card', x, y, w, h, T + img, z=5))
+    add(body, name, {
+        'ControlName': 'CExButton', 'fieldName': name, 'xpos': x, 'ypos': y, 'zpos': 6, 'wide': w, 'tall': h,
+        'visible': 1, 'enabled': 1, 'tabPosition': 0, 'labelText': text, 'font': 'HM_Menu',
+        'textAlignment': 'center', 'Command': command, 'paintbackground': 0, 'paintborder': 1,
+        'border_default': 'HM_Card_none', 'border_armed': f'HM_Card_{img}_h', 'border_depressed': f'HM_Card_{img}_h',
+        'defaultFgColor_override': '226 226 220 255', 'armedFgColor_override': '255 255 255 255',
+        'depressedFgColor_override': '46 214 140 255', 'sound_depressed': 'UI/buttonclick.wav',
+        'sound_released': 'UI/buttonclickrelease.wav', 'sound_armed': 'UI/buttonrollover.wav'})
 
 
 # ------------------------------------------------------------------ scoreboard

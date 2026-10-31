@@ -377,6 +377,7 @@ def extras_art(out):
     out.thumb('inspect_bg', manga.countdown_card(seed=461, size=(512, 512)))
     out.thumb('escort_strip', manga.escort_strip())
     out.thumb('cp_rim', manga.cp_rim())
+    out.thumb('item_card', manga.ghost_card())  # the killer's item on the death screen (HM_ItemCard)
 
 
 def manga_assets(out, pdir):
@@ -407,6 +408,10 @@ def manga_assets(out, pdir):
     out.thumb('team_auto_h', manga.small_card('RANDOM', '運', 303, hover=True))
     out.thumb('team_spec', manga.small_card('SPECTATE', '観', 304))
     out.thumb('team_spec_h', manga.small_card('SPECTATE', '観', 304, hover=True))
+    # loadout preview team switch (screens.class_loadout): the name is the button's own label
+    for team, tint, seed in (('blu', (70, 110, 170), 305), ('red', (180, 60, 64), 306)):
+        out.thumb(f'team_tag_{team}', manga.team_tag(tint, seed))
+        out.thumb(f'team_tag_{team}_h', manga.team_tag(tint, seed, hover=True))
 
     out.thumb('ctf_bar', manga.ctf_bar(405))
     objective_icons(out, pdir)
