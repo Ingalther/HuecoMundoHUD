@@ -1,2 +1,4 @@
 __pycache__/
 *.pyc
+# update.bat's install check (tools/doctor.py) writes this next to it
+hm_report.txt

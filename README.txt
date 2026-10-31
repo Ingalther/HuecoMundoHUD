@@ -43,6 +43,9 @@ UPDATING AND EDITING
 With TF2 closed, update.bat pulls the latest version and rebuilds the HUD (needs Git and Python 3
 with Pillow and numpy). tools\build.py rebuilds it from TF2's current files; colours, layout and
 artwork are all in tools\.
+update.bat then checks the install: another HUD or a mod in tf\custom that replaces some of the
+HUD's files is found and, if you agree, moved into tf\custom_disabled (nothing is deleted). What
+it found is in hm_report.txt next to update.bat: send that file when you report a problem.
 
 UNINSTALL
 ---------

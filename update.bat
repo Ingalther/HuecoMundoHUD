@@ -17,7 +17,7 @@ rem a missing one is named and can be installed.
 call :tools
 if errorlevel 1 exit /b 1
 echo.
-echo  [1/2] Pulling the latest changes from GitHub...
+echo  [1/3] Pulling the latest changes from GitHub...
 if exist ".git" goto pull
 echo  This folder has no git data yet, linking it to GitHub...
 git init -q
@@ -45,9 +45,15 @@ rem build), so the labels pull, build, nofetch and nofiles must stay, and so mus
 call :tools
 if errorlevel 1 exit /b 1
 echo.
-echo  [2/2] Building the HUD and installing it into TF2...
+echo  [2/3] Building the HUD and installing it into TF2...
 %PY% tools\build.py --install
 if errorlevel 1 goto nobuild
+rem The install check (tools\doctor.py) looks for what makes the HUD look wrong in game (TF2 left running,
+rem another HUD or a mod in tf\custom that replaces its files), offers to move such mods out and writes
+rem hm_report.txt next to this file. It never stops an update that went through.
+echo.
+echo  [3/3] Checking the install...
+%PY% tools\doctor.py
 echo.
 echo  Done! You can start TF2.
 pause
