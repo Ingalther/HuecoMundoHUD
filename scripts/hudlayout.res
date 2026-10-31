@@ -173,7 +173,7 @@
 		"fieldName"		"CHudAccountPanel"
 		"xpos"		"c-35"
 		"ypos"		"344"
-		"wide"		"70"
+		"wide"		"120"
 		"tall"		"70"
 		"visible"		"1"
 		"enabled"		"1"
@@ -222,7 +222,7 @@
 		"visible"		"0"
 		"enabled"		"1"
 		"xpos"		"c-126"
-		"ypos"		"272"
+		"ypos"		"258"
 		"wide"		"252"
 		"tall"		"35"
 		"priority"		"40"
@@ -232,7 +232,7 @@
 			"ypos"		"370"
 			"x_offset"		"20"
 		}
-		"ypos_minmode"		"278"
+		"ypos_minmode"		"264"
 	}
 	"CSpectatorTargetID"
 	{
@@ -254,7 +254,7 @@
 		"visible"		"0"
 		"enabled"		"1"
 		"xpos"		"c-126"
-		"ypos"		"313"
+		"ypos"		"297"
 		"wide"		"252"
 		"tall"		"35"
 		"priority"		"35"
@@ -263,7 +263,7 @@
 			"ypos"		"330"
 			"x_offset"		"20"
 		}
-		"ypos_minmode"		"319"
+		"ypos_minmode"		"303"
 	}
 	"BuildingStatus_Spy"
 	{

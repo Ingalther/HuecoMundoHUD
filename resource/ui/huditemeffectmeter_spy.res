@@ -7,13 +7,13 @@
 		"visible"		"1"
 		"enabled"		"1"
 		"xpos"		"c-46"
-		"ypos"		"350"
+		"ypos"		"356"
 		"wide"		"92"
 		"tall"		"34"
 		"MeterFG"		"46 214 140 255"
 		"MeterBG"		"122 124 124 110"
 		"xpos_minmode"		"c-46"
-		"ypos_minmode"		"356"
+		"ypos_minmode"		"362"
 	}
 	"ItemEffectMeterBG"
 	{

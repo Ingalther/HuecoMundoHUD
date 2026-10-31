@@ -590,6 +590,9 @@ def patch_damage(root):
 # Engineer metal: a card in the sticky slot (wrench-on-ingot logo, the count beside it). The panel is taller than
 # the card: the game floats the +/- metal deltas upward inside it, above the card.
 ACCOUNT_RISE = 36
+# the metal card's panel reaches right of the meter column: the +/- metal numbers float up there (delta_item_x), clear of
+# a Frontier Justice / Pomson card stacked over the metal card
+ACCOUNT_W, ACCOUNT_DELTA_X = 120, 82
 
 
 def account_box(alt=False):
@@ -599,7 +602,7 @@ def account_box(alt=False):
 
 def patch_account(root):
     body = kv.find(root, 'Resource/UI/HudAccountPanel.res')
-    kv.setmany(kv.find(body, 'CHudAccountPanel'), delta_item_x=40, delta_item_start_y=ACCOUNT_RISE - 6,
+    kv.setmany(kv.find(body, 'CHudAccountPanel'), delta_item_x=ACCOUNT_DELTA_X, delta_item_start_y=ACCOUNT_RISE - 6,
                delta_item_end_y=2, PositiveColor='46 214 140 255', NegativeColor='200 64 64 255',
                delta_item_font='HM_Metal')
     y = ACCOUNT_RISE + 4
@@ -678,51 +681,55 @@ def patch_rocketpack(root):
     kv.add_block(body, 'HM_BarTint', {'visible': 0, 'wide': 0, 'tall': 0})
 
 
-# Item meters as manga cards in the sticky slot: same torn tag as the sticky counter, a manga logo of the item on its
+# Item meters as manga cards in the sticky slot: the same torn tag as the sticky counter, a manga logo of the item on
+# its left (manga.logo_*), an emerald bar (or count) on its right.
 # (The game shares huditemeffectmeter.res between many items: cloak, Dead Ringer, Jarate, sandvich, banner... The
 # per-item files only get an item logo where the in-game test confirmed which item uses them.)
-# left (manga.logo_*), an emerald bar (or count) on its right. slot = 0 sits exactly where the sticky
-# counter is; meters that can show together with another one (or with the stickies / uber meter) go one card to
-# the left (-1) or right (+1).
+# The cards stack in one column over the sticky slot, three rows (METER_ROW). The game cannot tell the HUD which other
+# meters are showing, so every file has a fixed row, and the files one class can show at the same time sit in
+# different rows (checked against the game's per-class meter list):
+#   row 0, the sticky slot: the generic file (banner rage, lunchbox, Jarate, Razorback, cloak, Gas Passer, Sandman),
+#          the Righteous Bison, and the class counters that live there (stickies / shield, ÜberCharge, metal);
+#   row 1: each class's own meter next to those: Scout's drinks / Mad Milk or the Flying Guillotine, the Cow Mangler,
+#          the Air Strike / Eyelander, the Phlogistinator, Heavy's MvM rage, the Frontier Justice or Pomson, the
+#          Vita-Saw, the Bazaar Bargain or Heatmaker, the Diamondback;
+#   row 2: a third one: Scout's Soda Popper / Baby Face's Blaster (with a drink and the Sandman), the Spy-cicle (with
+#          the cloak and the Diamondback).
+# Only the MvM sapper recharge stays beside the column (slot 1): a Spy can show it with all three of those.
 METER_CARDS = {  # file: (manga logo, slot)
     'huditemeffectmeter.res': ('tf2', 0),               # generic: sandvich, banner rage, gas passer... (TF2 emblem)
-    'huditemeffectmeter_cleaver.res': ('cleaver', -1),  # Flying Guillotine (next to the scout meter)
-    'huditemeffectmeter_demoman.res': ('skull', 0),      # shared: Air Strike kills / Eyelander heads (raised, wide)
-    'huditemeffectmeter_engineer.res': ('revenge', 1),  # Frontier Justice revenge crits (metal owns slot 0)
-    'huditemeffectmeter_heavy.res': ('minigun', 0),     # MvM minigun rage (raised: the lunchbox meter owns slot 0)
-    'huditemeffectmeter_organs.res': ('heart', -1),     # Vita-Saw organs (the uber meter owns slot 0)
-    'huditemeffectmeter_particlecannon.res': ('plasma', 0),  # Cow Mangler (raised: right above the sticky slot)
-    'huditemeffectmeter_pomson.res': ('bolt', 1),       # Pomson 6000 (metal owns slot 0)
-    'huditemeffectmeter_pyro.res': ('flame', 0),        # Phlogistinator Mmmph (raised: the Gas Passer in slot 0)
-    'huditemeffectmeter_raygun.res': ('beam', 0),       # Righteous Bison (a secondary like the banner: right under
-                                                        # the Cow Mangler / Air Strike card, not off to the side)
-    'huditemeffectmeter_sapper.res': ('sapper', 1),     # sapper recharge
-    'huditemeffectmeter_scout.res': ('drink', 0),       # Bonk / Crit-a-Cola / Mad Milk (raised: Sandman in slot 0)
-    'huditemeffectmeter_sniper.res': ('skull', 0),      # Bazaar Bargain heads (raised: Jarate / Razorback in slot 0)
-    'huditemeffectmeter_sniperfocus.res': ('scope', 1),  # Hitman's Heatmaker focus
-    'huditemeffectmeter_sodapopper.res': ('soda', 1),   # Soda Popper hype
-    'huditemeffectmeter_spy.res': ('revolver', 0),      # Diamondback crits (raised: the cloak meter owns slot 0)
-    'huditemeffectmeter_spyknife.res': ('icicle', -1),  # Spy-cicle
+    'huditemeffectmeter_cleaver.res': ('cleaver', 0),   # Flying Guillotine
+    'huditemeffectmeter_demoman.res': ('skull', 0),      # shared: Air Strike kills / Eyelander heads (wide)
+    'huditemeffectmeter_engineer.res': ('revenge', 0),  # Frontier Justice revenge crits
+    'huditemeffectmeter_heavy.res': ('minigun', 0),     # MvM minigun rage
+    'huditemeffectmeter_organs.res': ('heart', 0),      # Vita-Saw organs
+    'huditemeffectmeter_particlecannon.res': ('plasma', 0),  # Cow Mangler
+    'huditemeffectmeter_pomson.res': ('bolt', 0),       # Pomson 6000
+    'huditemeffectmeter_pyro.res': ('flame', 0),        # Phlogistinator Mmmph
+    'huditemeffectmeter_raygun.res': ('beam', 0),       # Righteous Bison (a secondary like the banner)
+    'huditemeffectmeter_sapper.res': ('sapper', 1),     # MvM sapper recharge (beside the column)
+    'huditemeffectmeter_scout.res': ('drink', 0),       # Bonk / Crit-a-Cola / Mad Milk
+    'huditemeffectmeter_sniper.res': ('skull', 0),      # Bazaar Bargain heads (wide)
+    'huditemeffectmeter_sniperfocus.res': ('scope', 0),  # Hitman's Heatmaker focus
+    'huditemeffectmeter_sodapopper.res': ('soda', 0),   # Soda Popper hype / Baby Face's Blaster boost
+    'huditemeffectmeter_spy.res': ('revolver', 0),      # Diamondback crits (wide)
+    'huditemeffectmeter_spyknife.res': ('icicle', 0),   # Spy-cicle
 }
 CARD_STEP = 76
-# Cards that sit one row above their slot (fixed, like WeirdcoreHUD: the game cannot tell the HUD which other
-# meter is showing). Cow Mangler: right above the sticky slot, so a banner's rage card below never covers it.
-# The Air Strike and the Eyelander share huditemeffectmeter_demoman.res, so one card serves both: a skull (heads /
-# kills), raised over the sticky slot (Demoman's sticky / shield counter and a Soldier's banner rage sit in it), wide
-# enough to show the game's own label next to the count, "KILLS" for the Air Strike, "HEADS" for the Eyelander.
-# The generic meter file (banner rage, cloak, Jarate, Razorback, Sandman, lunchbox...) owns the sticky slot, so the
-# per-item files that a class can show next to it go one row up: Scout's drinks next to the Sandman, Sniper's Bazaar
-# Bargain next to Jarate, Spy's Diamondback next to the cloak, Heavy's MvM rage next to the sandvich, Pyro's
-# Phlogistinator next to the Gas Passer. No class can show two of the raised cards at once (checked against the
-# game's per-class meter list). The row sits right under the target IDs, which move up to clear it (target_id_ys).
-METER_RAISED = {'huditemeffectmeter_particlecannon.res', 'huditemeffectmeter_demoman.res',
-                'huditemeffectmeter_scout.res', 'huditemeffectmeter_sniper.res', 'huditemeffectmeter_spy.res',
-                'huditemeffectmeter_heavy.res', 'huditemeffectmeter_pyro.res'}
+METER_ROW = {f: 1 for f in ('huditemeffectmeter_cleaver.res', 'huditemeffectmeter_scout.res',
+                            'huditemeffectmeter_particlecannon.res', 'huditemeffectmeter_demoman.res',
+                            'huditemeffectmeter_pyro.res', 'huditemeffectmeter_heavy.res',
+                            'huditemeffectmeter_engineer.res', 'huditemeffectmeter_pomson.res',
+                            'huditemeffectmeter_organs.res', 'huditemeffectmeter_sniper.res',
+                            'huditemeffectmeter_sniperfocus.res', 'huditemeffectmeter_spy.res')}
+METER_ROW.update({'huditemeffectmeter_sodapopper.res': 2, 'huditemeffectmeter_spyknife.res': 2})
 # card width (others: 58): count cards wide enough for the game's own word next to the count
 # (Air Strike KILLS / Eyelander HEADS, Bazaar Bargain HEADS, Diamondback CRITS)
 METER_WIDE = {'huditemeffectmeter_demoman.res': 80, 'huditemeffectmeter_sniper.res': 80,
               'huditemeffectmeter_spy.res': 80}
-CARD_ROW = 30  # one card (26) plus a gap
+# one card (26) less 2: the torn edges of stacked cards overlap a little, like a pile of manga panels, and the column
+# stays low enough for the target IDs above it to keep clear of the crosshair
+CARD_ROW = 24
 
 
 def meter_card_name(filename):
@@ -735,13 +742,13 @@ def meter_card_pos(slot, alt=False):
     return 'c%d' % (-PIPES_W // 2 + slot * CARD_STEP), y
 
 
-TID_H, TID_GAP = 35, 6  # target ID strip height (stock), gap under each strip
+TID_H, TID_GAP = 35, 4  # target ID strip height (stock), gap under each strip
 
 
 def target_id_ys(alt=False):
     """Main and secondary target ID tops (stock 285 / 335). The secondary strip ("Healer: ..." / "Healing: ...")
-    covered the raised card row (its art starts 4 under the meter's top), so both strips go up until it clears."""
-    healer = min(335, pipes_pos(alt)[1] - CARD_ROW + 4 - TID_GAP - TID_H)
+    covered the meter column's top row (its art starts 4 under the meter's top), so both strips go up until it clears."""
+    healer = min(335, pipes_pos(alt)[1] - CARD_ROW * max(METER_ROW.values()) + 4 - TID_GAP - TID_H)
     return min(285, healer - TID_GAP - TID_H), healer
 
 
@@ -766,7 +773,7 @@ def patch_meter_card(root, rel):
     name = meter_card_name(fname)
     body = next(e[1] for e in root if isinstance(e[1], list))
     top = kv.find(body, 'HudItemEffectMeter')
-    rise = CARD_ROW if fname in METER_RAISED else 0
+    rise = CARD_ROW * METER_ROW.get(fname, 0)
     cw = METER_WIDE.get(fname, 58)
     grow = cw - 58  # a wider card grows both ways around the slot's centre
     for alt in (False, True):
@@ -1311,7 +1318,7 @@ def patch_hudlayout(root):
     ammo = kv.find(body, 'HudWeaponAmmo')
     kv.setmany(ammo, **box(*weapon_pos(), k(WEAPON_W), k(WEAPON_H)))
     minmode(ammo, *weapon_pos(True))
-    kv.setmany(kv.find(body, 'CHudAccountPanel'), **box(*account_box(), PIPES_W, PIPES_H + ACCOUNT_RISE))
+    kv.setmany(kv.find(body, 'CHudAccountPanel'), **box(*account_box(), ACCOUNT_W, PIPES_H + ACCOUNT_RISE))
     minmode(kv.find(body, 'CHudAccountPanel'), *account_box(True))
     kv.setmany(kv.find(body, 'HudChat'), xpos=5, ypos=196, wide=300, tall=112)
     # sticky launcher / bow / flame-rocket charge-up: a thin emerald bar centered right under the sticky card
