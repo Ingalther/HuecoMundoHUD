@@ -1081,6 +1081,14 @@ def patch_freezepanel(root):
                    fgcolor_override='HM_BoneMid')
 
 
+def patch_invite(root):
+    """Party invite ("... has invited you to their party", Accept / Decline). The game slides it in at the top left,
+    where the matchmaking bar (zpos 10001) sits over it: the stock bar is a see-through gradient, ours an ink band that
+    hid it. It draws above the bar now (its position is the game's, set by an animation)."""
+    body = next(e[1] for e in root if isinstance(e[1], list))
+    kv.set(kv.find(body, 'InviteNotification'), 'zpos', 10010)
+
+
 def patch_statpanel(root):
     """Death screen record card ("On the bright side... You came close to your record for ..."): the stock framed box
     becomes a torn manga card in your own team's tone, the class portrait on its toned end, the text in the notice
@@ -1681,6 +1689,7 @@ def main():
         'resource/ui/hudmatchstatus.res': patch_matchstatus,
         'resource/ui/winpanel.res': screens.winpanel,
         'resource/ui/freezepanel_basic.res': patch_freezepanel,
+        'resource/ui/invitenotification.res': patch_invite,
         'resource/ui/statpanel_base.res': patch_statpanel,
         'resource/ui/hudtournament.res': patch_tournament,
         'resource/ui/targetid.res': patch_targetid,
