@@ -1139,8 +1139,8 @@
 		"zpos"		"9"
 		"wide"		"24"
 		"tall"		"14"
-		"autoResize"		"1"
-		"pinCorner"		"2"
+		"autoResize"		"0"
+		"pinCorner"		"0"
 		"visible"		"1"
 		"enabled"		"1"
 		"tabPosition"		"0"
@@ -1148,6 +1148,8 @@
 		"textAlignment"		"east"
 		"font"		"HM_AmmoSmall"
 		"fgcolor"		"46 214 140 255"
+		"textinsetx"		"4"
+		"use_proportional_insets"		"1"
 	}
 	"numSoldier" [$WIN32]
 	{
@@ -1158,8 +1160,8 @@
 		"zpos"		"9"
 		"wide"		"24"
 		"tall"		"14"
-		"autoResize"		"1"
-		"pinCorner"		"2"
+		"autoResize"		"0"
+		"pinCorner"		"0"
 		"visible"		"1"
 		"enabled"		"1"
 		"tabPosition"		"0"
@@ -1167,6 +1169,8 @@
 		"textAlignment"		"east"
 		"font"		"HM_AmmoSmall"
 		"fgcolor"		"46 214 140 255"
+		"textinsetx"		"4"
+		"use_proportional_insets"		"1"
 	}
 	"numPyro" [$WIN32]
 	{
@@ -1177,8 +1181,8 @@
 		"zpos"		"9"
 		"wide"		"24"
 		"tall"		"14"
-		"autoResize"		"1"
-		"pinCorner"		"2"
+		"autoResize"		"0"
+		"pinCorner"		"0"
 		"visible"		"1"
 		"enabled"		"1"
 		"tabPosition"		"0"
@@ -1186,6 +1190,8 @@
 		"textAlignment"		"east"
 		"font"		"HM_AmmoSmall"
 		"fgcolor"		"46 214 140 255"
+		"textinsetx"		"4"
+		"use_proportional_insets"		"1"
 	}
 	"numDemoman" [$WIN32]
 	{
@@ -1196,8 +1202,8 @@
 		"zpos"		"9"
 		"wide"		"24"
 		"tall"		"14"
-		"autoResize"		"1"
-		"pinCorner"		"2"
+		"autoResize"		"0"
+		"pinCorner"		"0"
 		"visible"		"1"
 		"enabled"		"1"
 		"tabPosition"		"0"
@@ -1205,6 +1211,8 @@
 		"textAlignment"		"east"
 		"font"		"HM_AmmoSmall"
 		"fgcolor"		"46 214 140 255"
+		"textinsetx"		"4"
+		"use_proportional_insets"		"1"
 	}
 	"numHeavy" [$WIN32]
 	{
@@ -1215,8 +1223,8 @@
 		"zpos"		"9"
 		"wide"		"24"
 		"tall"		"14"
-		"autoResize"		"1"
-		"pinCorner"		"2"
+		"autoResize"		"0"
+		"pinCorner"		"0"
 		"visible"		"1"
 		"enabled"		"1"
 		"tabPosition"		"0"
@@ -1224,6 +1232,8 @@
 		"textAlignment"		"east"
 		"font"		"HM_AmmoSmall"
 		"fgcolor"		"46 214 140 255"
+		"textinsetx"		"4"
+		"use_proportional_insets"		"1"
 	}
 	"numEngineer" [$WIN32]
 	{
@@ -1234,8 +1244,8 @@
 		"zpos"		"9"
 		"wide"		"24"
 		"tall"		"14"
-		"autoResize"		"1"
-		"pinCorner"		"2"
+		"autoResize"		"0"
+		"pinCorner"		"0"
 		"visible"		"1"
 		"enabled"		"1"
 		"tabPosition"		"0"
@@ -1243,6 +1253,8 @@
 		"textAlignment"		"east"
 		"font"		"HM_AmmoSmall"
 		"fgcolor"		"46 214 140 255"
+		"textinsetx"		"4"
+		"use_proportional_insets"		"1"
 	}
 	"numMedic" [$WIN32]
 	{
@@ -1253,8 +1265,8 @@
 		"zpos"		"9"
 		"wide"		"24"
 		"tall"		"14"
-		"autoResize"		"1"
-		"pinCorner"		"2"
+		"autoResize"		"0"
+		"pinCorner"		"0"
 		"visible"		"1"
 		"enabled"		"1"
 		"tabPosition"		"0"
@@ -1262,6 +1274,8 @@
 		"textAlignment"		"east"
 		"font"		"HM_AmmoSmall"
 		"fgcolor"		"46 214 140 255"
+		"textinsetx"		"4"
+		"use_proportional_insets"		"1"
 	}
 	"numSniper" [$WIN32]
 	{
@@ -1272,8 +1286,8 @@
 		"zpos"		"9"
 		"wide"		"24"
 		"tall"		"14"
-		"autoResize"		"1"
-		"pinCorner"		"2"
+		"autoResize"		"0"
+		"pinCorner"		"0"
 		"visible"		"1"
 		"enabled"		"1"
 		"tabPosition"		"0"
@@ -1281,6 +1295,8 @@
 		"textAlignment"		"east"
 		"font"		"HM_AmmoSmall"
 		"fgcolor"		"46 214 140 255"
+		"textinsetx"		"4"
+		"use_proportional_insets"		"1"
 	}
 	"numSpy" [$WIN32]
 	{
@@ -1291,8 +1307,8 @@
 		"zpos"		"9"
 		"wide"		"24"
 		"tall"		"14"
-		"autoResize"		"1"
-		"pinCorner"		"2"
+		"autoResize"		"0"
+		"pinCorner"		"0"
 		"visible"		"1"
 		"enabled"		"1"
 		"tabPosition"		"0"
@@ -1300,6 +1316,8 @@
 		"textAlignment"		"east"
 		"font"		"HM_AmmoSmall"
 		"fgcolor"		"46 214 140 255"
+		"textinsetx"		"4"
+		"use_proportional_insets"		"1"
 	}
 	"MvMUpgradeImageScout"
 	{

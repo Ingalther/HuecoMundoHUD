@@ -684,7 +684,7 @@ def patch_rocketpack(root):
 # counter is; meters that can show together with another one (or with the stickies / uber meter) go one card to
 # the left (-1) or right (+1).
 METER_CARDS = {  # file: (manga logo, slot)
-    'huditemeffectmeter.res': ('mask', 0),              # generic: sandvich, banner rage, gas passer... (Hollow mask)
+    'huditemeffectmeter.res': ('tf2', 0),               # generic: sandvich, banner rage, gas passer... (TF2 emblem)
     'huditemeffectmeter_cleaver.res': ('cleaver', -1),  # Flying Guillotine (next to the scout meter)
     'huditemeffectmeter_demoman.res': ('skull', 0),      # shared: Air Strike kills / Eyelander heads (raised, wide)
     'huditemeffectmeter_engineer.res': ('revenge', 1),  # Frontier Justice revenge crits (metal owns slot 0)
@@ -1091,14 +1091,17 @@ def patch_tournament(root):
         comp = kv.find(bg, 'if_competitive')
         if comp is not None:
             kv.setmany(comp, xpos='cs-0.5', ypos=145)
-    for n, color in (('CountdownLabel', 'HM_Bone'), ('CountdownLabelShadow', 'HM_Shadow')):
+    # Bahnschrift's italic is the upright face slanted (about 1 in 3), so the digits lean right of their box: the label
+    # sits 4 units left of the card's middle for the number to look centred on it (measured in game; the shadow keeps
+    # its 0.8 unit offset)
+    for n, color, x in (('CountdownLabel', 'HM_Bone', 'cs-0.6'), ('CountdownLabelShadow', 'HM_Shadow', 'cs-0.58')):
         blk = kv.find(body, n)
         if blk is None:
             continue
         kv.set(blk, 'font', 'HM_HealthHuge')
         comp = kv.find(blk, 'if_competitive')
         if comp is not None:
-            kv.setmany(comp, font='HM_HealthHuge', fgcolor=color)
+            kv.setmany(comp, font='HM_HealthHuge', fgcolor=color, xpos=x)
         else:
             kv.set(blk, 'fgcolor', color)
 

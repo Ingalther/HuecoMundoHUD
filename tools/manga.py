@@ -891,7 +891,11 @@ def logo_banner():      # banner rage: war flag on a pole
         (_ell(0.18, 0.04, 0.33, 0.16), 'color', GOLD)], highlights=[(0.23, 0.08, 0.02, 0.015)])
 
 
-def logo_mask():        # generic meter (sandvich, banner, gas passer...): the Bleach Hollow emblem
+def logo_tf2():         # generic meter (sandvich, banner, gas passer...): TF2's own emblem, as the game icon has it
+    return tf_emblem(256)
+
+
+def logo_mask():        # the Bleach Hollow emblem: what logo() falls back to
     # geometry measured on the emblem (x 0..1, y 0..1 of its 1.21:1 frame), fitted into the square
     def M(x, y):
         return 0.05 + x * 0.9, 0.11 + y * 0.9 / 1.21

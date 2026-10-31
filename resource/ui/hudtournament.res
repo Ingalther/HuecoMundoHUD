@@ -900,7 +900,7 @@
 		"proportionaltoparent"		"1"
 		"if_competitive"
 		{
-			"xpos"		"cs-0.5"
+			"xpos"		"cs-0.6"
 			"ypos"		"cs-0.1"
 			"fgcolor"		"HM_Bone"
 			"font"		"HM_HealthHuge"
@@ -932,7 +932,7 @@
 		"proportionaltoparent"		"1"
 		"if_competitive"
 		{
-			"xpos"		"cs-0.48"
+			"xpos"		"cs-0.58"
 			"ypos"		"cs-0.08"
 			"font"		"HM_HealthHuge"
 			"fgcolor"		"HM_Shadow"

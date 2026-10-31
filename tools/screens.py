@@ -177,8 +177,19 @@ LAYOUT_OPTIONS = [  # (button, preview art, cl_hud_minmode, name, description)
     ('HM_LayoutCentered', 'layout_centered', 0, 'CENTERED', 'Pulled in toward the crosshair (default)'),
     ('HM_LayoutCorners', 'layout_corners', 1, 'CORNERS', 'Health and ammo in the bottom corners'),
 ]
-POPUP_W, POPUP_H = 372, 264
+POPUP_W, POPUP_H = 640, 264
 CHARACTER_OPTIONS = (('HM_Char3D', '3D MODEL', 1), ('HM_Char2D', '2D IMAGE', 0))  # cl_hud_playerclass_use_playermodel
+# QUICK FIXES, the right column: console commands players look up when the game acts up, one click each
+# (button, command, what it does)
+QUICK_X = 376
+QUICK_FIXES = [
+    ('FIX SOUND', 'snd_restart', 'Stops broken, looping sounds'),
+    ('RELOAD HUD', 'hud_reloadscheme', 'Fixes broken HUD colours and panels'),
+    ('FIX PLAYERS', 'record fix; stop', 'Fixes invisible players and animations'),
+    ('PRACTICE MAP', 'map itemtest', 'Loads itemtest, a map to practise on'),
+    ('DEMO PLAYER', 'demoui', 'Opens the demo player'),
+    ('RECONNECT', 'retry', 'Reconnects to the last server'),
+]
 
 
 def hud_settings_button(body, y):
@@ -208,7 +219,7 @@ def hud_settings_popup(motd):
                                 'labelText': 'HUD SETTINGS', 'textAlignment': 'west', 'font': 'HM_Title',
                                 'fgcolor': '226 226 220 255'})
     add(motd, 'HM_PopupSection', {'ControlName': 'CExLabel', 'fieldName': 'HM_PopupSection', 'xpos': 22,
-                                  'ypos': 42, 'zpos': 2, 'wide': POPUP_W - 44, 'tall': 12, 'visible': 1, 'enabled': 1,
+                                  'ypos': 42, 'zpos': 2, 'wide': QUICK_X - 36, 'tall': 12, 'visible': 1, 'enabled': 1,
                                   'labelText': 'HEALTH AND AMMO LAYOUT', 'textAlignment': 'west', 'font': 'HM_Menu',
                                   'fgcolor': '46 214 140 255'})
     for i, (name, img, mode, title, desc) in enumerate(LAYOUT_OPTIONS):
@@ -227,15 +238,35 @@ def hud_settings_popup(motd):
             add(motd, name + suffix, {'ControlName': 'CExLabel', 'fieldName': name + suffix, 'xpos': x, 'ypos': y,
                                       'zpos': 2, 'wide': 160, 'tall': 12, 'visible': 1, 'enabled': 1,
                                       'labelText': text, 'textAlignment': 'west', 'font': font, 'fgcolor': color})
-    note(motd, 'HM_PopupNote0', 184, 'Applies instantly. Same as cl_hud_minmode 0 / 1 in the console.')
+    note(motd, 'HM_PopupNote0', 184, 'Applies instantly. Same as cl_hud_minmode 0 / 1 in the console.',
+         w=QUICK_X - 36)
     # PLAYER CHARACTER: the live 3D model or TF2's own 2D class art, through the game's own setting (no reload)
     add(motd, 'HM_PopupSection2', {'ControlName': 'CExLabel', 'fieldName': 'HM_PopupSection2', 'xpos': 22,
-                                   'ypos': 202, 'zpos': 2, 'wide': POPUP_W - 44, 'tall': 12, 'visible': 1,
+                                   'ypos': 202, 'zpos': 2, 'wide': QUICK_X - 36, 'tall': 12, 'visible': 1,
                                    'enabled': 1, 'labelText': 'PLAYER CHARACTER', 'textAlignment': 'west',
                                    'font': 'HM_Menu', 'fgcolor': '46 214 140 255'})
     for i, (name, text, value) in enumerate(CHARACTER_OPTIONS):
         popup_button(motd, name, 22 + i * 100, 218, text, f'engine cl_hud_playerclass_use_playermodel {value}')
-    note(motd, 'HM_PopupNote3', 238, 'Same as cl_hud_playerclass_use_playermodel 1 / 0 in the console.')
+    note(motd, 'HM_PopupNote3', 238, 'Same as cl_hud_playerclass_use_playermodel 1 / 0 in the console.',
+         w=QUICK_X - 36)
+    # QUICK FIXES: each button runs its command; what it does beside it, the command itself under that
+    add(motd, 'HM_PopupDivider', {'ControlName': 'ImagePanel', 'fieldName': 'HM_PopupDivider', 'xpos': QUICK_X - 14,
+                                  'ypos': 44, 'zpos': 2, 'wide': 1, 'tall': 196, 'visible': 1, 'enabled': 1,
+                                  'fillcolor': '46 214 140 70'})
+    add(motd, 'HM_PopupSection3', {'ControlName': 'CExLabel', 'fieldName': 'HM_PopupSection3', 'xpos': QUICK_X,
+                                   'ypos': 42, 'zpos': 2, 'wide': POPUP_W - QUICK_X - 22, 'tall': 12, 'visible': 1,
+                                   'enabled': 1, 'labelText': 'QUICK FIXES', 'textAlignment': 'west',
+                                   'font': 'HM_Menu', 'fgcolor': '46 214 140 255'})
+    for i, (text, command, desc) in enumerate(QUICK_FIXES):
+        y = 60 + i * 31
+        popup_button(motd, f'HM_Fix{i}', QUICK_X, y, text, f'engine {command}')
+        for suffix, dy, label_text, color in (('Desc', -1, desc, '184 186 180 255'),
+                                              ('Cmd', 9, command, '46 214 140 200')):
+            add(motd, f'HM_Fix{i}{suffix}', {'ControlName': 'CExLabel', 'fieldName': f'HM_Fix{i}{suffix}',
+                                             'xpos': QUICK_X + 100, 'ypos': y + dy, 'zpos': 2,
+                                             'wide': POPUP_W - QUICK_X - 118, 'tall': 10, 'visible': 1, 'enabled': 1,
+                                             'labelText': label_text, 'textAlignment': 'west', 'font': 'HM_Small',
+                                             'fgcolor': color})
 
 
 def popup_button(motd, name, x, y, text, command):
@@ -250,9 +281,9 @@ def popup_button(motd, name, x, y, text, command):
         'sound_depressed': 'UI/buttonclick.wav', 'sound_released': 'UI/buttonclickrelease.wav'})
 
 
-def note(motd, name, y, text, x=22):
+def note(motd, name, y, text, x=22, w=None):
     add(motd, name, {'ControlName': 'CExLabel', 'fieldName': name, 'xpos': x, 'ypos': y, 'zpos': 2,
-                     'wide': POPUP_W - x - 18, 'tall': 12, 'visible': 1, 'enabled': 1, 'labelText': text,
+                     'wide': w or POPUP_W - x - 18, 'tall': 12, 'visible': 1, 'enabled': 1, 'labelText': text,
                      'textAlignment': 'west', 'font': 'HM_Small', 'fgcolor': '122 124 124 255'})
 
 
@@ -325,8 +356,12 @@ def classselection(root):
         y = 60 + row * (H + GAP)
         card_button(body, kv.find(body, btn), f'cls_{btn}', x, y, W, H)
         if num:
+            # italic digits lean out of an east-aligned box (the slant is about 1 in 3, so 3 units at this size): a
+            # right inset keeps them whole, and the box keeps its width (the stock autoResize shrank it to the digit,
+            # which cut its slanted right side off)
             kv.setmany(kv.find(body, num), xpos=(16 + W - 30) if col == 0 else f'r{16 + 30}', ypos=y + 4, wide=24,
-                       tall=14, zpos=9, textAlignment='east', fgcolor='46 214 140 255', font='HM_AmmoSmall')
+                       tall=14, zpos=9, textAlignment='east', fgcolor='46 214 140 255', font='HM_AmmoSmall',
+                       autoResize=0, pinCorner=0, textinsetx=4, use_proportional_insets=1)
     for n in ('Offense', 'Defense', 'Support', 'ClassTipsPanel', 'localPlayerImage', 'localPlayerBG', 'CountLabel'):
         blk = kv.find(body, n)
         if blk is not None:
