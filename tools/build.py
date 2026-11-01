@@ -202,7 +202,6 @@ HM_BORDERS = {
     'HM_StreakCard': scalable_border('streak_card', 40, 4, draw_h=3),  # only as tall as its text; text starts 5 in
     'HM_RespawnCard': scalable_border('respawn_card', 0, 0),  # the respawn label's own border (patch_spectator)
     'HM_KeyChip': scalable_border('menu_key', 0, 0),  # build / disguise menu number labels (patch_menu)
-    'HM_ItemCard': scalable_border('item_card', 40, 7),  # see-through card that follows a panel the game sizes
 }
 HM_BORDERS['HM_Card_none'] = scalable_border('blank', 0, 0)
 for _c in screens.CARD_BORDERS:  # whole-image borders: zero corners stretch the art over the button
@@ -670,6 +669,31 @@ def patch_inspect(root):
     reload always unlocks the counters."""
     body = next(e[1] for e in root if isinstance(e[1], list))
     kv.set(kv.find(body, 'itempanel'), 'visible', 1)
+    quiet_item_panel(kv.find(body, 'itempanel'))
+
+
+def quiet_item_panel(item):
+    """"<player> is carrying:" with their weapon, on the death screen (freezepanel_basic.res, when the killer's weapon
+    is not stock) and on an F tap at a teammate (hudinspectpanel.res). The game puts TFFatLineBorder on every item
+    panel when its scheme loads (CItemModelPanel::ApplySchemeSettings), whatever the .res says: that was the dark box.
+    paintborder 0 keeps it from drawing (the flag is the .res's; SetBorder leaves it alone), and a quiet see-through
+    torn card fills the panel from inside instead: autoResize 3 makes it follow the panel, which the game sizes to its
+    text (EditablePanel::OnSizeChanged). The item's name only (no attribute and set lists), a smaller model."""
+    if item is None:
+        return
+    kv.remove(item, 'border')
+    kv.setmany(item, bgcolor_override='0 0 0 0', paintbackground=0, paintborder=0, name_only=1, model_wide=72,
+               model_tall=48, model_ypos=16)
+    model = kv.find(item, 'itemmodelpanel')
+    if model is not None:  # the model's own panel gets the same border from code
+        kv.setmany(model, paintborder=0, paintbackground=0)
+    kv.add_block(item, 'HM_ItemCard', {
+        'ControlName': 'ScalableImagePanel', 'fieldName': 'HM_ItemCard', 'xpos': 0, 'ypos': 0, 'zpos': -1,
+        'wide': 'f0', 'tall': 'f0', 'autoResize': 3, 'pinCorner': 0, 'visible': 1, 'enabled': 1,
+        'mouseinputenabled': 0, 'image': T + 'item_card', 'src_corner_height': 40, 'src_corner_width': 40,
+        'draw_corner_width': 7, 'draw_corner_height': 7})
+    kv.setmany(kv.find(item, 'ItemLabel'), font='HM_NoticeBody', xpos=10, ypos=5, tall=12,
+               fgcolor_override='HM_BoneMid')
 
 
 def patch_rocketpack(root):
@@ -1070,15 +1094,7 @@ def patch_freezepanel(root):
     kv.set(kv.find(base, 'AvatarImage'), 'zpos', 2)
     # the killer's health tile (patch_killer_health), centred on the card's toned end
     kv.setmany(kv.find(base, 'FreezePanelHealth'), xpos=6, ypos=159, wide=34, tall=34)
-    # "<killer> is carrying:" with their weapon: a quiet see-through card instead of the game's dark box, the item's
-    # name only (no attribute and set lists) and a smaller model. The card is the panel's border, so it follows the
-    # panel, which the game sizes to its text
-    item = kv.find(body, 'itempanel')
-    if item is not None:
-        kv.setmany(item, bgcolor_override='0 0 0 0', paintbackground=0, border='HM_ItemCard', paintborder=1,
-                   name_only=1, model_wide=72, model_tall=48, model_ypos=16)
-        kv.setmany(kv.find(item, 'ItemLabel'), font='HM_NoticeBody', xpos=10, ypos=5, tall=12,
-                   fgcolor_override='HM_BoneMid')
+    quiet_item_panel(kv.find(body, 'itempanel'))
 
 
 def patch_invite(root):

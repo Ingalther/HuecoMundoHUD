@@ -5825,16 +5825,6 @@
 			"draw_corner_width"		"0"
 			"draw_corner_height"		"0"
 		}
-		"HM_ItemCard"
-		{
-			"bordertype"		"scalable_image"
-			"backgroundtype"		"2"
-			"image"		"replay/thumbnails/hm/item_card"
-			"src_corner_height"		"40"
-			"src_corner_width"		"40"
-			"draw_corner_width"		"7"
-			"draw_corner_height"		"7"
-		}
 		"HM_Card_none"
 		{
 			"bordertype"		"scalable_image"

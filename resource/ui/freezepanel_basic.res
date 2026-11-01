@@ -187,6 +187,8 @@
 			"fieldName"		"itemmodelpanel"
 			"use_item_rendertarget"		"0"
 			"useparentbg"		"1"
+			"paintborder"		"0"
+			"paintbackground"		"0"
 		}
 		"ItemLabel"
 		{
@@ -209,9 +211,28 @@
 			"fgcolor_override"		"HM_BoneMid"
 		}
 		"paintbackground"		"0"
-		"border"		"HM_ItemCard"
-		"paintborder"		"1"
+		"paintborder"		"0"
 		"name_only"		"1"
+		"HM_ItemCard"
+		{
+			"ControlName"		"ScalableImagePanel"
+			"fieldName"		"HM_ItemCard"
+			"xpos"		"0"
+			"ypos"		"0"
+			"zpos"		"-1"
+			"wide"		"f0"
+			"tall"		"f0"
+			"autoResize"		"3"
+			"pinCorner"		"0"
+			"visible"		"1"
+			"enabled"		"1"
+			"mouseinputenabled"		"0"
+			"image"		"replay/thumbnails/hm/item_card"
+			"src_corner_height"		"40"
+			"src_corner_width"		"40"
+			"draw_corner_width"		"7"
+			"draw_corner_height"		"7"
+		}
 	}
 	"FreezePanelBase" [$WIN32]
 	{
