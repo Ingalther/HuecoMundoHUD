@@ -3549,7 +3549,7 @@
 		"visible"		"1"
 		"enabled"		"1"
 		"mouseinputenabled"		"0"
-		"labelText"		"Hueco Mundo HUD v1.1  -  made by Ingalther Ulquiorra"
+		"labelText"		"Hueco Mundo HUD v1.2  -  made by Ingalther Ulquiorra"
 		"textAlignment"		"east"
 		"font"		"HM_Small"
 		"fgcolor"		"150 152 150 110"
