@@ -252,19 +252,6 @@ def team_tag(tint, seed, hover=False, size=(256, 128)):
     return panel(size, pts, seed, content=content, edge=EMERALD if hover else BONE)
 
 
-def ghost_card(seed=470, size=(256, 256), fill_alpha=0.5, edge_alpha=0.8):
-    """Quiet see-through card: ink at half opacity inside a thin bone torn edge, no shadow. For panels that should be
-    there without pulling the eye (the killer's item on the death screen); drawn as a nine-slice border."""
-    w, h = size
-    pts = [(10, 12), (w - 8, 6), (w - 12, h - 8), (6, h - 12)]
-    outer, inner = torn(poly_mask(size, pts), seed, grow=7, shrink=4, rough=0.45)
-    base = np.zeros((h, w, 4), np.float32)
-    base[..., :3] = np.array(BONE, np.float32) / 255
-    base[..., :3] = base[..., :3] * (1 - inner[..., None]) + np.array((8, 9, 10), np.float32) / 255 * inner[..., None]
-    base[..., 3] = outer * (1 - inner) * edge_alpha + inner * fill_alpha
-    return Image.fromarray((base * 255).clip(0, 255).astype(np.uint8), 'RGBA')
-
-
 def model_frame(tint, seed, size=(512, 512)):
     """In-game player model backdrop: tilted torn panel, team-tinted tone rising from the bottom."""
     w, h = size

@@ -377,7 +377,6 @@ def extras_art(out):
     out.thumb('inspect_bg', manga.countdown_card(seed=461, size=(512, 512)))
     out.thumb('escort_strip', manga.escort_strip())
     out.thumb('cp_rim', manga.cp_rim())
-    out.thumb('item_card', manga.ghost_card())  # the killer's item on the death screen (HM_ItemCard)
 
 
 def manga_assets(out, pdir):
