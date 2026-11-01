@@ -364,7 +364,8 @@ def hud_settings_art(out):
 
 
 def extras_art(out):
-    """Hitmarker, respawn card, engineer / spy menu cards, payload strip, capture ring rim."""
+    """Hitmarker, respawn card, engineer / spy menu cards, payload strip, capture ring rim, search strips and the
+    crafting cards."""
     import manga
     out.thumb('hitmarker', manga.hitmarker())
     out.thumb('respawn_card', manga.respawn_card())
@@ -377,6 +378,12 @@ def extras_art(out):
     out.thumb('inspect_bg', manga.countdown_card(seed=461, size=(512, 512)))
     out.thumb('escort_strip', manga.escort_strip())
     out.thumb('cp_rim', manga.cp_rim())
+    # backpack / item selection / crafting (screens.backpack, item_selection, crafting)
+    out.thumb('search_bar', manga.search_bar())
+    out.thumb('search_field', manga.search_bar(glass=False))
+    out.thumb('craft_list', manga.craft_card(472, (512, 614)))
+    out.thumb('craft_recipe', manga.craft_card(474, (512, 586), band=0.14))
+    out.thumb('craft_chip', manga.craft_chip())
 
 
 def manga_assets(out, pdir):

@@ -531,6 +531,154 @@ def tag_button(body, name, img, x, y, w, h, text, command):
         'sound_released': 'UI/buttonclickrelease.wav', 'sound_armed': 'UI/buttonrollover.wav'})
 
 
+# ------------------------------------------------------------------ backpack, item selection, crafting
+INK_BUTTON = {  # flat ink, emerald on hover, bright emerald while pressed (the HUD Settings popup's buttons)
+    'paintbackground': 1, 'defaultBgColor_override': '16 17 18 235', 'armedBgColor_override': '28 110 78 255',
+    'depressedBgColor_override': '46 214 140 255', 'selectedBgColor_override': '28 110 78 255',
+    'defaultFgColor_override': '226 226 220 255', 'armedFgColor_override': '255 255 255 255',
+    'depressedFgColor_override': '8 9 10 255', 'selectedFgColor_override': '255 255 255 255',
+    'disabledfgcolor2_override': '96 98 98 255'}  # the scheme draws disabled text black: ash instead
+EMERALD = '46 214 140 255'
+SEARCH_H = 21
+SEARCH_CHIP = 25  # manga.search_bar's magnifier chip (about square) plus a gap: the typed text starts after it
+
+
+def ink_button(blk, font='HM_Menu', main=False):
+    """A stock button in the HUD's flat ink style; main: the page's main action, deep emerald at rest."""
+    if blk is None:
+        return
+    kv.setmany(blk, **INK_BUTTON)
+    if font:
+        kv.set(blk, 'font', font)
+    if main:
+        kv.set(blk, 'defaultBgColor_override', '14 46 34 240')
+
+
+def search_field(body, cx, y, w):
+    """The game's name filter (NameFilterTextEntry: the code reads what is typed there) on a manga search strip
+    (manga.search_bar): the strip carries the magnifier, the field sits right of it, see-through, typing in bone.
+    Its 'Search:' label stays, as a small emerald caption above. cx: units from the screen centre."""
+    add(body, 'HM_SearchBar', image('HM_SearchBar', f'c{cx}', y, w, SEARCH_H, T + 'search_bar', z=1))
+    kv.setmany(kv.find(body, 'NameFilterTextEntry'), xpos=f'c{cx + SEARCH_CHIP}', ypos=y + 3, zpos=3,
+               wide=w - SEARCH_CHIP - 6, tall=SEARCH_H - 6, font='HM_Menu', fgcolor_override='226 226 220 255',
+               bgcolor_override='0 0 0 0', paintbackgroundtype=0, paintborder=0)
+    kv.setmany(kv.find(body, 'NameFilterLabel'), xpos=f'c{cx + 2}', ypos=y - 11, zpos=1, wide=90, tall=10,
+               autoResize=0, font='HM_Small', fgcolor=EMERALD)
+
+
+def field_strip(body, name, cx, y, w, h):
+    """The search strip without its magnifier, behind a drop-down menu."""
+    add(body, name, image(name, f'c{cx}', y, w, h, T + 'search_field', z=0))
+
+
+def backpack(root):
+    """Backpack: the scene backdrop (an opaque page over the class grid), the search strip, the drop-down menus on
+    ink strips, flat ink page chips. The page chips' text colour is the game's (by how full each page is: near black
+    when empty, tan when partly full, bone when full) and the current page's fill is the scheme's TFOrange (deep
+    emerald): an ash chip keeps all three readable."""
+    overlay_page('backpack_panel')(root)
+    body = _root(root)
+    search_field(body, 137, 14, 133)
+    for name, combo, (cx, w) in (('HM_RarityField', 'ShowRarityComboBox', (-90, 214)),
+                                 ('HM_SortField', 'SortByComboBox', (132, 159))):
+        field_strip(body, name, cx, 35, w, 19)
+        kv.setmany(kv.find(body, combo), zpos=2, fgcolor_override='226 226 220 255',
+                   selectionTextColor_override='226 226 220 255', disabledFgColor_override='226 226 220 255')
+    kv.setmany(kv.find(body, 'ShowBaseItemsCheckbox'), Font='HM_Menu', textAlignment='west')
+    kv.set(kv.find(body, 'CaratLabel'), 'fgcolor_override', EMERALD)
+    chip = kv.find(kv.find(kv.find(body, 'backpack_panel'), 'pagebuttons_kv'), 'Button')
+    kv.setmany(chip, PaintBackgroundType=0, paintborder=0, defaultBgColor_override='76 78 78 255',
+               armedBgColor_override='28 110 78 255', depressedBgColor_override='46 214 140 255',
+               selectedBgColor_override='28 110 78 255')
+    for n in ('ShowExplanationsButton', 'CancelApplyToolButton', 'DragToNextPageButton', 'DragToPrevPageButton'):
+        ink_button(kv.find(body, n), font=None if n.startswith('Drag') else 'HM_Menu')
+
+
+def item_selection(root):
+    """Picking an item for a loadout slot or a crafting blueprint: full-screen page over the loadout / crafting
+    page, so the same scene backdrop; search strip, emerald rules for the dotted tan lines, ink buttons."""
+    overlay_page('ItemSelectionPanel')(root)
+    body = _root(root)
+    search_field(body, 160, 14, 140)
+    kv.set(kv.find(body, 'ItemSlotLabel'), 'wide', 210)  # was 375: its box ran under the search field
+    for n, y in (('TopLine', 44), ('BottomLine', 334)):
+        kv.setmany(kv.find(body, n), ypos=y, tall=1, image=T + 'blank', fillcolor='46 214 140 80', tileImage=0)
+    for n in ('CaratLabel', 'CurPageLabel'):
+        kv.set(kv.find(body, n), 'fgcolor_override', EMERALD)
+    kv.setmany(kv.find(body, 'OnlyAllowUniqueQuality'), Font='HM_Menu')
+    for n in ('CancelButton', 'ShowBackpack', 'ShowSelection', 'PrevPageButton', 'NextPageButton'):
+        ink_button(kv.find(body, n))
+
+
+# crafting page, in units from the screen centre: the recipe list's card on the left (heading, the four category
+# icons, the list), the chosen blueprint's card on the right (inside its container, which the game shows only
+# while a blueprint is chosen)
+CRAFT_LIST = (-306, 4, 302, 362)  # x, y, w, h
+CRAFT_ICON, CRAFT_ICON_GAP, CRAFT_ICON_X, CRAFT_ICON_Y = 26, 12, -290, 32
+CRAFT_ROW = 15  # recipe row height (the game spaces rows by this plus 2)
+CRAFT_PAD = 14  # the blueprint card's inner margin
+
+
+def crafting(root):
+    overlay_page('crafting_panel')(root)
+    body = _root(root)
+    panel = kv.find(body, 'crafting_panel')
+    x, y, w, h = CRAFT_LIST
+    add(body, 'HM_CraftListCard', image('HM_CraftListCard', f'c{x}', y, w, h, T + 'craft_list', z=-5))
+    kv.setmany(kv.find(body, 'ClassLabel'), xpos='c-290', ypos=10, wide=280, tall=18, font='HM_NoticeTitle',
+               textAlignment='north-west', fgcolor_override='226 226 220 255')
+    # the four category buttons: the game places them at filter_xoffset + (size + filter_xdelta) * i from the centre
+    kv.setmany(panel, filter_xoffset=CRAFT_ICON_X, filter_ypos=CRAFT_ICON_Y, filter_xdelta=CRAFT_ICON_GAP)
+    kv.setmany(kv.find(panel, 'recipefilterbuttons_kv'), wide=CRAFT_ICON, tall=CRAFT_ICON, zpos=3)
+    for i in range(4):
+        cx = CRAFT_ICON_X + (CRAFT_ICON + CRAFT_ICON_GAP) * i - 4
+        add(body, f'HM_CraftChip{i}', image(f'HM_CraftChip{i}', f'c{cx}', CRAFT_ICON_Y - 4, CRAFT_ICON + 8,
+                                           CRAFT_ICON + 8, T + 'craft_chip', z=1))
+    # the recipe list: rows like the main menu's (hairline at rest, emerald wash and edge on hover). The chosen one
+    # is held pressed by the game, and CExButton has no pressed-state border: a deep emerald fill and emerald text
+    kv.setmany(kv.find(body, 'recipecontainerscroller'), ypos=72, tall=284)
+    kv.set(kv.find(body, 'recipecontainer'), 'tall', 284)
+    rows = kv.find(panel, 'recipebuttons_kv')
+    kv.setmany(rows, font='HM_Menu', tall=CRAFT_ROW, textinsetx=10, use_proportional_insets=1, paintbackground=1,
+               paintborder=1, border_default='HM_Nav', border_armed='HM_NavArmed',
+               defaultFgColor_override='196 198 194 255', defaultBgColor_override='0 0 0 0',
+               armedFgColor_override='255 255 255 255', armedBgColor_override='0 0 0 0',
+               depressedFgColor_override=EMERALD, depressedBgColor_override='20 64 46 230',
+               disabledfgcolor2_override='96 98 98 255')
+    for k in ('border_depressed', 'border_selected'):
+        kv.remove(rows, k)
+    # the chosen blueprint: the container grows by the card's margin, everything in it moves in by it
+    sel = kv.find(body, 'selectedrecipecontainer')
+    kv.setmany(sel, xpos='c0', ypos=4, wide=316, tall=362)
+    add(sel, 'HM_CraftRecipeCard', image('HM_CraftRecipeCard', 0, 0, 316, 362, T + 'craft_recipe', z=-1))
+    P = CRAFT_PAD
+    kv.setmany(kv.find(sel, 'RecipeTitle'), xpos=P, ypos=8, wide=316 - 2 * P, tall=36, font='HM_NoticeTitle',
+               fgcolor='226 226 220 255')
+    kv.setmany(kv.find(sel, 'RecipeInputStringLabel'), xpos=P, ypos=54, wide=316 - 2 * P, fgcolor='196 198 194 255')
+    kv.setmany(kv.find(sel, 'InputLabel'), xpos=P, ypos=78, tall=14, font='HM_Menu', fgcolor=EMERALD)
+    kv.setmany(kv.find(sel, 'OutputLabel'), xpos=P, ypos=246, tall=14, font='HM_Menu', fgcolor=EMERALD)
+    # item slots: the game lays them out from the container's left edge, at item_ypos / output_item_ypos
+    kv.setmany(panel, item_crafting_offcenter_x=P, item_ypos=94, output_item_ypos=262)
+    kv.setmany(kv.find(sel, 'CraftButton'), xpos=P, ypos=320, wide=186, tall=30, font='HM_NoticeTitle', textinsetx=0)
+    ink_button(kv.find(sel, 'CraftButton'), font='HM_NoticeTitle', main=True)
+    kv.setmany(kv.find(sel, 'FreeAccountLabel'), xpos=P, ypos=320)
+    kv.setmany(kv.find(sel, 'UpgradeButton'), xpos=P + 192, ypos=322, wide=316 - 2 * P - 192, textinsetx=0)
+    ink_button(kv.find(sel, 'UpgradeButton'))  # was olive green
+    tip = kv.find(body, 'TooltipPanel')  # the category icons' hover text
+    kv.setmany(kv.find(tip, 'TipLabel'), font='HM_Menu', fgcolor_override='226 226 220 255')
+
+
+def crafting_dialog(root):
+    """"Crafting..." / "New blueprint found" popups: the game's orange-red text in the HUD's colours."""
+    body = _root(root)
+    for e in body:
+        if isinstance(e[1], list) and (kv.get(e[1], 'fgcolor_override') or '').startswith('200 80 60'):
+            kv.set(e[1], 'fgcolor_override', EMERALD)
+    for e in body:
+        if isinstance(e[1], list) and (kv.get(e[1], 'ControlName') or '').lower() == 'cexbutton':
+            ink_button(e[1])
+
+
 # ------------------------------------------------------------------ scoreboard
 def scoreboard(root):
     body = _root(root)

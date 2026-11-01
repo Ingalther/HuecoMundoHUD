@@ -32,7 +32,7 @@
 		"wrap"		"0"
 		"labelText"		"#NewRecipeFound"
 		"textAlignment"		"center"
-		"fgcolor_override"		"200 80 60 255"
+		"fgcolor_override"		"46 214 140 255"
 		"bgcolor_override"		"0 0 0 0"
 	}
 	"RecipeItemModelPanel"
@@ -87,7 +87,7 @@
 		"enabled"		"1"
 		"tabPosition"		"0"
 		"labelText"		"#GameUI_Ok"
-		"font"		"HudFontSmallBold"
+		"font"		"HM_Menu"
 		"textAlignment"		"center"
 		"dulltext"		"0"
 		"brighttext"		"0"
@@ -95,5 +95,15 @@
 		"Command"		"close"
 		"sound_depressed"		"UI/buttonclick.wav"
 		"sound_released"		"UI/buttonclickrelease.wav"
+		"paintbackground"		"1"
+		"defaultBgColor_override"		"16 17 18 235"
+		"armedBgColor_override"		"28 110 78 255"
+		"depressedBgColor_override"		"46 214 140 255"
+		"selectedBgColor_override"		"28 110 78 255"
+		"defaultFgColor_override"		"226 226 220 255"
+		"armedFgColor_override"		"255 255 255 255"
+		"depressedFgColor_override"		"8 9 10 255"
+		"selectedFgColor_override"		"255 255 255 255"
+		"disabledfgcolor2_override"		"96 98 98 255"
 	}
 }

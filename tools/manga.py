@@ -83,11 +83,12 @@ def torn(mask, seed, grow=6, shrink=3, rough=0.35):
     return outer, inner * outer
 
 
-def panel(size, pts, seed, content=None, fill=(8, 9, 10), edge=BONE, edge_alpha=1.0, shadow=True):
-    """Manga panel: ink (or content) inside a torn paper edge, with a hard offset shadow."""
+def panel(size, pts, seed, content=None, fill=(8, 9, 10), edge=BONE, edge_alpha=1.0, shadow=True, grow=6, shrink=3):
+    """Manga panel: ink (or content) inside a torn paper edge, with a hard offset shadow. grow / shrink: how far the
+    ragged paper edge reaches out of / into the outline (torn): smaller for art drawn large on screen."""
     w, h = size
     m = poly_mask(size, pts)
-    outer, inner = torn(m, seed)
+    outer, inner = torn(m, seed, grow=grow, shrink=shrink)
     base = np.zeros((h, w, 4), np.float32)
     if shadow:
         sh = np.zeros_like(outer)  # hard offset shadow; a plain shift, np.roll would wrap it onto the top/left edge
@@ -1588,3 +1589,67 @@ def cp_rim(seed=451, size=256):
     base[..., 3] = outer
     base[..., :3] = base[..., :3] * (1 - inner[..., None]) + np.array(INK, np.float32) / 255 * inner[..., None]
     return Image.fromarray((base * 255).clip(0, 255).astype(np.uint8), 'RGBA')
+
+
+def magnifier(size, color=BONE, ring=0.11):
+    """Search glyph: a ring with a handle down to the right, on a transparent square (no font needed)."""
+    ss = 4
+    S = size * ss
+    m = Image.new('L', (S, S), 0)
+    d = ImageDraw.Draw(m)
+    cx = cy = S * 0.42
+    r = S * 0.27
+    w = S * ring
+    d.ellipse((cx - r, cy - r, cx + r, cy + r), outline=255, width=int(w))
+    a = math.radians(45)
+    x0, y0 = cx + math.cos(a) * (r + w * 0.2), cy + math.sin(a) * (r + w * 0.2)
+    x1, y1 = cx + math.cos(a) * S * 0.62, cy + math.sin(a) * S * 0.62
+    d.line((x0, y0, x1, y1), fill=255, width=int(w * 1.45))
+    d.ellipse((x1 - w * 0.72, y1 - w * 0.72, x1 + w * 0.72, y1 + w * 0.72), fill=255)  # round handle end
+    return art.solid_with_alpha(color, arr(m.resize((size, size), Image.LANCZOS)))
+
+
+def search_bar(seed=470, size=(512, 80), glass=True):
+    """Backpack / item selection search field (HUD about 135x21, screens.SEARCH_W): a torn ink strip, screentone
+    gathering toward its right end, a tapered emerald line along its foot and, at the left, a bone magnifier on an
+    emerald chip; the game draws the typed text right of the chip. glass=False: the same strip without the chip,
+    behind the backpack's drop-down menus."""
+    w, h = size
+    pts = [(8, 7), (w - 5, 4), (w - 11, h - 6), (4, h - 8)]
+    content = tone_fill(size, 1.0, (46, 50, 52), period=6, alpha=242, vertical=False, lo=0.45, hi=1.0)
+    x0 = 0
+    if glass:
+        cw = int(h * 1.08)  # the chip: about square in the HUD (the strip is drawn at its own aspect)
+        chip = poly_mask(size, [(0, 0), (cw + 8, 0), (cw - 4, h), (0, h)])
+        content.alpha_composite(art.solid_with_alpha((20, 104, 70), arr(chip) * 0.96))
+        g = magnifier(int(h * 0.62))
+        content.alpha_composite(g, (int(cw * 0.5 - g.width * 0.5) + 3, (h - g.height) // 2))
+        x0 = cw + 6
+    card = panel(size, pts, seed, content=content, shadow=False, grow=3, shrink=2)
+    card.alpha_composite(rule(w - x0 - 22, 12, thick=4), (x0 + 6, h - 19))
+    return card
+
+
+def craft_card(seed, size, band=0.17):
+    """Crafting page cards (screens.crafting, HUD 302x362 and 316x362): torn ink sheet, a screentone band across
+    the top (behind the heading and the category icons on the recipe list, behind the blueprint's title on the
+    other), a tapered emerald line under it and faint speed lines from the bottom corner."""
+    w, h = size
+    pts = [(12, 10), (w - 8, 14), (w - 14, h - 8), (8, h - 12)]
+    content = rgba(size, (8, 9, 10), 238)
+    bh = int(h * band)
+    tone = arr(tone_fill((w, bh), 1.0, (40, 44, 46), period=8, vertical=True, lo=1.0, hi=0.25))
+    content.alpha_composite(Image.fromarray((tone * 255).astype(np.uint8), 'RGBA'))
+    lines = arr(speed_lines(size, w, h, n=70, seed=seed, alpha=0.06, inner=0.3))
+    content.alpha_composite(Image.fromarray((lines * 255).astype(np.uint8), 'RGBA'))
+    card = panel(size, pts, seed, content=content, grow=3, shrink=2)
+    card.alpha_composite(rule(int(w * 0.6), 18, thick=5), (int(w * 0.045), bh - 9))
+    return card
+
+
+def craft_chip(seed=476, size=(128, 128)):
+    """Crafting category icon chip: a small torn ink square, screentone rising from its foot."""
+    w, h = size
+    pts = [(10, 9), (w - 7, 6), (w - 10, h - 8), (6, h - 11)]
+    content = tone_fill(size, 1.0, (52, 56, 58), period=6, alpha=240, vertical=True, lo=0.4, hi=1.0)
+    return panel(size, pts, seed, content=content, shadow=False, grow=4, shrink=2)
