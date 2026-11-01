@@ -275,9 +275,6 @@ def objective_icons(out, pdir):
     for g in ('home', 'home_alt', 'dropped', 'moving', 'moving_alt'):
         out.thumb(f'obj/objectives_flagpanel_ico_flag_{g}',
                   manga.glyph(read_vtf(os.path.join(hud, f'objectives_flagpanel_ico_flag_{g}.vtf'))))
-    # the intel you carry (the game picks the flag's team colour): a manga briefcase card
-    for name, tint in (('red', (170, 56, 60)), ('blue', (60, 100, 160))):
-        out.thumb(f'obj/objectives_flagpanel_carried_{name}', manga.intel_card(tint, 640 + len(name)))
 
 
 BUILDING_KANJI = {'sentry': '砲', 'dispenser': '補', 'tele_entrance': '入', 'tele_exit': '出', 'sapper': '破'}
@@ -364,8 +361,8 @@ def hud_settings_art(out):
 
 
 def extras_art(out):
-    """Hitmarker, respawn card, engineer / spy menu cards, payload strip, capture ring rim, search strips and the
-    crafting cards."""
+    """Hitmarker, respawn card, engineer / spy menu cards, payload strip, capture ring rim, search strips, the
+    crafting cards and the carried intel card."""
     import manga
     out.thumb('hitmarker', manga.hitmarker())
     out.thumb('respawn_card', manga.respawn_card())
@@ -384,6 +381,9 @@ def extras_art(out):
     out.thumb('craft_list', manga.craft_card(472, (512, 614)))
     out.thumb('craft_recipe', manga.craft_card(474, (512, 586), band=0.14))
     out.thumb('craft_chip', manga.craft_chip())
+    # the intel you carry (CTF): drawn as a border (build.patch_flagpanel), so it shows on sv_pure servers too, in
+    # the HUD's bone white since a border cannot follow the flag's team
+    out.thumb('intel_card', manga.intel_card((206, 206, 200), 650))
 
 
 def manga_assets(out, pdir):

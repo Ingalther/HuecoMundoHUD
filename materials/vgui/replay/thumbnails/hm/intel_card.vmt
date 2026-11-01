@@ -1,6 +1,6 @@
 "UnlitGeneric"
 {
-	"$baseTexture"	"vgui/replay/thumbnails/hm/obj/objectives_flagpanel_carried_red"
+	"$basetexture"	"vgui/replay/thumbnails/hm/intel_card"
 	"$translucent"	"1"
 	"$vertexcolor"	"1"
 	"$vertexalpha"	"1"

@@ -202,6 +202,7 @@ HM_BORDERS = {
     'HM_StreakCard': scalable_border('streak_card', 40, 4, draw_h=3),  # only as tall as its text; text starts 5 in
     'HM_RespawnCard': scalable_border('respawn_card', 0, 0),  # the respawn label's own border (patch_spectator)
     'HM_KeyChip': scalable_border('menu_key', 0, 0),  # build / disguise menu number labels (patch_menu)
+    'HM_IntelCard': scalable_border('intel_card', 0, 0),  # the intel you carry (patch_flagpanel)
 }
 HM_BORDERS['HM_Card_none'] = scalable_border('blank', 0, 0)
 for _c in screens.CARD_BORDERS:  # whole-image borders: zero corners stretch the art over the button
@@ -1287,12 +1288,17 @@ def patch_flagpanel(root):
     kv.setmany(kv.find(body, 'RedFlag'), xpos='c42', ypos='r58')
     # carrying the intel: the stock 100x100 briefcase over an 80x80 compass sat in the middle, over the sticky and
     # meter cards. The game hides the flag rings while you carry, so the compass to your capture zone sits on the
-    # score strip's middle instead, between the scores, with the intel card (hud/objectives_flagpanel_carried_*,
-    # manga.intel_card) inside. The stock hybrid / Special Delivery spots were the old middle ones.
+    # score strip's middle instead, between the scores, with the intel card inside. The stock hybrid / Special
+    # Delivery spots were the old middle ones.
+    # The game sets the carried picture itself, from hud/objectives_flagpanel_carried_*, and Valve's servers keep
+    # that material stock (sv_pure): the 3D briefcase came back in casual. So the picture is drawn see-through and
+    # the card (manga.intel_card) is the panel's border, from the replay/thumbnails path every server allows; the
+    # game still shows and hides the panel
     capture = kv.find(body, 'CaptureFlag')
     kv.setmany(capture, xpos='c-20', ypos='r%d' % (CTF_STRIP + 1), wide=40, tall=40)
     for n in ('CarriedImage', 'SpecCarriedImage'):
-        kv.setmany(kv.find(body, n), xpos='c-12', ypos='r%d' % (CTF_STRIP - 7), wide=24, tall=24)
+        kv.setmany(kv.find(body, n), xpos='c-12', ypos='r%d' % (CTF_STRIP - 7), wide=24, tall=24,
+                   drawcolor='0 0 0 0', border='HM_IntelCard', paintborder=1)
     for blk in (capture, kv.find(body, 'CarriedImage')):
         for cond in ('if_hybrid', 'if_specialdelivery'):
             kv.remove(blk, cond)

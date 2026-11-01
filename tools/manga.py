@@ -1452,9 +1452,9 @@ def briefcase(tint, size=256):
 
 
 def intel_card(tint, seed, size=128):
-    """Carried intel (hud/objectives_flagpanel_carried_*): the team's briefcase on a torn ink square, with the emerald
-    rim the meter cards give their logos (tag_with_icon). The game shows it inside the compass ring that points to
-    the capture zone."""
+    """Carried intel (build.patch_flagpanel, HM_IntelCard): a briefcase on a torn ink square, with the emerald rim
+    the meter cards give their logos (tag_with_icon). The game shows it inside the compass ring that points to the
+    capture zone."""
     pts = [(10, 12), (118, 8), (120, 118), (8, 120)]
     im = panel((size, size), pts, seed, shadow=False)
     case = briefcase(tint).resize((int(size * 0.84),) * 2, Image.LANCZOS)

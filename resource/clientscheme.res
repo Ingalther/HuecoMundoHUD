@@ -5825,6 +5825,16 @@
 			"draw_corner_width"		"0"
 			"draw_corner_height"		"0"
 		}
+		"HM_IntelCard"
+		{
+			"bordertype"		"scalable_image"
+			"backgroundtype"		"2"
+			"image"		"replay/thumbnails/hm/intel_card"
+			"src_corner_height"		"0"
+			"src_corner_width"		"0"
+			"draw_corner_width"		"0"
+			"draw_corner_height"		"0"
+		}
 		"HM_Card_none"
 		{
 			"bordertype"		"scalable_image"

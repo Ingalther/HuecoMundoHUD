@@ -265,6 +265,9 @@
 		"enabled"		"1"
 		"image"		"../hud/objectives_flagpanel_carried_red"
 		"scaleImage"		"1"
+		"drawcolor"		"0 0 0 0"
+		"border"		"HM_IntelCard"
+		"paintborder"		"1"
 	}
 	"PlayingTo"
 	{
@@ -454,5 +457,8 @@
 		"enabled"		"1"
 		"image"		"../hud/objectives_flagpanel_carried_red"
 		"scaleImage"		"1"
+		"drawcolor"		"0 0 0 0"
+		"border"		"HM_IntelCard"
+		"paintborder"		"1"
 	}
 }
