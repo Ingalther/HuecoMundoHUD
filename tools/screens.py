@@ -147,6 +147,8 @@ def mainmenu(root):
         img = kv.find(btn, 'SubImage')
         if img is not None:
             kv.setmany(img, xpos='cs-0.5', ypos='cs-0.5', wide=18, tall=18, image=glyph, proportionaltoparent=1)
+    for i, (name, glyph, command, tip) in enumerate(QUICK_SERVER, start=3):
+        icon_button(body, name, 24 + i * 34, 436, glyph, command, tip)
     for n in ('SubImage', 'Notifications_CountLabel'):  # the unread badge, pulled inside the narrower button
         kv.set(kv.find(kv.find(body, 'Notifications_ShowButtonPanel'), n), 'xpos', 12)
     kv.set(kv.find(body, 'MOTD_ShowButtonPanel'), 'xpos', OFF)
@@ -166,6 +168,31 @@ def mainmenu(root):
                             'labelText': f'Hueco Mundo HUD v{VERSION}  -  made by Ingalther Ulquiorra',
                             'textAlignment': 'east',
                             'font': 'HM_Small', 'fgcolor': '150 152 150 110'})
+
+
+# two more icons after them, straight to the community server browser and the create-server window (stock hides both
+# behind Find a Game). The main menu hands commands it does not know to the game menu, which opens both windows; the
+# hover text is the game's own name for each, from the Find a Game list
+QUICK_SERVER = (('HM_ServerBrowserButton', 'glyph_server_browser', 'OpenServerBrowser',
+                 '#MMenu_PlayList_ServerBrowser_Button'),
+                ('HM_CreateServerButton', 'glyph_create', 'OpenCreateMultiplayerGameDialog',
+                 '#MMenu_PlayList_CreateServer_Button'))
+
+
+def icon_button(body, name, x, y, glyph, command, tip):
+    """Glyph button like the stock icons in the sidebar's foot row: bone, emerald on hover, the game's tooltip."""
+    blk = _block(name, {
+        'ControlName': 'CExImageButton', 'fieldName': name, 'xpos': x, 'ypos': y, 'zpos': 1, 'wide': 28, 'tall': 28,
+        'autoResize': 0, 'pinCorner': 0, 'visible': 1, 'enabled': 1, 'tabPosition': 0, 'labelText': '',
+        'Command': command, 'tooltiptext': tip, 'paintbackground': 0, 'paintborder': 0,
+        'image_drawcolor': '208 209 209 255', 'image_armedcolor': '46 214 140 255',
+        'sound_depressed': 'UI/buttonclick.wav', 'sound_released': 'UI/buttonclickrelease.wav'})
+    blk.append(['SubImage', _block('SubImage', {
+        'ControlName': 'ImagePanel', 'fieldName': 'SubImage', 'xpos': 'cs-0.5', 'ypos': 'cs-0.5', 'zpos': 1,
+        'wide': 18, 'tall': 18, 'visible': 1, 'enabled': 1, 'scaleImage': 1, 'image': glyph,
+        'proportionaltoparent': 1, 'mouseinputenabled': 0, 'keyboardinputenabled': 0}), None])
+    kv.remove(body, name)
+    body.append([name, blk, None])
 
 
 # ------------------------------------------------------------------ HUD Settings popup

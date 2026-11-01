@@ -16,7 +16,8 @@ INSTALLATION
 WHAT'S IN IT
 ------------
 - Main menu: Hueco Mundo by night with Las Noches and the ULQUIORRA logo. It changes by itself on
-  full-moon nights, for Scream Fortress and for Smissmas.
+  full-moon nights, for Scream Fortress and for Smissmas. Two icons at its foot open the community
+  server browser and the create-server window.
 - All menus (loadout, backpack, scoreboard, class / team select...) in black, grey and emerald.
 - In game: your 3D model (or TF2's 2D class art) on a torn triangle with the health beside it,
   ammo on an ink blade, and ÜberCharge, metal, stickies and item meters as manga cards.

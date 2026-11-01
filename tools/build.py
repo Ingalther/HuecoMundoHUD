@@ -254,6 +254,11 @@ def retint_scheme(src_text):
         for ent in kv.walk(kv.find(scheme, section) or []):
             if not isinstance(ent[1], list):
                 ent[1] = retint(ent[1])
+    # hover text (the store's class filters, the main menu's server icons) is drawn with this scheme: ink and bone like
+    # the HUD's own, not the base file's colours
+    base = kv.find(scheme, 'BaseSettings')
+    if base is not None:
+        kv.setmany(base, **{'Tooltip.TextColor': '226 226 220 255', 'Tooltip.BgColor': '14 15 16 240'})
     return kv.dump(root) + '\n'
 
 

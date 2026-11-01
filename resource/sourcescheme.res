@@ -103,6 +103,8 @@
 		"TextEntry.TextColor"		"TFTextBright"
 		"TextEntry.DisabledTextColor"		"TFTextMedium"
 		"TextEntry.SelectedBgColor"		"TFOrangeBright"
+		"Tooltip.TextColor"		"226 226 220 255"
+		"Tooltip.BgColor"		"14 15 16 240"
 	}
 	"Fonts"
 	{
