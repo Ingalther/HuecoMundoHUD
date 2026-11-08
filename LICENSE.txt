@@ -1,11 +1,11 @@
 Hueco Mundo HUD
-Copyright (c) 2026 Ingalther Ulquiorra
+Copyright (c) 2026 Ingalther
 
 This HUD is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0
 International licence (CC BY-NC-SA 4.0): https://creativecommons.org/licenses/by-nc-sa/4.0/
 
 You may use, share and modify it, as long as you:
-  - BY: keep the credit "Hueco Mundo HUD by Ingalther Ulquiorra" (in-game credit, this file and the
+  - BY: keep the credit "Hueco Mundo HUD by Ingalther" (in-game credit, this file and the
         README included) and link back to the original release;
   - NC: do not sell it or put it behind a paywall;
   - SA: release any modified version under this same licence.

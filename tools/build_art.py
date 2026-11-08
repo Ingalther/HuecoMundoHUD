@@ -95,7 +95,7 @@ def menu_logo():
     sub_k = art.text_img('虚圏', art.font(art.KANJI, 30), EMERALD, tracking=4)
     im.alpha_composite(sub, (14, y))
     im.alpha_composite(sub_k, (14 + sub.width + 22, y + sub.height - sub_k.height))
-    by = art.text_img('HUD BY INGALTHER ULQUIORRA', art.font('constan.ttf', 16), (110, 112, 110), tracking=4)
+    by = art.text_img('HUD BY INGALTHER', art.font('constan.ttf', 16), (110, 112, 110), tracking=4)
     im.alpha_composite(by, (16, min(H - by.height - 2, y + sub.height + 12)))
     return im
 

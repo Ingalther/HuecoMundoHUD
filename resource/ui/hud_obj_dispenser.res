@@ -1,4 +1,4 @@
-// Hueco Mundo HUD - made by Ingalther Ulquiorra. Licence: CC BY-NC-SA 4.0 (credit required, no selling).
+// Hueco Mundo HUD - made by Ingalther. Licence: CC BY-NC-SA 4.0 (credit required, no selling).
 "Resource/UI/hud_obj_dispenser.res"
 {
 	"BuildingStatusItem"

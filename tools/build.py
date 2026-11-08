@@ -1397,7 +1397,7 @@ def redirect_objective_materials():
         write(os.path.join(OUT, 'materials', 'hud', stock + '.vmt'), HUD_VMT % ours)
 
 
-CREDIT = '// Hueco Mundo HUD - made by Ingalther Ulquiorra. Licence: CC BY-NC-SA 4.0 (credit required, no selling).\n'
+CREDIT = '// Hueco Mundo HUD - made by Ingalther. Licence: CC BY-NC-SA 4.0 (credit required, no selling).\n'
 
 
 def write(path, text):

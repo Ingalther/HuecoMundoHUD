@@ -165,7 +165,7 @@ def mainmenu(root):
         kv.setmany(kv.find(body, n), visible=0, wide=0, tall=0)
     add(body, 'HM_Credit', {'ControlName': 'CExLabel', 'fieldName': 'HM_Credit', 'xpos': 'r290', 'ypos': 'r16',
                             'zpos': 1, 'wide': 280, 'tall': 12, 'visible': 1, 'enabled': 1, 'mouseinputenabled': 0,
-                            'labelText': f'Hueco Mundo HUD v{VERSION}  -  made by Ingalther Ulquiorra',
+                            'labelText': f'Hueco Mundo HUD v{VERSION}  -  made by Ingalther',
                             'textAlignment': 'east',
                             'font': 'HM_Small', 'fgcolor': '150 152 150 110'})
 

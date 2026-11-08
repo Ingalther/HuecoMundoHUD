@@ -1,4 +1,4 @@
-// Hueco Mundo HUD - made by Ingalther Ulquiorra. Licence: CC BY-NC-SA 4.0 (credit required, no selling).
+// Hueco Mundo HUD - made by Ingalther. Licence: CC BY-NC-SA 4.0 (credit required, no selling).
 "Resource/UI/MainMenuOverride.res"
 {
 	"MainMenuOverride"
@@ -3549,7 +3549,7 @@
 		"visible"		"1"
 		"enabled"		"1"
 		"mouseinputenabled"		"0"
-		"labelText"		"Hueco Mundo HUD v1.2  -  made by Ingalther Ulquiorra"
+		"labelText"		"Hueco Mundo HUD v1.2  -  made by Ingalther"
 		"textAlignment"		"east"
 		"font"		"HM_Small"
 		"fgcolor"		"150 152 150 110"
