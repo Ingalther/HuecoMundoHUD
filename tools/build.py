@@ -1515,6 +1515,16 @@ event HM_HitmarkerFlash
 	Animate HM_Hitmarker	Alpha	"255"	Linear 0.0 0.0
 	Animate HM_Hitmarker	Alpha	"0"		Linear 0.08 0.22
 }
+// A respawn or round restart (the end of warmup) cancels every running animation (CHud::ResetHUD), and a hitmarker
+// caught mid-flash stayed on screen. The same reset runs HudSpyDisguiseHide (CTFHudPlayerClass::Reset) on the whole
+// HUD: it puts the hitmarker out. An event's first definition wins, so the stock event's own lines come first.
+event HudSpyDisguiseHide
+{
+	Animate PlayerStatusSpyOutlineImage		Position	"3 413"			Linear 0.0 0.2
+	Animate PlayerStatusSpyOutlineImage		Size		"55 55"			Linear 0.0 0.2
+	Animate PlayerStatusSpyOutlineImage		Alpha		"0"				Linear 0.2 0.1
+	Animate HM_Hitmarker	Alpha	"0"		Linear 0.0 0.0
+}
 '''
 
 # ------------------------------------------------------------------ respawn card, menus, objectives
