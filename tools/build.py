@@ -793,9 +793,7 @@ def patch_meter_card(root, rel):
     cw = METER_WIDE.get(fname, 58)
     grow = cw - 58  # a wider card grows both ways around the slot's centre
     for alt in (False, True):
-        if alt:  # minmode: the sticky slot's row between the plates, the other rows under the ammo plate
-            x, y = MM.meter_pos(slot, METER_ROW.get(fname, 0))
-            minmode(top, 'c%d' % (int(x[1:]) - (0 if METER_ROW.get(fname, 0) else grow // 2)), y)
+        if alt:  # minmode: a bare row under the ammo plate (MM.meter, at the end)
             continue
         x, y = meter_card_pos(slot, alt)
         x = 'c%d' % (int(x[1:]) - grow // 2)
@@ -839,6 +837,7 @@ def patch_meter_card(root, rel):
         blk = kv.find(body, 'KillComboClassIcon%d' % i)
         if blk is not None:
             kv.setmany(blk, xpos=38 + (i - 1) * 9, ypos=22, zpos=2, wide=8, tall=8)
+    MM.meter(body, slot, METER_ROW.get(fname, 0))
 
 
 # stock meter files (shield / bow / uber charge, Dead Ringer, stickies, item meters) keep their layout but lose

@@ -67,12 +67,11 @@ def health(body):
             mm(blk, xpos=c(nx + d), ypos=MM_Y + 2 + d, wide=84, tall=NUM_T, font='HM_MMNum', textAlignment='east')
     # the max health (its plain keys keep it hidden in the default layout; its text, %MaxHealth%, stays in the plain
     # key: a label's text in a _minmode key is shown raw)
+    # (the game shows it only while the health is under the max, so "MAX" is part of its text: both go together)
     blk = kv.find(body, 'PlayerStatusMaxHealthValue')
     if blk is not None:
-        kv.setmany(blk, fgcolor='HM_Bone', textAlignment='west')
-        mm(blk, xpos=c(H_X + 30), ypos=MM_Y + 22, wide=40, tall=12, font='HM_Small')
-    only_mm(body, 'HM_MMMax', B.label('HM_MMMax', 0, 0, 0, 0, 'MAX', 'HM_Small', 'HM_BoneMid'),
-            (c(H_X + 10), MM_Y + 22, 20, 12))
+        kv.setmany(blk, fgcolor='HM_BoneMid', textAlignment='west', labelText='MAX %MaxHealth%')
+        mm(blk, xpos=c(H_X + 10), ypos=MM_Y + 24, wide=70, tall=12, font='HM_Small')
     only_mm(body, 'HM_MMPlateH', B.img_panel('HM_MMPlateH', 0, 0, 0, 0, 'mm_plate_h', z=1),
             (c(H_X), MM_Y, PLATE[0], PLATE[1]))
 
@@ -111,22 +110,45 @@ def ammo(body):
     only_mm(body, 'HM_MMPlateA', B.img_panel('HM_MMPlateA', 0, 0, 0, 0, 'mm_plate_a', z=0), (0, 0, PLATE[0], PLATE[1]))
 
 
+STRIP_H = 16                    # one minimal meter row
+BAR_X, BAR_W = 64, 70           # a row's bar (or count) right of its label
+
+
 def killstreak(body):
-    """The 殺 kill streak tag under the health plate, at its inner end."""
-    import build as B
+    """The kill streak under the health plate, as bare text: the count and the game's STREAK word, no tag."""
     blk = kv.find(body, 'HudItemEffectMeter')
     if blk is not None:
-        mm(blk, xpos=c(H_X + PLATE[0] - B.k(B.STREAK[2])), ypos=UNDER)
+        mm(blk, xpos=c(H_X + PLATE[0] - 80), ypos=UNDER, wide=80, tall=STRIP_H)
+    blk = kv.find(body, 'ItemEffectMeterBG')
+    if blk is not None:
+        hide(blk)
+    blk = kv.find(body, 'ItemEffectMeterLabel')
+    if blk is not None:
+        mm(blk, xpos=0, ypos=0, wide=56, tall=STRIP_H, textAlignment='east')
+    blk = kv.find(body, 'ItemEffectMeterCount')
+    if blk is not None:
+        mm(blk, xpos=60, ypos=0, wide=20, tall=STRIP_H, font='HM_Metal')
 
 
-def meter_pos(slot, row):
-    """An item meter card's panel box (x, y) in minmode: the sticky slot's row between the plates (row 0), the
-    other rows under the ammo plate, going down."""
-    import build as B
-    if row == 0:
-        x, y = B.meter_card_pos(slot, True)
-        return x, y
-    return c(A_X - 6), UNDER + (row - 1) * B.CARD_ROW
+def meter(body, slot, row):
+    """An item meter in minmode: no card, a bare row under the ammo plate (rows going down, the sticky slot's row
+    first; the MvM sapper's below the others): the game's word for the meter (DRINK, RAGE, HEADS...) and a thin
+    emerald bar beside it, or its count."""
+    top = kv.find(body, 'HudItemEffectMeter')
+    idx = row if slot == 0 else 3
+    mm(top, xpos=c(A_X), ypos=UNDER + idx * STRIP_H, wide=PLATE[0], tall=STRIP_H)
+    for name, blk in children(body, skip=('HudItemEffectMeter',)):
+        if name == 'ItemEffectMeterLabel':
+            mm(blk, xpos=0, ypos=0, wide=BAR_X - 4, tall=STRIP_H, font='HM_Small', textAlignment='east', visible=1)
+        elif name in ('ItemEffectMeter', 'HM_BarTint'):
+            mm(blk, xpos=BAR_X, ypos=(STRIP_H - 4) // 2, wide=BAR_W, tall=4)
+        elif name == 'ItemEffectMeterCount':
+            mm(blk, xpos=BAR_X, ypos=0, wide=40, tall=STRIP_H, font='HM_Metal')
+        elif name.startswith('KillComboClassIcon'):
+            i = int(name[-1])
+            mm(blk, xpos=BAR_X + 30 + (i - 1) * 12, ypos=2, wide=11, tall=11)
+        else:
+            hide(blk)
 
 
 def pipes(body):

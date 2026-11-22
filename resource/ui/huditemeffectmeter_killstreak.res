@@ -12,10 +12,10 @@
 		"tall"		"24"
 		"MeterFG"		"White"
 		"MeterBG"		"Gray"
-		"wide_minmode"		"72"
-		"tall_minmode"		"24"
-		"xpos_minmode"		"c-204"
+		"xpos_minmode"		"c-212"
 		"ypos_minmode"		"364"
+		"wide_minmode"		"80"
+		"tall_minmode"		"16"
 	}
 	"ItemEffectMeterBG"
 	{
@@ -32,6 +32,8 @@
 		"scaleImage"		"1"
 		"teambg_2"		"replay/thumbnails/hm/tag_streak"
 		"teambg_3"		"replay/thumbnails/hm/tag_streak"
+		"wide_minmode"		"0"
+		"tall_minmode"		"0"
 	}
 	"ItemEffectMeterLabel"
 	{
@@ -53,6 +55,11 @@
 		"brighttext"		"0"
 		"font"		"HM_Small"
 		"fgcolor"		"HM_Emerald"
+		"xpos_minmode"		"0"
+		"ypos_minmode"		"0"
+		"wide_minmode"		"56"
+		"tall_minmode"		"16"
+		"textAlignment_minmode"		"east"
 	}
 	"ItemEffectMeter"
 	{
@@ -92,5 +99,10 @@
 		"font"		"HM_StreakSmall"
 		"fgcolor"		"HM_Bone"
 		"textinsetx"		"0"
+		"xpos_minmode"		"60"
+		"ypos_minmode"		"0"
+		"wide_minmode"		"20"
+		"tall_minmode"		"16"
+		"font_minmode"		"HM_Metal"
 	}
 }

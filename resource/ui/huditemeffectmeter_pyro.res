@@ -9,8 +9,10 @@
 		"ypos"		"356"
 		"wide"		"70"
 		"tall"		"34"
-		"xpos_minmode"		"c127"
-		"ypos_minmode"		"364"
+		"xpos_minmode"		"c133"
+		"ypos_minmode"		"380"
+		"wide_minmode"		"138"
+		"tall_minmode"		"16"
 	}
 	"ItemEffectMeterBG"
 	{
@@ -23,5 +25,7 @@
 		"teambg_1"		"replay/thumbnails/hm/meter_item_pyro"
 		"teambg_2"		"replay/thumbnails/hm/meter_item_pyro"
 		"teambg_3"		"replay/thumbnails/hm/meter_item_pyro"
+		"wide_minmode"		"0"
+		"tall_minmode"		"0"
 	}
 }

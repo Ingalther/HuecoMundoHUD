@@ -12,8 +12,10 @@
 		"tall"		"34"
 		"MeterFG"		"46 214 140 255"
 		"MeterBG"		"122 124 124 110"
-		"xpos_minmode"		"c127"
-		"ypos_minmode"		"364"
+		"xpos_minmode"		"c133"
+		"ypos_minmode"		"380"
+		"wide_minmode"		"138"
+		"tall_minmode"		"16"
 	}
 	"ItemEffectMeterBG"
 	{
@@ -31,6 +33,8 @@
 		"teambg_2"		"replay/thumbnails/hm/meter_item_heavy"
 		"teambg_3"		"replay/thumbnails/hm/meter_item_heavy"
 		"teambg_1"		"replay/thumbnails/hm/meter_item_heavy"
+		"wide_minmode"		"0"
+		"tall_minmode"		"0"
 	}
 	"ItemEffectMeterLabel"
 	{
@@ -51,6 +55,13 @@
 		"dulltext"		"0"
 		"brighttext"		"0"
 		"font"		"TFFontSmall"
+		"xpos_minmode"		"0"
+		"ypos_minmode"		"0"
+		"wide_minmode"		"60"
+		"tall_minmode"		"16"
+		"font_minmode"		"HM_Small"
+		"textAlignment_minmode"		"east"
+		"visible_minmode"		"1"
 	}
 	"ItemEffectMeter"
 	{
@@ -71,6 +82,10 @@
 		"brighttext"		"0"
 		"fgcolor_override"		"46 214 140 255"
 		"bgcolor_override"		"10 10 12 255"
+		"xpos_minmode"		"64"
+		"ypos_minmode"		"6"
+		"wide_minmode"		"70"
+		"tall_minmode"		"4"
 	}
 	"ItemEffectMeterLabel2"
 	{
@@ -91,6 +106,8 @@
 		"dulltext"		"0"
 		"brighttext"		"0"
 		"font"		"TFFontSmall"
+		"wide_minmode"		"0"
+		"tall_minmode"		"0"
 	}
 	"KillComboClassIcon1"
 	{
@@ -105,6 +122,10 @@
 		"image"		"../HUD/leaderboard_class_scout"
 		"scaleImage"		"1"
 		"zpos"		"2"
+		"xpos_minmode"		"94"
+		"ypos_minmode"		"2"
+		"wide_minmode"		"11"
+		"tall_minmode"		"11"
 	}
 	"KillComboClassIcon2"
 	{
@@ -119,6 +140,10 @@
 		"image"		"../HUD/leaderboard_class_scout"
 		"scaleImage"		"1"
 		"zpos"		"2"
+		"xpos_minmode"		"106"
+		"ypos_minmode"		"2"
+		"wide_minmode"		"11"
+		"tall_minmode"		"11"
 	}
 	"KillComboClassIcon3"
 	{
@@ -133,6 +158,10 @@
 		"image"		"../HUD/leaderboard_class_scout"
 		"scaleImage"		"1"
 		"zpos"		"2"
+		"xpos_minmode"		"118"
+		"ypos_minmode"		"2"
+		"wide_minmode"		"11"
+		"tall_minmode"		"11"
 	}
 	"HM_BarTint"
 	{
@@ -148,5 +177,9 @@
 		"paintbackground"		"1"
 		"bgcolor_override"		"3 141 89 153"
 		"mouseinputenabled"		"0"
+		"xpos_minmode"		"64"
+		"ypos_minmode"		"6"
+		"wide_minmode"		"70"
+		"tall_minmode"		"4"
 	}
 }
