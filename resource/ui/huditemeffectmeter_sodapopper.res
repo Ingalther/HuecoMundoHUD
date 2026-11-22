@@ -12,8 +12,8 @@
 		"tall"		"34"
 		"MeterFG"		"46 214 140 255"
 		"MeterBG"		"122 124 124 110"
-		"xpos_minmode"		"c-35"
-		"ypos_minmode"		"288"
+		"xpos_minmode"		"c127"
+		"ypos_minmode"		"388"
 	}
 	"ItemEffectMeterBG"
 	{

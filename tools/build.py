@@ -21,6 +21,7 @@ import kv
 import vpk
 import build_art
 import screens
+import minmode as MM  # the minmode layout (cl_hud_minmode 1)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.dirname(HERE)  # the project folder is the HUD
@@ -171,6 +172,8 @@ HM_FONTS = {
     'HM_ReserveBig': font_block('Bahnschrift SemiBold Condensed', round(19 * CARD_K), 600, italic=1),
     'HM_StreakSmall': font_block('Bahnschrift SemiBold Condensed', round(16 * CARD_K), 600, italic=1),
     'HM_Sticky': font_block('Bahnschrift SemiBold Condensed', 20, 600, italic=1),
+    'HM_MMNum': font_block('Bahnschrift SemiBold Condensed', 32, 600, italic=1),   # minmode's bare numbers
+    'HM_MMRes': font_block('Bahnschrift SemiBold Condensed', 16, 600, italic=1),   # minmode's ammo reserve
     'HM_Metal': font_block('Bahnschrift SemiBold Condensed', round(13 * CARD_K), 600, italic=1),
     'HM_NoticeTitle': font_block('Bahnschrift SemiBold Condensed', 17, 600),
     'HM_NoticeBody': font_block('Bahnschrift SemiCondensed', 11, 400),
@@ -538,6 +541,7 @@ def patch_health(root):
     shadow = (DIGITS[0] + 1, DIGITS[1] + 1) + DIGITS[2:]
     add_placed(body, 'HM_HealthShadow', label('HM_HealthShadow', *pc(*shadow), '%Health%', 'HM_HealthHuge',
                                                'HM_Shadow', z=5), shadow)
+    MM.health(body)
 
 
 def patch_class(root):
@@ -557,6 +561,7 @@ def patch_class(root):
         place(kv.find(body, n), (4, 92, 28, 28), zpos=8)
     add_placed(body, 'HM_PlayerShard', team_img('HM_PlayerShard', *pc(*SHARD), 'shard', z=1), SHARD)
     add_placed(body, 'HM_PlayerShardBase', img_panel('HM_PlayerShardBase', *pc(*SHARD), 'shard_base', z=4), SHARD)
+    MM.player_class(body)
 
 
 def patch_ammo(root):
@@ -580,6 +585,7 @@ def patch_ammo(root):
     kv.setmany(kv.find(body, 'AmmoInReserve'), zpos=6, fgcolor='HM_Ash', **small, **box(*wc(67, 30, 40, 26)))
     kv.setmany(kv.find(body, 'AmmoInReserveShadow'), zpos=5, fgcolor='HM_Shadow', **small, **box(*wc(68, 31, 40, 26)))
     kv.add_block(body, 'HM_AmmoBlade', img_panel('HM_AmmoBlade', *wc(0, 0, WEAPON_W, WEAPON_H), 'ammo_blade', z=0))
+    MM.ammo(body)
 
 
 def patch_damage(root):
@@ -633,6 +639,7 @@ def patch_killstreak(root):
     # the label font does not scale with the clusters, so it gets the rest of the tag
     kv.setmany(kv.find(body, 'ItemEffectMeterLabel'), xpos=k(43), ypos=0, wide=w - k(43), tall=h,
                font='HM_Small', textAlignment='west', fgcolor='HM_Emerald')
+    MM.killstreak(body)
 
 
 # item meters (sandvich, cloak, banner, pipes...) keep their stock arrangement, lifted as one block until the lowest
@@ -754,7 +761,7 @@ TID_H, TID_GAP = 35, 4  # target ID strip height (stock), gap under each strip
 def target_id_ys(alt=False):
     """Main and secondary target ID tops (stock 285 / 335). The secondary strip ("Healer: ..." / "Healing: ...")
     covered the meter column's top row (its art starts 4 under the meter's top), so both strips go up until it clears."""
-    if alt:  # corners layout: the group sits nearer the crosshair, so the strips go under its charge bar
+    if alt:  # minmode: the card sits between the plates, so the strips go under its charge bar
         main = pipes_pos(alt)[1] + PIPES_H + 2 + CHARGE_H + TID_GAP
         return main, main + TID_H + TID_GAP
     healer = min(335, pipes_pos(alt)[1] - CARD_ROW * max(METER_ROW.values()) + 4 - TID_GAP - TID_H)
@@ -786,6 +793,10 @@ def patch_meter_card(root, rel):
     cw = METER_WIDE.get(fname, 58)
     grow = cw - 58  # a wider card grows both ways around the slot's centre
     for alt in (False, True):
+        if alt:  # minmode: the sticky slot's row between the plates, the other rows under the ammo plate
+            x, y = MM.meter_pos(slot, METER_ROW.get(fname, 0))
+            minmode(top, 'c%d' % (int(x[1:]) - (0 if METER_ROW.get(fname, 0) else grow // 2)), y)
+            continue
         x, y = meter_card_pos(slot, alt)
         x = 'c%d' % (int(x[1:]) - grow // 2)
         if alt:
@@ -877,14 +888,9 @@ def pipes_pos(alt=False):
     band_mid = pc(*BAND, alt=alt)[1] + k(BAND[3]) / 2
     blade_mid = weapon_pos(alt)[1] + k(WEAPON_H) / 2
     y = round((band_mid + blade_mid) / 2 + 20 - PIPES_H / 2)
-    y = min(y, 480 - CTF_STRIP - 2 - CHARGE_H - 2 - PIPES_H)
-    # corners layout: the sticky / shield card, its charge bar and the meter column above it sit nearer the crosshair
-    # (players coming from other HUDs look for the shield charge there, and the bottom middle stays free for the
-    # texts game modes such as VSH write there); the target IDs go under the group instead (target_id_ys)
-    return "c-%d" % (PIPES_W // 2), y - (MINMODE_RISE if alt else 0)
-
-
-MINMODE_RISE = 50
+    if alt:  # minmode: between the two plates, level with their tops; the charge bar under it (tools/minmode.py)
+        return "c-%d" % (PIPES_W // 2), MM.MM_Y
+    return "c-%d" % (PIPES_W // 2), min(y, 480 - CTF_STRIP - 2 - CHARGE_H - 2 - PIPES_H)
 
 
 def patch_pipes(root):
@@ -918,6 +924,7 @@ def patch_pipes(root):
     kv.set(kv.find(body, 'PipesPresentPanel'), 'visible', 0)
     for n in ('NumPipesLabel', 'NumPipesLabelDropshadow'):
         kv.set(kv.find(kv.find(body, 'NoPipesPresentPanel'), n), 'labelText', '0')
+    MM.pipes(body)
 
 
 # ÜberCharge (Vaccinator included) as a card in the sticky slot: medic-cross logo, the charge % above an emerald bar
@@ -1380,6 +1387,7 @@ def patch_hudlayout(root):
     # hitmarker: flashed by the DamagedPlayer animation (ANIMS_HITMARKER)
     hm = kv.add_block(body, 'HM_Hitmarker', img_panel('HM_Hitmarker', 'c-12', 'c-12', 24, 24, 'hitmarker', z=10))
     hm.append(['alpha', '0', None])
+    MM.layout(body)
 
 
 HUD_VMT = ('"UnlitGeneric"\n{\n\t"$baseTexture"\t"vgui/replay/thumbnails/hm/%s"\n\t"$translucent"\t"1"\n'

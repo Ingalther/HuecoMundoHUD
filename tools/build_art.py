@@ -346,7 +346,10 @@ def hud_settings_art(out):
     blade, streak = manga.ammo_blade(413), manga.tag(414, '殺')
     digits = art.text_img('150', art.font(art.SANS, 120), BONE)
     ammo = art.text_img('6', art.font(art.SANS, 120), BONE)
-    for name, alt in (('layout_centered', False), ('layout_corners', True)):
+    out.thumb('mm_plate_h', manga.mm_plate(601, '体力', True))
+    out.thumb('mm_plate_a', manga.mm_plate(602, '弾薬', False))
+    mm_preview(out, scene, digits, ammo)
+    for name, alt in (('layout_centered', False),):
         wx, wy = build.weapon_pos(alt)
         wx = 853.33 - float(wx[1:])
         d = build.pc(*build.DIGITS, alt=alt)
@@ -358,6 +361,25 @@ def hud_settings_art(out):
                   (ammo, (wx + 40, wy + 22, 26 * ammo.width / ammo.height, 26))]
         out.thumb(name, manga.layout_preview(scene, pieces))
         out.thumb(name + '_h', manga.layout_preview(scene, pieces, hover=True))
+
+
+def mm_preview(out, scene, digits, ammo):
+    """The minmode button's picture: the two plates either side of the crosshair, the sticky card between them."""
+    import build
+    import manga
+    import minmode as MM
+    cx = 853.33 / 2
+    h_plate, a_plate = manga.mm_plate(601, '体力', True), manga.mm_plate(602, '弾薬', False)
+    pw, ph = MM.PLATE
+    card = manga.tag(415)
+    pieces = [(h_plate, (cx + MM.H_X, MM.MM_Y, pw, ph)),
+              (digits, (cx + MM.H_X + pw - 8 - 26 * digits.width / digits.height, MM.MM_Y + 6,
+                        26 * digits.width / digits.height, 26)),
+              (a_plate, (cx + MM.A_X, MM.MM_Y, pw, ph)),
+              (ammo, (cx + MM.A_X + 12, MM.MM_Y + 6, 26 * ammo.width / ammo.height, 26)),
+              (card, (cx - build.PIPES_W / 2 + 10, MM.MM_Y + 4, 58, 26))]
+    out.thumb('layout_minmode', manga.layout_preview(scene, pieces))
+    out.thumb('layout_minmode_h', manga.layout_preview(scene, pieces, hover=True))
 
 
 def extras_art(out):

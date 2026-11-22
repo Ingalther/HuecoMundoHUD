@@ -13,7 +13,7 @@
 		"MeterFG"		"46 214 140 255"
 		"MeterBG"		"122 124 124 110"
 		"xpos_minmode"		"c41"
-		"ypos_minmode"		"336"
+		"ypos_minmode"		"318"
 	}
 	"ItemEffectMeterBG"
 	{

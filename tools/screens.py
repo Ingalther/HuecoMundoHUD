@@ -202,7 +202,7 @@ def icon_button(body, name, x, y, glyph, command, tip):
 # cl_hud_minmode and reloads the HUD.
 LAYOUT_OPTIONS = [  # (button, preview art, cl_hud_minmode, name, description)
     ('HM_LayoutCentered', 'layout_centered', 0, 'CENTERED', 'Pulled in toward the crosshair (default)'),
-    ('HM_LayoutCorners', 'layout_corners', 1, 'CORNERS', 'Health and ammo in the bottom corners'),
+    ('HM_LayoutMinmode', 'layout_minmode', 1, 'MINMODE', 'Minimal: bare numbers by the crosshair'),
 ]
 POPUP_W, POPUP_H = 640, 264
 CHARACTER_OPTIONS = (('HM_Char3D', '3D MODEL', 1), ('HM_Char2D', '2D IMAGE', 0))  # cl_hud_playerclass_use_playermodel
@@ -369,7 +369,7 @@ def card_button(body, blk, img, x, y, w, h, command=None):
 
 
 CARD_BORDERS = ['cls_' + c for c, _ in [('scout', 0), ('soldier', 0), ('pyro', 0), ('demoman', 0), ('heavyweapons', 0),
-                                          ('engineer', 0), ('medic', 0), ('sniper', 0), ('spy', 0), ('random', 0)]] +                ['team_blu', 'team_red', 'team_auto', 'team_spec', 'layout_centered', 'layout_corners',
+                                          ('engineer', 0), ('medic', 0), ('sniper', 0), ('spy', 0), ('random', 0)]] +                ['team_blu', 'team_red', 'team_auto', 'team_spec', 'layout_centered', 'layout_minmode',
                 'team_tag_blu', 'team_tag_red']
 
 

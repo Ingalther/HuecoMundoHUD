@@ -30,7 +30,7 @@ def font(name, size, index=0):
 
 SERIF = 'GARA.TTF|constan.ttf|georgia.ttf'
 SERIF_B = 'GARABD.TTF|constanb.ttf|georgiab.ttf'
-KANJI = 'simsun.ttc|YuGothM.ttc|msgothic.ttc'
+KANJI = 'simsun.ttc|YuGothM.ttc|msgothic.ttc|/usr/share/fonts/opentype/ipafont-gothic/ipag.ttf'
 KANA = 'YuGothL.ttc|YuGothR.ttc|msgothic.ttc'
 SANS = 'bahnschrift.ttf|segoeui.ttf'
 

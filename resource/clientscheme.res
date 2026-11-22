@@ -3277,6 +3277,34 @@
 				"dropshadow"		"0"
 			}
 		}
+		"HM_MMNum"
+		{
+			"1"
+			{
+				"name"		"Bahnschrift SemiBold Condensed"
+				"tall"		"32"
+				"weight"		"600"
+				"additive"		"0"
+				"antialias"		"1"
+				"italic"		"1"
+				"outline"		"0"
+				"dropshadow"		"0"
+			}
+		}
+		"HM_MMRes"
+		{
+			"1"
+			{
+				"name"		"Bahnschrift SemiBold Condensed"
+				"tall"		"16"
+				"weight"		"600"
+				"additive"		"0"
+				"antialias"		"1"
+				"italic"		"1"
+				"outline"		"0"
+				"dropshadow"		"0"
+			}
+		}
 		"HM_Metal"
 		{
 			"1"
@@ -6145,21 +6173,21 @@
 			"draw_corner_width"		"0"
 			"draw_corner_height"		"0"
 		}
-		"HM_Card_layout_corners"
+		"HM_Card_layout_minmode"
 		{
 			"bordertype"		"scalable_image"
 			"backgroundtype"		"2"
-			"image"		"replay/thumbnails/hm/layout_corners"
+			"image"		"replay/thumbnails/hm/layout_minmode"
 			"src_corner_height"		"0"
 			"src_corner_width"		"0"
 			"draw_corner_width"		"0"
 			"draw_corner_height"		"0"
 		}
-		"HM_Card_layout_corners_h"
+		"HM_Card_layout_minmode_h"
 		{
 			"bordertype"		"scalable_image"
 			"backgroundtype"		"2"
-			"image"		"replay/thumbnails/hm/layout_corners_h"
+			"image"		"replay/thumbnails/hm/layout_minmode_h"
 			"src_corner_height"		"0"
 			"src_corner_width"		"0"
 			"draw_corner_width"		"0"

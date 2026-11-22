@@ -28,7 +28,7 @@ WHAT'S IN IT
 HUD SETTINGS
 ------------
 "HUD Settings" in the main menu:
-- Layout: CENTERED (default) or CORNERS       (console: cl_hud_minmode 0 / 1)
+- Layout: CENTERED (default) or MINMODE       (console: cl_hud_minmode 0 / 1)
 - Player: 3D MODEL or 2D IMAGE                (console: cl_hud_playerclass_use_playermodel 1 / 0)
 
 GOOD TO KNOW

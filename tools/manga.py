@@ -574,6 +574,35 @@ def streak_card(seed=433, size=(512, 128)):
     return card
 
 
+def mm_plate(seed, kanji, inner_right, size=(512, 164)):
+    """Minmode plate under a bare number: a torn ink strip, solid at the end by the crosshair and fading out to the
+    other in a screentone; an emerald brush rule along its foot, bright at the inner end; a small kanji caption at the
+    outer end. inner_right: the health plate (left of the crosshair), its inner end is the right one."""
+    w, h = size
+    m = poly_mask(size, [(6, 22), (w - 6, 18), (w - 6, h - 40), (6, h - 36)])
+    outer, inner = torn(m, seed, grow=4, shrink=2, rough=0.3)
+    ramp = np.linspace(0, 1, w) if inner_right else np.linspace(1, 0, w)
+    solid = np.clip(ramp * 1.6 - 0.15, 0, 1) ** 1.2
+    tone = screentone(np.tile(1 - np.clip(ramp * 1.3, 0, 1), (h, 1)) * 0.75 + 0.2, period=9, dot_color=INK,
+                      paper=(255, 255, 255))
+    dots = (tone[..., 0] < 128).astype(np.float32) * 0.6 * (ramp > 0.04)
+    a = np.maximum(solid * 0.88, dots) * outer
+    im = art.solid_with_alpha(INK, a)
+    d = ImageDraw.Draw(im)
+    foot = h - 30
+    for x in range(w):
+        t = ramp[x]
+        if t > 0.08:
+            d.line([(x, foot), (x, foot + 4)], fill=EMERALD + (int(170 * t),))
+    stub = range(w - 150, w - 8) if inner_right else range(8, 150)
+    for x in stub:
+        d.line([(x, foot - 2), (x, foot + 7)], fill=EMERALD + (255,))
+    k = art.text_img(kanji, art.font(art.KANJI, 40), EMERALD, tracking=4)
+    kx = 34 if inner_right else w - 34 - k.width
+    im.alpha_composite(k, (kx, 22))
+    return im
+
+
 def hp_track(size=(64, 256)):
     """Empty gauge: dark tile with a faint bone rim (also the target-ID health backdrop)."""
     w, h = size

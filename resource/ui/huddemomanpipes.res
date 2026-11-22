@@ -56,6 +56,10 @@
 		"brighttext"		"0"
 		"fgcolor_override"		"46 214 140 255"
 		"bgcolor_override"		"226 226 220 45"
+		"xpos_minmode"		"15"
+		"ypos_minmode"		"36"
+		"wide_minmode"		"53"
+		"tall_minmode"		"6"
 	}
 	"PipesPresentPanel"
 	{

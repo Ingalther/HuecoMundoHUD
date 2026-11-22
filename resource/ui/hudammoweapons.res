@@ -16,6 +16,8 @@
 		"scaleImage"		"1"
 		"teambg_2"		"replay/thumbnails/hm/blank"
 		"teambg_3"		"replay/thumbnails/hm/blank"
+		"wide_minmode"		"0"
+		"tall_minmode"		"0"
 	}
 	"HudWeaponLowAmmoImage"
 	{
@@ -33,6 +35,10 @@
 		"teambg_2"		"replay/thumbnails/hm/aura_r"
 		"teambg_3"		"replay/thumbnails/hm/aura_r"
 		"drawcolor"		"255 196 48 255"
+		"xpos_minmode"		"0"
+		"ypos_minmode"		"0"
+		"wide_minmode"		"138"
+		"tall_minmode"		"44"
 	}
 	"AmmoInClip"
 	{
@@ -51,6 +57,12 @@
 		"labelText"		"%Ammo%"
 		"textinsetx"		"6"
 		"use_proportional_insets"		"1"
+		"xpos_minmode"		"2"
+		"ypos_minmode"		"2"
+		"wide_minmode"		"50"
+		"tall_minmode"		"36"
+		"font_minmode"		"HM_MMNum"
+		"textAlignment_minmode"		"east"
 	}
 	"AmmoInClipShadow"
 	{
@@ -69,6 +81,12 @@
 		"labelText"		"%Ammo%"
 		"textinsetx"		"6"
 		"use_proportional_insets"		"1"
+		"xpos_minmode"		"3"
+		"ypos_minmode"		"3"
+		"wide_minmode"		"50"
+		"tall_minmode"		"36"
+		"font_minmode"		"HM_MMNum"
+		"textAlignment_minmode"		"east"
 	}
 	"AmmoInReserve"
 	{
@@ -87,6 +105,11 @@
 		"labelText"		"%AmmoInReserve%"
 		"textinsetx"		"1"
 		"use_proportional_insets"		"1"
+		"xpos_minmode"		"56"
+		"ypos_minmode"		"14"
+		"wide_minmode"		"44"
+		"tall_minmode"		"18"
+		"font_minmode"		"HM_MMRes"
 	}
 	"AmmoInReserveShadow"
 	{
@@ -105,6 +128,11 @@
 		"labelText"		"%AmmoInReserve%"
 		"textinsetx"		"1"
 		"use_proportional_insets"		"1"
+		"xpos_minmode"		"57"
+		"ypos_minmode"		"15"
+		"wide_minmode"		"44"
+		"tall_minmode"		"18"
+		"font_minmode"		"HM_MMRes"
 	}
 	"AmmoNoClip"
 	{
@@ -123,6 +151,12 @@
 		"labelText"		"%Ammo%"
 		"textinsetx"		"6"
 		"use_proportional_insets"		"1"
+		"xpos_minmode"		"10"
+		"ypos_minmode"		"2"
+		"wide_minmode"		"90"
+		"tall_minmode"		"36"
+		"font_minmode"		"HM_MMNum"
+		"textAlignment_minmode"		"west"
 	}
 	"AmmoNoClipShadow"
 	{
@@ -141,6 +175,12 @@
 		"labelText"		"%Ammo%"
 		"textinsetx"		"6"
 		"use_proportional_insets"		"1"
+		"xpos_minmode"		"11"
+		"ypos_minmode"		"3"
+		"wide_minmode"		"90"
+		"tall_minmode"		"36"
+		"font_minmode"		"HM_MMNum"
+		"textAlignment_minmode"		"west"
 	}
 	"HM_AmmoBlade"
 	{
@@ -156,5 +196,42 @@
 		"scaleImage"		"1"
 		"image"		"replay/thumbnails/hm/ammo_blade"
 		"mouseinputenabled"		"0"
+		"wide_minmode"		"0"
+		"tall_minmode"		"0"
+	}
+	"HM_MMAmmoLabel"
+	{
+		"ControlName"		"CExLabel"
+		"fieldName"		"HM_MMAmmoLabel"
+		"xpos"		"88"
+		"ypos"		"22"
+		"zpos"		"5"
+		"wide"		"0"
+		"tall"		"0"
+		"visible"		"1"
+		"enabled"		"1"
+		"labelText"		"AMMO"
+		"textAlignment"		"east"
+		"font"		"HM_Small"
+		"fgcolor"		"HM_Bone"
+		"wide_minmode"		"40"
+		"tall_minmode"		"12"
+	}
+	"HM_MMPlateA"
+	{
+		"ControlName"		"ImagePanel"
+		"fieldName"		"HM_MMPlateA"
+		"xpos"		"0"
+		"ypos"		"0"
+		"zpos"		"0"
+		"wide"		"0"
+		"tall"		"0"
+		"visible"		"1"
+		"enabled"		"1"
+		"scaleImage"		"1"
+		"image"		"replay/thumbnails/hm/mm_plate_a"
+		"mouseinputenabled"		"0"
+		"wide_minmode"		"138"
+		"tall_minmode"		"44"
 	}
 }

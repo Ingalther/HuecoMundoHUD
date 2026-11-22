@@ -28,8 +28,8 @@
 		"scaleImage"		"1"
 		"xpos_minmode"		"14"
 		"ypos_minmode"		"352"
-		"wide_minmode"		"106"
-		"tall_minmode"		"106"
+		"wide_minmode"		"0"
+		"tall_minmode"		"0"
 	}
 	"PlayerStatusSpyImage"
 	{
@@ -46,8 +46,8 @@
 		"scaleImage"		"1"
 		"teambg_2"		"../hud/class_spyred"
 		"teambg_3"		"../hud/class_spyblue"
-		"xpos_minmode"		"12"
-		"ypos_minmode"		"429"
+		"xpos_minmode"		"c-302"
+		"ypos_minmode"		"326"
 		"wide_minmode"		"28"
 		"tall_minmode"		"28"
 	}
@@ -64,8 +64,8 @@
 		"enabled"		"1"
 		"image"		"../hud/class_spy_outline"
 		"scaleImage"		"1"
-		"xpos_minmode"		"12"
-		"ypos_minmode"		"429"
+		"xpos_minmode"		"c-302"
+		"ypos_minmode"		"326"
 		"wide_minmode"		"28"
 		"tall_minmode"		"28"
 	}
@@ -86,6 +86,8 @@
 		"teambg_2_lodef"		"replay/thumbnails/hm/blank"
 		"teambg_3"		"replay/thumbnails/hm/blank"
 		"teambg_3_lodef"		"replay/thumbnails/hm/blank"
+		"wide_minmode"		"0"
+		"tall_minmode"		"0"
 	}
 	"classmodelpanelBG"
 	{
@@ -104,6 +106,8 @@
 		"teambg_2_lodef"		"replay/thumbnails/hm/blank"
 		"teambg_3"		"replay/thumbnails/hm/blank"
 		"teambg_3_lodef"		"replay/thumbnails/hm/blank"
+		"wide_minmode"		"0"
+		"tall_minmode"		"0"
 	}
 	"classmodelpanel"
 	{
@@ -235,8 +239,8 @@
 		}
 		"xpos_minmode"		"2"
 		"ypos_minmode"		"198"
-		"wide_minmode"		"130"
-		"tall_minmode"		"260"
+		"wide_minmode"		"0"
+		"tall_minmode"		"0"
 	}
 	"CarryingWeapon"
 	{
@@ -336,6 +340,8 @@
 			"proportionaltoparent"		"1"
 			"auto_wide_tocontents"		"1"
 		}
+		"wide_minmode"		"0"
+		"tall_minmode"		"0"
 	}
 	"HM_PlayerShard"
 	{
@@ -355,8 +361,8 @@
 		"teambg_3"		"replay/thumbnails/hm/shard_blue"
 		"xpos_minmode"		"8"
 		"ypos_minmode"		"337"
-		"wide_minmode"		"130"
-		"tall_minmode"		"130"
+		"wide_minmode"		"0"
+		"tall_minmode"		"0"
 	}
 	"HM_PlayerShardBase"
 	{
@@ -374,7 +380,7 @@
 		"mouseinputenabled"		"0"
 		"xpos_minmode"		"8"
 		"ypos_minmode"		"337"
-		"wide_minmode"		"130"
-		"tall_minmode"		"130"
+		"wide_minmode"		"0"
+		"tall_minmode"		"0"
 	}
 }
