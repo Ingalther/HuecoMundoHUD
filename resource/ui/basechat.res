@@ -11,7 +11,9 @@
 		"ypos"		"200"
 		"wide"		"270"
 		"tall"		"112"
-		"PaintBackgroundType"		"2"
+		"PaintBackgroundType"		"0"
+		"bgcolor_override"		"8 9 10 150"
+		"paintborder"		"0"
 	}
 	"ChatInputLine"
 	{
@@ -25,36 +27,45 @@
 		"wide"		"260"
 		"tall"		"2"
 		"PaintBackgroundType"		"0"
+		"bgcolor_override"		"0 0 0 0"
+		"fgcolor_override"		"226 226 220 255"
 	}
 	"ChatFiltersButton"
 	{
 		"ControlName"		"Button"
 		"fieldName"		"ChatFiltersButton"
-		"xpos"		"225"
-		"ypos"		"2"
-		"wide"		"45"
-		"tall"		"15"
-		"autoResize"		"1"
+		"xpos"		"0"
+		"ypos"		"0"
+		"wide"		"270"
+		"tall"		"13"
+		"autoResize"		"0"
 		"pinCorner"		"0"
 		"visible"		"1"
 		"enabled"		"1"
 		"tabPosition"		"0"
-		"labelText"		"#chat_filterbutton"
-		"textAlignment"		"center"
+		"labelText"		"//  CHAT  //  FILTERS"
+		"textAlignment"		"west"
 		"dulltext"		"0"
 		"brighttext"		"0"
 		"Default"		"0"
+		"textinsetx"		"6"
+		"paintbackground"		"1"
+		"paintborder"		"0"
+		"defaultBgColor_override"		"226 226 220 240"
+		"armedBgColor_override"		"46 214 140 255"
+		"depressedBgColor_override"		"18 60 44 255"
+		"defaultFgColor_override"		"8 9 10 255"
+		"armedFgColor_override"		"8 9 10 255"
+		"depressedFgColor_override"		"226 226 220 255"
 	}
 	"HudChatHistory"
 	{
 		"ControlName"		"RichText"
 		"fieldName"		"HudChatHistory"
-		"xpos"		"10" [$WIN32]
-		"ypos"		"17" [$WIN32]
-		"xpos"		"10" [$X360]
-		"ypos"		"10" [$X360]
-		"wide"		"260"
-		"tall"		"75"
+		"xpos"		"3"
+		"ypos"		"16"
+		"wide"		"264"
+		"tall"		"72"
 		"wrap"		"1"
 		"autoResize"		"1"
 		"pinCorner"		"1"
@@ -64,5 +75,8 @@
 		"textAlignment"		"south-west"
 		"font"		"ChatFont"
 		"maxchars"		"-1"
+		"bgcolor_override"		"0 0 0 120"
+		"fgcolor_override"		"226 226 220 255"
+		"border"		"HM_ChatWell"
 	}
 }

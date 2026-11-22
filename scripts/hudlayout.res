@@ -851,8 +851,8 @@
 		"visible"		"1"
 		"enabled"		"1"
 		"xpos"		"5"
-		"ypos"		"196"
-		"wide"		"300"
+		"ypos"		"200"
+		"wide"		"270"
 		"tall"		"112"
 		"PaintBackgroundType"		"2"
 	}

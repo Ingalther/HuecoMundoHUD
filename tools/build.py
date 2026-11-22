@@ -11,6 +11,7 @@ The HUD is derived from the game's own current UI files (extracted from tf2_misc
 re-skinned through the scheme and patched where the layout changes. Only files that differ from stock are shipped.
 """
 import colorsys
+import copy
 import os
 import re
 import shutil
@@ -1334,9 +1335,231 @@ def patch_flagstatus(root):
     kv.setmany(kv.find(body, 'StatusIcon'), xpos=69, ypos=17, wide=22, tall=22)
 
 
+CHAT = (5, 200, 270, 112)
+CHAT_HEAD, CHAT_PAD, CHAT_WELL_H = 13, 3, 72
+
+
 def patch_chat(root):
+    """The open chat as a manga panel (only colours and places are the HUD's to set; the chat reads its own scheme,
+    resource/chatscheme.res, build_chatscheme: its font, the typing line's dark field, the emerald scroll bar and the
+    history well's frame come from there). Its background, painted only while it is open, is a light ink glass; the
+    filters button is a strip of bone paper across the top with ink lettering (//  CHAT  //  FILTERS), emerald on
+    hover; the history well sits inset under it, its frame (the game paints that border only while the chat is open)
+    thin bone with emerald corner brackets, a screentone patch and a 話 // CHAT tag (build_art.chat_well). No border on
+    the chat itself or on the typing line: those are drawn while the chat is closed too."""
     body = next(e[1] for e in root if isinstance(e[1], list))
-    kv.setmany(kv.find(body, 'HudChat'), xpos=5, ypos=200, wide=270, tall=112)
+    kv.setmany(kv.find(body, 'HudChat'), xpos=CHAT[0], ypos=CHAT[1], wide=CHAT[2], tall=CHAT[3], PaintBackgroundType=0,
+               bgcolor_override='8 9 10 150', paintborder=0)
+    hist = kv.find(body, 'HudChatHistory')
+    if hist is not None:
+        kv.setmany(hist, xpos=CHAT_PAD, ypos=CHAT_HEAD + CHAT_PAD, wide=CHAT[2] - 2 * CHAT_PAD, tall=CHAT_WELL_H,
+                   bgcolor_override='0 0 0 120', fgcolor_override='226 226 220 255', border='HM_ChatWell')
+    line = kv.find(body, 'ChatInputLine')
+    if line is not None:
+        kv.setmany(line, bgcolor_override='0 0 0 0', fgcolor_override='226 226 220 255')
+    btn = kv.find(body, 'ChatFiltersButton')
+    if btn is not None:
+        # a plain vgui button: only its flat fill and one label are ours to set
+        kv.setmany(btn, xpos=0, ypos=0, wide=CHAT[2], tall=CHAT_HEAD, autoResize=0, textAlignment='west',
+                   labelText='//  CHAT  //  FILTERS', textinsetx=6, paintbackground=1, paintborder=0,
+                   defaultBgColor_override='226 226 220 240', armedBgColor_override='46 214 140 255',
+                   depressedBgColor_override='18 60 44 255', defaultFgColor_override='8 9 10 255',
+                   armedFgColor_override='8 9 10 255', depressedFgColor_override='226 226 220 255')
+
+
+# the chat's filter checklist (FILTERS on the chat's header): the stock file (hl2's, not in tf2_misc), kept here
+CHAT_FILTERS_STOCK = r'''"Resource/UI/ChatFilters.res"
+{
+	"HudChatFilterPanel"
+	{
+		"ControlName"		"EditablePanel"
+		"fieldName"		"HudChatFilterPanel"
+		"xpos"			"335"
+		"ypos"			"275"
+		"zpos"			"0"
+		"wide"			"130"
+		"tall"			"70"
+		"visible"		"0"
+		"enabled"		"1"
+	}
+
+	"joinleave_button"
+	{
+		"ControlName"		"CheckButton"
+		"fieldName"		"joinleave_button"
+		"xpos"			"10"
+		"ypos"			"5"
+		"wide"			"150"
+		"tall"			"10"
+		"autoResize"		"1"
+		"pinCorner"		"0"
+		"visible"		"1"
+		"enabled"		"1"
+		"tabPosition"		"0"
+		"labelText"		"#filter_joinleave"
+		"textAlignment"		"west"
+		"dulltext"		"0"
+		"brighttext"		"0"
+		"Default"		"0"		
+	}
+	"namechange_button"
+	{
+		"ControlName"		"CheckButton"
+		"fieldName"		"namechange_button"
+		"xpos"			"10"
+		"ypos"			"15"
+		"wide"			"150"
+		"tall"			"10"
+		"autoResize"		"1"
+		"pinCorner"		"0"
+		"visible"		"1"
+		"enabled"		"1"
+		"tabPosition"		"0"
+		"labelText"		"#filter_namechange"
+		"textAlignment"		"west"
+		"dulltext"		"0"
+		"brighttext"		"0"
+		"Default"		"0"		
+	}
+	"publicchat_button"
+	{
+		"ControlName"		"CheckButton"
+		"fieldName"		"publicchat_button"
+		"xpos"			"10"
+		"ypos"			"25"
+		"wide"			"150"
+		"tall"			"10"
+		"autoResize"		"1"
+		"pinCorner"		"0"
+		"visible"		"1"
+		"enabled"		"1"
+		"tabPosition"		"0"
+		"labelText"		"#filter_publicchat"
+		"textAlignment"		"west"
+		"dulltext"		"0"
+		"brighttext"		"0"
+		"Default"		"0"		
+	}
+	"servermsg_button"
+	{
+		"ControlName"		"CheckButton"
+		"fieldName"		"servermsg_button"
+		"xpos"			"10"
+		"ypos"			"35"
+		"wide"			"150"
+		"tall"			"10"
+		"autoResize"		"1"
+		"pinCorner"		"0"
+		"visible"		"1"
+		"enabled"		"1"
+		"tabPosition"		"0"
+		"labelText"		"#filter_servermsg"
+		"textAlignment"		"west"
+		"dulltext"		"0"
+		"brighttext"		"0"
+		"Default"		"0"		
+	}
+	"teamchange_button"
+	{
+		"ControlName"		"CheckButton"
+		"fieldName"		"teamchange_button"
+		"xpos"			"10"
+		"ypos"			"45"
+		"wide"			"150"
+		"tall"			"10"
+		"autoResize"		"1"
+		"pinCorner"		"0"
+		"visible"		"1"
+		"enabled"		"1"
+		"tabPosition"		"0"
+		"labelText"		"#filter_teamchange"
+		"textAlignment"		"west"
+		"dulltext"		"0"
+		"brighttext"		"0"
+		"Default"		"0"		
+	}
+	
+	"achivement_button"
+	{
+		"ControlName"		"CheckButton"
+		"fieldName"		"achivement_button"
+		"xpos"			"10"
+		"ypos"			"55"
+		"wide"			"150"
+		"tall"			"10"
+		"autoResize"		"1"
+		"pinCorner"		"0"
+		"visible"		"1"
+		"enabled"		"1"
+		"tabPosition"		"0"
+		"labelText"		"#filter_achievement"
+		"textAlignment"		"west"
+		"dulltext"		"0"
+		"brighttext"		"0"
+		"Default"		"0"		
+	}
+}'''
+
+
+def chat_filters():
+    """resource/ui/chatfilters.res: the checklist as a small manga panel (it was the stock grey box): ink glass with a
+    bone paper strip on top (//  CHAT FILTERS in ink) over the check boxes. The panel shows only while it is open, so
+    the strip can be its own child. The game draws the panel's colour at half alpha."""
+    root = kv.parse(CHAT_FILTERS_STOCK)
+    body = next(e[1] for e in root if isinstance(e[1], list))
+    head = 12
+    pnl = kv.find(body, 'HudChatFilterPanel')
+    kv.setmany(pnl, tall=int(kv.get(pnl, 'tall')) + head, PaintBackgroundType=0, paintbackground=1,
+               bgcolor_override='8 9 10 255')
+    for name, blk in [(e[0], e[1]) for e in body if isinstance(e[1], list)]:
+        if name.endswith('_button'):
+            kv.setmany(blk, ypos=int(kv.get(blk, 'ypos')) + head, fgcolor_override='226 226 220 255')
+    kv.add_block(body, 'HM_FilterHead', {'ControlName': 'EditablePanel', 'fieldName': 'HM_FilterHead', 'xpos': 0,
+                                         'ypos': 0, 'zpos': 1, 'wide': 'f0', 'tall': head - 2, 'visible': 1,
+                                         'enabled': 1, 'paintbackground': 1, 'bgcolor_override': '226 226 220 240',
+                                         'mouseinputenabled': 0})
+    kv.add_block(body, 'HM_FilterTitle', label('HM_FilterTitle', 6, 0, 120, head - 2, '//  CHAT FILTERS', 'HM_Small',
+                                               '8 9 10 255', z=2))
+    return kv.dump(root) + '\n'
+
+
+# The chat reads resource/chatscheme.res, not clientscheme.res: its fonts, colours and the well's frame are set here
+CHAT_SCHEME_COLORS = {
+    'Chat.TypingText': '226 226 220 255',
+    'TextEntry.TextColor': '226 226 220 255', 'TextEntry.BgColor': '4 4 6 200', 'TextEntry.CursorColor': '46 214 140 255',
+    'TextEntry.SelectedBgColor': '18 60 44 255', 'TextEntry.SelectedTextColor': '226 226 220 255',
+    'TextEntry.FocusEdgeColor': '0 0 0 0',
+    'ScrollBarButton.FgColor': '46 214 140 255', 'ScrollBarButton.BgColor': '18 22 20 200',
+    'ScrollBarButton.ArmedFgColor': '120 240 190 255', 'ScrollBarButton.ArmedBgColor': '18 60 44 220',
+    'ScrollBarButton.DepressedFgColor': '8 9 10 255', 'ScrollBarButton.DepressedBgColor': '46 214 140 255',
+    'ScrollBarSlider.FgColor': '46 214 140 255', 'ScrollBarSlider.BgColor': '18 22 20 200',
+    'CheckButton.TextColor': '226 226 220 255', 'CheckButton.SelectedTextColor': '255 255 255 255',
+    'CheckButton.BgColor': '0 0 0 120', 'CheckButton.Border1': '122 124 124 255', 'CheckButton.Border2': '122 124 124 255',
+    'CheckButton.Check': '46 214 140 255', 'CheckButton.HighlightFgColor': '120 240 190 255',
+    'Label.TextColor': '226 226 220 255',
+}
+CHAT_SCHEME_FONTS = ('ChatFont', 'HM_Small', 'Default')
+
+
+def build_chatscheme(src_text, client_text):
+    root = kv.parse(src_text)
+    scheme = kv.find(root, 'Scheme')
+    # the chat's own lines (server messages, chat text) are TanLight, missing from the stock chatscheme
+    kv.set(kv.find(scheme, 'Colors'), 'TanLight', '226 226 220 255')
+    base = kv.find(scheme, 'BaseSettings')
+    for k, v in CHAT_SCHEME_COLORS.items():
+        kv.set(base, k, v)
+    client_fonts = kv.path(kv.parse(client_text), 'Scheme', 'Fonts')
+    fonts = kv.find(scheme, 'Fonts')
+    for name in CHAT_SCHEME_FONTS:
+        blk = kv.find(client_fonts, name)
+        if blk is not None:
+            kv.remove(fonts, name)
+            fonts.append([name, copy.deepcopy(blk), None])
+    borders = kv.find(scheme, 'Borders')
+    kv.remove(borders, 'HM_ChatWell')
+    borders.append(['HM_ChatWell', scalable_border('chat_well', 0, 0), None])
+    return kv.dump(root) + '\n'
 
 
 def patch_hudlayout(root):
@@ -1346,7 +1569,7 @@ def patch_hudlayout(root):
     minmode(ammo, *weapon_pos(True))
     kv.setmany(kv.find(body, 'CHudAccountPanel'), **box(*account_box(), ACCOUNT_W, PIPES_H + ACCOUNT_RISE))
     minmode(kv.find(body, 'CHudAccountPanel'), *account_box(True))
-    kv.setmany(kv.find(body, 'HudChat'), xpos=5, ypos=196, wide=300, tall=112)
+    kv.setmany(kv.find(body, 'HudChat'), xpos=CHAT[0], ypos=CHAT[1], wide=CHAT[2], tall=CHAT[3])
     # sticky launcher / bow / flame-rocket charge-up: a thin emerald bar centered right under the sticky card
     for n in ('HudDemomanCharge', 'HudBowCharge', 'HudFlameRocketCharge'):
         blk = kv.find(body, n)
@@ -1803,8 +2026,13 @@ def main():
                 shipped += 1
     print(f'  res files shipped: {shipped}')
 
-    write(os.path.join(OUT, 'resource/clientscheme.res'),
-          build_scheme(open(os.path.join(work, 'resource/clientscheme.res'), encoding='utf-8', errors='replace').read()))
+    client = build_scheme(open(os.path.join(work, 'resource/clientscheme.res'), encoding='utf-8', errors='replace').read())
+    write(os.path.join(OUT, 'resource/clientscheme.res'), client)
+    chat_src = os.path.join(work, 'resource/chatscheme.res')
+    if os.path.exists(chat_src):
+        write(os.path.join(OUT, 'resource/chatscheme.res'),
+              build_chatscheme(open(chat_src, encoding='utf-8', errors='replace').read(), client))
+    write(os.path.join(OUT, 'resource/ui/chatfilters.res'), chat_filters())
     ss = os.path.join(work, 'resource/sourcescheme.res')
     if os.path.exists(ss):  # GameUI dialogs (loading window...) take their colours from here
         write(os.path.join(OUT, 'resource/sourcescheme.res'),

@@ -382,6 +382,12 @@ def mm_preview(out, scene, digits, ammo):
     out.thumb('layout_minmode_h', manga.layout_preview(scene, pieces, hover=True))
 
 
+def chat_art(out):
+    """The open chat's history well frame (build.patch_chat)."""
+    import manga
+    out.thumb('chat_well', manga.chat_well())
+
+
 def extras_art(out):
     """Hitmarker, respawn card, engineer / spy menu cards, payload strip, capture ring rim, search strips, the
     crafting cards and the carried intel card."""
@@ -465,6 +471,7 @@ def build(root, preview=None, portraits=None):
     hud_cards(out)
     hud_settings_art(out)
     extras_art(out)
+    chat_art(out)
     out.thumb('emblem', emblem())
     logo = menu_logo()
     out.thumb('logo', logo)

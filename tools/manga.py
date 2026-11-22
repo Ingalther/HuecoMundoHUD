@@ -603,6 +603,29 @@ def mm_plate(seed, kanji, inner_right, size=(512, 164)):
     return im
 
 
+def chat_well(size=(1056, 288)):
+    """The open chat's history well frame (a border the game paints only while the chat is open): see-through, a thin
+    bone frame, emerald corner brackets top left and bottom right, a screentone patch fading in at the top right, a
+    small 話 // CHAT tag. No fill: the well's own background colour is its ink."""
+    w, h = size
+    im = Image.new('RGBA', size, (0, 0, 0, 0))
+    d = ImageDraw.Draw(im)
+    for y in range(8, 150, 14):
+        for x in range(w - 300 + (y // 14 % 2) * 7, w - 10, 14):
+            r = 4.4 * (x - (w - 300)) / 300
+            if r > 0.6:
+                d.ellipse((x - r, y - r, x + r, y + r), fill=BONE + (60,))
+    d.rectangle((0, 0, w - 1, h - 1), outline=BONE + (110,), width=3)
+    for (ax, ay, sx, sy) in ((0, 0, 1, 1), (w - 1, h - 1, -1, -1)):
+        d.rectangle((min(ax, ax + sx * 150), min(ay, ay + sy * 10), max(ax, ax + sx * 150), max(ay, ay + sy * 10)),
+                    fill=EMERALD + (255,))
+        d.rectangle((min(ax, ax + sx * 10), min(ay, ay + sy * 84), max(ax, ax + sx * 10), max(ay, ay + sy * 84)),
+                    fill=EMERALD + (255,))
+    tag = art.text_img('話  //  CHAT', art.font(art.KANJI, 40), (150, 152, 150), tracking=2)
+    im.alpha_composite(tag, (30, 14))
+    return im
+
+
 def hp_track(size=(64, 256)):
     """Empty gauge: dark tile with a faint bone rim (also the target-ID health backdrop)."""
     w, h = size
