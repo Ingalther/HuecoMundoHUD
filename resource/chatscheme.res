@@ -253,7 +253,7 @@
 			"1"
 			{
 				"name"		"Bahnschrift SemiCondensed"
-				"tall"		"12"
+				"tall"		"15"
 				"weight"		"700"
 				"yres"		"480 599"
 				"dropshadow"		"1"
@@ -261,7 +261,7 @@
 			"2"
 			{
 				"name"		"Bahnschrift SemiCondensed"
-				"tall"		"13"
+				"tall"		"16"
 				"weight"		"700"
 				"yres"		"600 767"
 				"dropshadow"		"1"
@@ -269,7 +269,7 @@
 			"3"
 			{
 				"name"		"Bahnschrift SemiCondensed"
-				"tall"		"14"
+				"tall"		"18"
 				"weight"		"700"
 				"yres"		"768 1023"
 				"dropshadow"		"1"
@@ -277,7 +277,7 @@
 			"4"
 			{
 				"name"		"Bahnschrift SemiCondensed"
-				"tall"		"20"
+				"tall"		"25"
 				"weight"		"700"
 				"yres"		"1024 1199"
 				"dropshadow"		"1"
@@ -285,7 +285,7 @@
 			"5"
 			{
 				"name"		"Bahnschrift SemiCondensed"
-				"tall"		"24"
+				"tall"		"30"
 				"weight"		"700"
 				"yres"		"1200 10000"
 				"dropshadow"		"1"

@@ -126,6 +126,7 @@ FONT_REMAP = {
 # FONT_REMAP leaves Verdana alone, and these stock fonts are Verdana on every screen of 600+ lines: the chat kept
 # the stock look at 900p / 1080p
 CHAT_FONTS = ('ChatFont', 'ChatMiniFont')
+CHAT_TALL = {480: 15, 600: 16, 768: 18, 1024: 25, 1200: 30}  # ChatFont's pixel size per yres band (stock 12/13/14/20/24)
 
 
 def font_block(name, tall, weight=400, italic=0, outline=0, dropshadow=0, antialias=1):
@@ -321,6 +322,12 @@ def build_scheme(src_text):
         for sub in kv.find(fonts, name) or []:
             if isinstance(sub[1], list):
                 kv.set(sub[1], 'name', 'Bahnschrift SemiCondensed')
+    # the chat's text a quarter bigger than stock at every screen height (it read too small: 20 px at 1080p)
+    for sub in kv.find(fonts, 'ChatFont') or []:
+        if isinstance(sub[1], list):
+            lo = int((kv.get(sub[1], 'yres') or '0').split()[0])
+            if lo in CHAT_TALL:
+                kv.set(sub[1], 'tall', CHAT_TALL[lo])
     for name, blk in HM_FONTS.items():
         kv.remove(fonts, name)
         fonts.append([name, blk, None])
