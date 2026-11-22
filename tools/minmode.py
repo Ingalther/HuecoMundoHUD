@@ -110,6 +110,7 @@ def ammo(body):
 STRIP_H = 16                    # one minimal meter row
 BAR_X, BAR_W = 64, 70           # a row's bar (or count) right of its label
 STICKY_T = 16                   # the sticky count / shield bar strip between the plates
+SHIELD_W, SHIELD_T = 100, 6     # the shield charge bar across that strip
 CHARGE_Y = MM_Y + 4 + STICKY_T + 2  # the charge-up line right under it
 
 
@@ -151,16 +152,16 @@ def meter(body, slot, row):
 
 
 def pipes(body):
-    """huddemomanpipes.res: no card. The stickies and the shield share this panel, so in minmode it is a wide see-through
-    box from the middle (between the plates) down to the first meter row under the ammo plate (layout()). With a
-    sticky launcher STICKIES and the count sit at its middle end; with a shield (the game hides the sticky panels and
-    shows its CHARGE label then) the charge is a thin bar in that first row. The game paints that bar white, so the
-    CHARGE label, which only shows with a shield, is laid over it as a translucent emerald sheet (no text): pale jade."""
+    """huddemomanpipes.res (the panel is a strip under the crosshair, between the plates, layout()): no card. With a
+    sticky launcher STICKIES and the count in its middle; with a shield (the game hides the sticky panels and shows its
+    CHARGE label then) the charge as a bar across the strip, like other HUDs put it under the crosshair. The game
+    paints that bar white, so the CHARGE label, which only shows with a shield, is laid over it as a translucent emerald
+    sheet (no text): pale jade."""
     import build as B
     blk = kv.find(body, 'background')
     if blk is not None:
         hide(blk)
-    bar = (A_X + B.PIPES_W // 2 + BAR_X, UNDER - (MM_Y + 4) + (STRIP_H - 4) // 2, BAR_W, 4)
+    bar = (0, (STICKY_T - SHIELD_T) // 2, SHIELD_W, SHIELD_T)
     blk = kv.find(body, 'ChargeMeter')
     if blk is not None:
         mm(blk, xpos=bar[0], ypos=bar[1], wide=bar[2], tall=bar[3])
@@ -172,7 +173,7 @@ def pipes(body):
         pnl = kv.find(body, panel)
         if pnl is None:
             continue
-        mm(pnl, wide=B.PIPES_W, tall=STICKY_T)
+        mm(pnl, xpos=(SHIELD_W - B.PIPES_W) // 2, ypos=0, wide=B.PIPES_W, tall=STICKY_T)
         for name in ('HM_PipesCover', 'HM_StickyIcon'):
             blk = kv.find(pnl, name)
             if blk is not None:
@@ -206,12 +207,10 @@ def layout(body):
     blk = kv.find(body, 'HudWeaponAmmo')
     if blk is not None:
         mm(blk, xpos=c(A_X), ypos=MM_Y, wide=PLATE[0], tall=PLATE[1])
-    # stickies / shield charge: one see-through box from the strip between the plates (stickies) to the first meter
-    # row under the ammo plate (shield charge), pipes()
+    # stickies / shield charge: a strip under the crosshair between the plates, the charge-up line right under it
     blk = kv.find(body, 'HudDemomanPipes')
     if blk is not None:
-        mm(blk, xpos=c(-B.PIPES_W // 2), ypos=MM_Y + 4, wide=B.PIPES_W // 2 + A_X + PLATE[0],
-           tall=UNDER + STRIP_H - (MM_Y + 4))
+        mm(blk, xpos=c(-SHIELD_W // 2), ypos=MM_Y + 4, wide=SHIELD_W, tall=STICKY_T)
     # Engineer's metal: the first meter row under the ammo plate, the panel reaching up for the +/- numbers
     blk = kv.find(body, 'CHudAccountPanel')
     if blk is not None:

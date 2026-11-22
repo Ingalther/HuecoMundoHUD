@@ -914,10 +914,10 @@
 		"ypos"		"380"
 		"wide"		"70"
 		"tall"		"34"
-		"xpos_minmode"		"c-35"
+		"xpos_minmode"		"c-50"
 		"ypos_minmode"		"322"
-		"wide_minmode"		"306"
-		"tall_minmode"		"58"
+		"wide_minmode"		"100"
+		"tall_minmode"		"16"
 	}
 	"HudTeamGoal"
 	{
