@@ -5,9 +5,9 @@ The default layout (the manga clusters) lives in the plain keys; this one only i
 passes below at the end of each file's patch (kv.set clears a key's _minmode twin, so nothing may set those keys
 after them). No model, no triangle, no band or blade: the health and the ammo as bare numbers either side of the
 crosshair, a quarter of the screen down, each on a torn ink plate that fades out away from the crosshair
-(manga.mm_plate). Under the ammo plate bare meter rows (stickies / shield charge first, then the item meters), the
-kill streak under the health plate; the Über / metal card and the charge-up line between the plates, the target IDs
-under them.
+(manga.mm_plate). Under the ammo plate bare meter rows (metal first, then the item meters), the kill streak under
+the health plate; between the plates the sticky count (STICKIES n) or the shield's charge bar, the charge-up line
+right under it, the Über card there for a Medic, the target IDs under those.
 
 Units are the HUD's 480-line ones; 'cN' is N from the screen's centre."""
 import kv
@@ -109,6 +109,8 @@ def ammo(body):
 
 STRIP_H = 16                    # one minimal meter row
 BAR_X, BAR_W = 64, 70           # a row's bar (or count) right of its label
+STICKY_T = 16                   # the sticky count / shield bar strip between the plates
+CHARGE_Y = MM_Y + 4 + STICKY_T + 2  # the charge-up line right under it
 
 
 def killstreak(body):
@@ -149,31 +151,27 @@ def meter(body, slot, row):
 
 
 def pipes(body):
-    """huddemomanpipes.res (the panel is the meter row, layout()): the sticky slot's row under the ammo plate. With a
-    shield the game's CHARGE word and the charge as a thin bar, like the item meters; with a sticky launcher the
-    count beside a STICKIES word. No cards."""
+    """huddemomanpipes.res (the panel is a strip between the plates, over the charge-up line, layout()): no card. With a
+    sticky launcher STICKIES and the count, like the meter rows; with a shield (the game hides the sticky panels and
+    shows its CHARGE label then) the charge as a thin bar. The game paints that bar white, so the CHARGE label, which
+    only shows with a shield, is laid over it as a translucent emerald sheet (no text): pale jade."""
     import build as B
     blk = kv.find(body, 'background')
     if blk is not None:
         hide(blk)
-    blk = kv.find(body, 'ChargeLabel')
-    if blk is not None:
-        mm(blk, xpos=0, ypos=0, wide=BAR_X - 4, tall=STRIP_H, font='HM_Small', textAlignment='east', visible=1,
-           fgcolor='HM_BoneMid')
+    bar = (5, (STICKY_T - 4) // 2, B.PIPES_W - 10, 4)
     blk = kv.find(body, 'ChargeMeter')
     if blk is not None:
-        mm(blk, xpos=BAR_X, ypos=(STRIP_H - 4) // 2, wide=BAR_W, tall=4)
-    # the game paints the bar white every frame (no key recolours it): a translucent emerald sheet over it turns it
-    # pale jade, like the item meters' bars (build.tint_bar)
-    only_mm(body, 'HM_MMChargeTint', {'ControlName': 'EditablePanel', 'fieldName': 'HM_MMChargeTint', 'zpos': 3,
-                                      'visible': 1, 'enabled': 1, 'paintbackground': 1,
-                                      'bgcolor_override': B.BAR_TINT, 'mouseinputenabled': 0},
-            (BAR_X, (STRIP_H - 4) // 2, BAR_W, 4))
+        mm(blk, xpos=bar[0], ypos=bar[1], wide=bar[2], tall=bar[3])
+    blk = kv.find(body, 'ChargeLabel')
+    if blk is not None:
+        mm(blk, xpos=bar[0], ypos=bar[1], wide=bar[2], tall=bar[3], visible=1, zpos=3, paintbackground=1,
+           bgcolor_override=B.BAR_TINT, fgcolor='0 0 0 0')
     for panel in ('PipesPresentPanel', 'NoPipesPresentPanel'):
         pnl = kv.find(body, panel)
         if pnl is None:
             continue
-        mm(pnl, wide=PLATE[0], tall=STRIP_H)
+        mm(pnl, wide=B.PIPES_W, tall=STICKY_T)
         for name in ('HM_PipesCover', 'HM_StickyIcon'):
             blk = kv.find(pnl, name)
             if blk is not None:
@@ -181,9 +179,24 @@ def pipes(body):
         for n, d in (('NumPipesLabel', 0), ('NumPipesLabelDropshadow', 1)):
             blk = kv.find(pnl, n)
             if blk is not None:
-                mm(blk, xpos=BAR_X + d, ypos=d, wide=40, tall=STRIP_H, font='HM_Metal')
+                mm(blk, xpos=48 + d, ypos=d, wide=22, tall=STICKY_T, font='HM_Metal')
         only_mm(pnl, 'HM_MMStickies', B.label('HM_MMStickies', 0, 0, 0, 0, 'STICKIES', 'HM_Small', 'HM_BoneMid', 'east'),
-                (0, 0, BAR_X - 4, STRIP_H))
+                (0, 0, 44, STICKY_T))
+
+
+def account(body):
+    """hudaccountpanel.res (Engineer's metal; the panel is the first meter row under the ammo plate, with room above
+    it for the floating +/- metal numbers, layout()): METAL and the count, no card."""
+    import build as B
+    for name in ('AccountBG', 'MetalIcon'):
+        blk = kv.find(body, name)
+        if blk is not None:
+            hide(blk)
+    blk = kv.find(body, 'AccountValue')
+    if blk is not None:
+        mm(blk, xpos=BAR_X, ypos=B.ACCOUNT_RISE, wide=40, tall=STRIP_H, font='HM_Metal')
+    only_mm(body, 'HM_MMMetal', B.label('HM_MMMetal', 0, 0, 0, 0, 'METAL', 'HM_Small', 'HM_BoneMid', 'east'),
+            (0, B.ACCOUNT_RISE, BAR_X - 4, STRIP_H))
 
 
 def layout(body):
@@ -192,12 +205,16 @@ def layout(body):
     blk = kv.find(body, 'HudWeaponAmmo')
     if blk is not None:
         mm(blk, xpos=c(A_X), ypos=MM_Y, wide=PLATE[0], tall=PLATE[1])
-    # the sticky slot (stickies / shield charge): the first meter row under the ammo plate
+    # stickies / shield charge: a strip between the plates, the charge-up line right under it
     blk = kv.find(body, 'HudDemomanPipes')
     if blk is not None:
-        mm(blk, xpos=c(A_X), ypos=UNDER, wide=PLATE[0], tall=STRIP_H)
-    # the sticky / bow / flame-rocket charge-up stays by the crosshair, a line between the plates
+        mm(blk, xpos=c(-B.PIPES_W // 2), ypos=MM_Y + 4, wide=B.PIPES_W, tall=STICKY_T)
+    # Engineer's metal: the first meter row under the ammo plate, the panel reaching up for the +/- numbers
+    blk = kv.find(body, 'CHudAccountPanel')
+    if blk is not None:
+        mm(blk, xpos=c(A_X), ypos=UNDER - B.ACCOUNT_RISE, wide=PLATE[0], tall=B.ACCOUNT_RISE + STRIP_H)
+    # the sticky / bow / flame-rocket charge-up: a line right under the sticky strip
     for n in ('HudDemomanCharge', 'HudBowCharge', 'HudFlameRocketCharge'):
         blk = kv.find(body, n)
         if blk is not None:
-            mm(blk, xpos=c(-30), ypos=MM_Y + (PLATE[1] - 8) // 2)
+            mm(blk, xpos=c(-30), ypos=CHARGE_Y)

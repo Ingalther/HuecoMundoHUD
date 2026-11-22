@@ -630,6 +630,7 @@ def patch_account(root):
     kv.setmany(kv.find(body, 'MetalIcon'), xpos=0, ypos=0, wide=0, tall=0)
     kv.setmany(kv.find(body, 'AccountValue'), xpos=38, ypos=y, wide=30, tall=26, font='HM_Sticky',
                fgcolor='HM_Bone', textAlignment='west')
+    MM.account(body)
 
 
 STREAK = (110, 97, 72, 24)  # tucked under the health band, like Weirdcore's skull
@@ -770,7 +771,7 @@ def target_id_ys(alt=False):
     """Main and secondary target ID tops (stock 285 / 335). The secondary strip ("Healer: ..." / "Healing: ...")
     covered the meter column's top row (its art starts 4 under the meter's top), so both strips go up until it clears."""
     if alt:  # minmode: the card sits between the plates, so the strips go under its charge bar
-        main = pipes_pos(alt)[1] + PIPES_H + 2 + CHARGE_H + TID_GAP
+        main = max(MM.CHARGE_Y + CHARGE_H, uber_box(True)[1] + UBER_H) + TID_GAP
         return main, main + TID_H + TID_GAP
     healer = min(335, pipes_pos(alt)[1] - CARD_ROW * max(METER_ROW.values()) + 4 - TID_GAP - TID_H)
     return min(285, healer - TID_GAP - TID_H), healer

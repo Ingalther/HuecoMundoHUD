@@ -26,6 +26,8 @@
 		"scaleImage"		"1"
 		"teambg_2"		"replay/thumbnails/hm/meter_metal"
 		"teambg_3"		"replay/thumbnails/hm/meter_metal"
+		"wide_minmode"		"0"
+		"tall_minmode"		"0"
 	}
 	"MetalIcon"
 	{
@@ -41,6 +43,8 @@
 		"scaleImage"		"1"
 		"icon"		"ico_metal"
 		"iconColor"		"ProgressOffWhite"
+		"wide_minmode"		"0"
+		"tall_minmode"		"0"
 	}
 	"AccountValue"
 	{
@@ -62,5 +66,28 @@
 		"brighttext"		"0"
 		"font"		"HM_Sticky"
 		"fgcolor"		"HM_Bone"
+		"xpos_minmode"		"64"
+		"ypos_minmode"		"36"
+		"wide_minmode"		"40"
+		"tall_minmode"		"16"
+		"font_minmode"		"HM_Metal"
+	}
+	"HM_MMMetal"
+	{
+		"ControlName"		"CExLabel"
+		"fieldName"		"HM_MMMetal"
+		"xpos"		"0"
+		"ypos"		"36"
+		"zpos"		"5"
+		"wide"		"0"
+		"tall"		"0"
+		"visible"		"1"
+		"enabled"		"1"
+		"labelText"		"METAL"
+		"textAlignment"		"east"
+		"font"		"HM_Small"
+		"fgcolor"		"HM_BoneMid"
+		"wide_minmode"		"60"
+		"tall_minmode"		"16"
 	}
 }

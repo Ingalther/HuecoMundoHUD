@@ -38,14 +38,15 @@
 		"dulltext"		"0"
 		"brighttext"		"0"
 		"font"		"TFFontSmall"
-		"xpos_minmode"		"0"
-		"ypos_minmode"		"0"
+		"xpos_minmode"		"5"
+		"ypos_minmode"		"6"
 		"wide_minmode"		"60"
-		"tall_minmode"		"16"
-		"font_minmode"		"HM_Small"
-		"textAlignment_minmode"		"east"
+		"tall_minmode"		"4"
 		"visible_minmode"		"1"
-		"fgcolor_minmode"		"HM_BoneMid"
+		"zpos_minmode"		"3"
+		"paintbackground_minmode"		"1"
+		"bgcolor_override_minmode"		"3 141 89 153"
+		"fgcolor_minmode"		"0 0 0 0"
 	}
 	"ChargeMeter"
 	{
@@ -66,9 +67,9 @@
 		"brighttext"		"0"
 		"fgcolor_override"		"46 214 140 255"
 		"bgcolor_override"		"226 226 220 45"
-		"xpos_minmode"		"64"
+		"xpos_minmode"		"5"
 		"ypos_minmode"		"6"
-		"wide_minmode"		"70"
+		"wide_minmode"		"60"
 		"tall_minmode"		"4"
 	}
 	"PipesPresentPanel"
@@ -116,9 +117,9 @@
 			"brighttext"		"0"
 			"font"		"HM_Sticky"
 			"fgcolor"		"HM_Bone"
-			"xpos_minmode"		"64"
+			"xpos_minmode"		"48"
 			"ypos_minmode"		"0"
-			"wide_minmode"		"40"
+			"wide_minmode"		"22"
 			"tall_minmode"		"16"
 			"font_minmode"		"HM_Metal"
 		}
@@ -142,9 +143,9 @@
 			"brighttext"		"0"
 			"font"		"HM_Sticky"
 			"fgcolor"		"HM_Shadow"
-			"xpos_minmode"		"65"
+			"xpos_minmode"		"49"
 			"ypos_minmode"		"1"
-			"wide_minmode"		"40"
+			"wide_minmode"		"22"
 			"tall_minmode"		"16"
 			"font_minmode"		"HM_Metal"
 		}
@@ -184,7 +185,7 @@
 			"wide_minmode"		"0"
 			"tall_minmode"		"0"
 		}
-		"wide_minmode"		"138"
+		"wide_minmode"		"70"
 		"tall_minmode"		"16"
 		"HM_MMStickies"
 		{
@@ -201,7 +202,7 @@
 			"textAlignment"		"east"
 			"font"		"HM_Small"
 			"fgcolor"		"HM_BoneMid"
-			"wide_minmode"		"60"
+			"wide_minmode"		"44"
 			"tall_minmode"		"16"
 		}
 	}
@@ -250,9 +251,9 @@
 			"brighttext"		"0"
 			"font"		"HM_Sticky"
 			"fgcolor"		"HM_Ash"
-			"xpos_minmode"		"64"
+			"xpos_minmode"		"48"
 			"ypos_minmode"		"0"
-			"wide_minmode"		"40"
+			"wide_minmode"		"22"
 			"tall_minmode"		"16"
 			"font_minmode"		"HM_Metal"
 		}
@@ -276,9 +277,9 @@
 			"brighttext"		"0"
 			"font"		"HM_Sticky"
 			"fgcolor"		"HM_Shadow"
-			"xpos_minmode"		"65"
+			"xpos_minmode"		"49"
 			"ypos_minmode"		"1"
-			"wide_minmode"		"40"
+			"wide_minmode"		"22"
 			"tall_minmode"		"16"
 			"font_minmode"		"HM_Metal"
 		}
@@ -319,7 +320,7 @@
 			"wide_minmode"		"0"
 			"tall_minmode"		"0"
 		}
-		"wide_minmode"		"138"
+		"wide_minmode"		"70"
 		"tall_minmode"		"16"
 		"HM_MMStickies"
 		{
@@ -336,25 +337,8 @@
 			"textAlignment"		"east"
 			"font"		"HM_Small"
 			"fgcolor"		"HM_BoneMid"
-			"wide_minmode"		"60"
+			"wide_minmode"		"44"
 			"tall_minmode"		"16"
 		}
-	}
-	"HM_MMChargeTint"
-	{
-		"ControlName"		"EditablePanel"
-		"fieldName"		"HM_MMChargeTint"
-		"zpos"		"3"
-		"visible"		"1"
-		"enabled"		"1"
-		"paintbackground"		"1"
-		"bgcolor_override"		"3 141 89 153"
-		"mouseinputenabled"		"0"
-		"xpos"		"64"
-		"ypos"		"6"
-		"wide"		"0"
-		"tall"		"0"
-		"wide_minmode"		"70"
-		"tall_minmode"		"4"
 	}
 }
