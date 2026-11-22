@@ -1397,6 +1397,25 @@ def redirect_objective_materials():
         write(os.path.join(OUT, 'materials', 'hud', stock + '.vmt'), HUD_VMT % ours)
 
 
+ANIMS_MENU = r'''
+// voice / server menus (HudMenu): the game centres them on the left edge, where a long one (a server's taunt or
+// vote menu) ran over the chat. Opened higher, so a menu of up to 13 lines ends above the chat box.
+// The stock event's own lines follow: an event's first definition wins.
+event MenuOpen
+{
+	StopEvent MenuClose 0.0
+	Animate HudMenu ypos			"-105"		Linear 0.0 0.0
+	Animate HudMenu Alpha			"255"		Linear 0.0 0.1
+	Animate HudMenu SelectionAlpha	"255"		Linear 0.0 0.1
+	Animate HudMenu FgColor			"FgColor"	Linear 0.0 0.1
+	Animate HudMenu MenuColor		"MenuColor"	Linear 0.0 0.1
+	Animate HudMenu ItemColor		"ItemColor"	Linear 0.0 0.1
+	Animate HudMenu TextScan		"1"			Linear 0.0 0.1
+	Animate HudMenu Blur			"1"			Linear 0.0 0.01
+}
+'''
+
+
 CREDIT = '// Hueco Mundo HUD - made by Ingalther. Licence: CC BY-NC-SA 4.0 (credit required, no selling).\n'
 
 
@@ -1773,7 +1792,7 @@ def main():
     if os.path.exists(ss):  # GameUI dialogs (loading window...) take their colours from here
         write(os.path.join(OUT, 'resource/sourcescheme.res'),
               retint_scheme(open(ss, encoding='utf-8', errors='replace').read()))
-    write(os.path.join(OUT, 'scripts/hudanimations_hm.txt'), ANIMS + ANIMS_HITMARKER)
+    write(os.path.join(OUT, 'scripts/hudanimations_hm.txt'), ANIMS + ANIMS_HITMARKER + ANIMS_MENU)
     write(os.path.join(OUT, 'scripts/hudanimations_manifest.txt'),
           'hudanimations_manifest\n{\n\t"file"\t\t"scripts/hudanimations.txt"\n'
           '\t"file"\t\t"scripts/hudanimations_hm.txt"\n\t"file"\t\t"scripts/hudanimations_tf.txt"\n}\n')

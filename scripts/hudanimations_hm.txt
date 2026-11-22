@@ -112,3 +112,19 @@ event HudSpyDisguiseHide
 	Animate PlayerStatusSpyOutlineImage		Alpha		"0"				Linear 0.2 0.1
 	Animate HM_Hitmarker	Alpha	"0"		Linear 0.0 0.0
 }
+
+// voice / server menus (HudMenu): the game centres them on the left edge, where a long one (a server's taunt or
+// vote menu) ran over the chat. Opened higher, so a menu of up to 13 lines ends above the chat box.
+// The stock event's own lines follow: an event's first definition wins.
+event MenuOpen
+{
+	StopEvent MenuClose 0.0
+	Animate HudMenu ypos			"-105"		Linear 0.0 0.0
+	Animate HudMenu Alpha			"255"		Linear 0.0 0.1
+	Animate HudMenu SelectionAlpha	"255"		Linear 0.0 0.1
+	Animate HudMenu FgColor			"FgColor"	Linear 0.0 0.1
+	Animate HudMenu MenuColor		"MenuColor"	Linear 0.0 0.1
+	Animate HudMenu ItemColor		"ItemColor"	Linear 0.0 0.1
+	Animate HudMenu TextScan		"1"			Linear 0.0 0.1
+	Animate HudMenu Blur			"1"			Linear 0.0 0.01
+}
