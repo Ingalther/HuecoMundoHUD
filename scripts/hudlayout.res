@@ -70,7 +70,7 @@
 		"wide"		"80"
 		"tall"		"26"
 		"xpos_minmode"		"c-36"
-		"ypos_minmode"		"390"
+		"ypos_minmode"		"340"
 	}
 	"HudDemomanCharge"
 	{
@@ -85,7 +85,7 @@
 		"MeterFG"		"46 214 140 255"
 		"MeterBG"		"122 124 124 110"
 		"xpos_minmode"		"c-30"
-		"ypos_minmode"		"422"
+		"ypos_minmode"		"372"
 	}
 	"HudBowCharge"
 	{
@@ -100,7 +100,7 @@
 		"MeterFG"		"46 214 140 255"
 		"MeterBG"		"122 124 124 110"
 		"xpos_minmode"		"c-30"
-		"ypos_minmode"		"422"
+		"ypos_minmode"		"372"
 	}
 	"HudFlameRocketCharge"
 	{
@@ -115,7 +115,7 @@
 		"MeterFG"		"46 214 140 255"
 		"MeterBG"		"122 124 124 110"
 		"xpos_minmode"		"c-30"
-		"ypos_minmode"		"422"
+		"ypos_minmode"		"372"
 	}
 	"HudBossHealth"
 	{
@@ -179,7 +179,7 @@
 		"enabled"		"1"
 		"PaintBackgroundType"		"2"
 		"xpos_minmode"		"c-35"
-		"ypos_minmode"		"350"
+		"ypos_minmode"		"300"
 	}
 	"CHealthAccountPanel"
 	{
@@ -232,7 +232,7 @@
 			"ypos"		"370"
 			"x_offset"		"20"
 		}
-		"ypos_minmode"		"264"
+		"ypos_minmode"		"384"
 	}
 	"CSpectatorTargetID"
 	{
@@ -263,7 +263,7 @@
 			"ypos"		"330"
 			"x_offset"		"20"
 		}
-		"ypos_minmode"		"303"
+		"ypos_minmode"		"423"
 	}
 	"BuildingStatus_Spy"
 	{
@@ -911,7 +911,7 @@
 		"wide"		"70"
 		"tall"		"34"
 		"xpos_minmode"		"c-35"
-		"ypos_minmode"		"386"
+		"ypos_minmode"		"336"
 	}
 	"HudTeamGoal"
 	{

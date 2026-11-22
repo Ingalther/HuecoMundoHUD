@@ -754,6 +754,9 @@ TID_H, TID_GAP = 35, 4  # target ID strip height (stock), gap under each strip
 def target_id_ys(alt=False):
     """Main and secondary target ID tops (stock 285 / 335). The secondary strip ("Healer: ..." / "Healing: ...")
     covered the meter column's top row (its art starts 4 under the meter's top), so both strips go up until it clears."""
+    if alt:  # corners layout: the group sits nearer the crosshair, so the strips go under its charge bar
+        main = pipes_pos(alt)[1] + PIPES_H + 2 + CHARGE_H + TID_GAP
+        return main, main + TID_H + TID_GAP
     healer = min(335, pipes_pos(alt)[1] - CARD_ROW * max(METER_ROW.values()) + 4 - TID_GAP - TID_H)
     return min(285, healer - TID_GAP - TID_H), healer
 
@@ -874,7 +877,14 @@ def pipes_pos(alt=False):
     band_mid = pc(*BAND, alt=alt)[1] + k(BAND[3]) / 2
     blade_mid = weapon_pos(alt)[1] + k(WEAPON_H) / 2
     y = round((band_mid + blade_mid) / 2 + 20 - PIPES_H / 2)
-    return "c-%d" % (PIPES_W // 2), min(y, 480 - CTF_STRIP - 2 - CHARGE_H - 2 - PIPES_H)
+    y = min(y, 480 - CTF_STRIP - 2 - CHARGE_H - 2 - PIPES_H)
+    # corners layout: the sticky / shield card, its charge bar and the meter column above it sit nearer the crosshair
+    # (players coming from other HUDs look for the shield charge there, and the bottom middle stays free for the
+    # texts game modes such as VSH write there); the target IDs go under the group instead (target_id_ys)
+    return "c-%d" % (PIPES_W // 2), y - (MINMODE_RISE if alt else 0)
+
+
+MINMODE_RISE = 50
 
 
 def patch_pipes(root):
