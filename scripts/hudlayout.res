@@ -87,7 +87,7 @@
 		"MeterFG"		"46 214 140 255"
 		"MeterBG"		"122 124 124 110"
 		"xpos_minmode"		"c-30"
-		"ypos_minmode"		"354"
+		"ypos_minmode"		"336"
 	}
 	"HudBowCharge"
 	{
@@ -102,7 +102,7 @@
 		"MeterFG"		"46 214 140 255"
 		"MeterBG"		"122 124 124 110"
 		"xpos_minmode"		"c-30"
-		"ypos_minmode"		"354"
+		"ypos_minmode"		"336"
 	}
 	"HudFlameRocketCharge"
 	{
@@ -117,7 +117,7 @@
 		"MeterFG"		"46 214 140 255"
 		"MeterBG"		"122 124 124 110"
 		"xpos_minmode"		"c-30"
-		"ypos_minmode"		"354"
+		"ypos_minmode"		"336"
 	}
 	"HudBossHealth"
 	{
@@ -912,8 +912,10 @@
 		"ypos"		"380"
 		"wide"		"70"
 		"tall"		"34"
-		"xpos_minmode"		"c-35"
-		"ypos_minmode"		"318"
+		"xpos_minmode"		"c133"
+		"ypos_minmode"		"364"
+		"wide_minmode"		"138"
+		"tall_minmode"		"16"
 	}
 	"HudTeamGoal"
 	{

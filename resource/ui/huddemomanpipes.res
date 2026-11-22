@@ -38,6 +38,13 @@
 		"dulltext"		"0"
 		"brighttext"		"0"
 		"font"		"TFFontSmall"
+		"xpos_minmode"		"0"
+		"ypos_minmode"		"0"
+		"wide_minmode"		"60"
+		"tall_minmode"		"16"
+		"font_minmode"		"HM_Small"
+		"textAlignment_minmode"		"east"
+		"visible_minmode"		"1"
 	}
 	"ChargeMeter"
 	{
@@ -58,10 +65,10 @@
 		"brighttext"		"0"
 		"fgcolor_override"		"46 214 140 255"
 		"bgcolor_override"		"226 226 220 45"
-		"xpos_minmode"		"8"
-		"ypos_minmode"		"19"
-		"wide_minmode"		"53"
-		"tall_minmode"		"6"
+		"xpos_minmode"		"64"
+		"ypos_minmode"		"6"
+		"wide_minmode"		"70"
+		"tall_minmode"		"4"
 	}
 	"PipesPresentPanel"
 	{
@@ -108,6 +115,11 @@
 			"brighttext"		"0"
 			"font"		"HM_Sticky"
 			"fgcolor"		"HM_Bone"
+			"xpos_minmode"		"64"
+			"ypos_minmode"		"0"
+			"wide_minmode"		"40"
+			"tall_minmode"		"16"
+			"font_minmode"		"HM_Metal"
 		}
 		"NumPipesLabelDropshadow"
 		{
@@ -129,6 +141,11 @@
 			"brighttext"		"0"
 			"font"		"HM_Sticky"
 			"fgcolor"		"HM_Shadow"
+			"xpos_minmode"		"65"
+			"ypos_minmode"		"1"
+			"wide_minmode"		"40"
+			"tall_minmode"		"16"
+			"font_minmode"		"HM_Metal"
 		}
 		"HM_PipesCover"
 		{
@@ -144,6 +161,8 @@
 			"scaleImage"		"1"
 			"image"		"replay/thumbnails/hm/meter_bg"
 			"mouseinputenabled"		"0"
+			"wide_minmode"		"0"
+			"tall_minmode"		"0"
 		}
 		"HM_StickyIcon"
 		{
@@ -161,6 +180,28 @@
 			"mouseinputenabled"		"0"
 			"teambg_2"		"replay/thumbnails/hm/sticky_red"
 			"teambg_3"		"replay/thumbnails/hm/sticky_blue"
+			"wide_minmode"		"0"
+			"tall_minmode"		"0"
+		}
+		"wide_minmode"		"138"
+		"tall_minmode"		"16"
+		"HM_MMStickies"
+		{
+			"ControlName"		"CExLabel"
+			"fieldName"		"HM_MMStickies"
+			"xpos"		"0"
+			"ypos"		"0"
+			"zpos"		"5"
+			"wide"		"0"
+			"tall"		"0"
+			"visible"		"1"
+			"enabled"		"1"
+			"labelText"		"STICKIES"
+			"textAlignment"		"east"
+			"font"		"HM_Small"
+			"fgcolor"		"HM_BoneMid"
+			"wide_minmode"		"60"
+			"tall_minmode"		"16"
 		}
 	}
 	"NoPipesPresentPanel"
@@ -208,6 +249,11 @@
 			"brighttext"		"0"
 			"font"		"HM_Sticky"
 			"fgcolor"		"HM_Ash"
+			"xpos_minmode"		"64"
+			"ypos_minmode"		"0"
+			"wide_minmode"		"40"
+			"tall_minmode"		"16"
+			"font_minmode"		"HM_Metal"
 		}
 		"NumPipesLabelDropshadow"
 		{
@@ -229,6 +275,11 @@
 			"brighttext"		"0"
 			"font"		"HM_Sticky"
 			"fgcolor"		"HM_Shadow"
+			"xpos_minmode"		"65"
+			"ypos_minmode"		"1"
+			"wide_minmode"		"40"
+			"tall_minmode"		"16"
+			"font_minmode"		"HM_Metal"
 		}
 		"HM_PipesCover"
 		{
@@ -244,6 +295,8 @@
 			"scaleImage"		"1"
 			"image"		"replay/thumbnails/hm/meter_bg"
 			"mouseinputenabled"		"0"
+			"wide_minmode"		"0"
+			"tall_minmode"		"0"
 		}
 		"HM_StickyIcon"
 		{
@@ -262,6 +315,28 @@
 			"teambg_2"		"replay/thumbnails/hm/sticky_red"
 			"teambg_3"		"replay/thumbnails/hm/sticky_blue"
 			"drawcolor"		"255 255 255 90"
+			"wide_minmode"		"0"
+			"tall_minmode"		"0"
+		}
+		"wide_minmode"		"138"
+		"tall_minmode"		"16"
+		"HM_MMStickies"
+		{
+			"ControlName"		"CExLabel"
+			"fieldName"		"HM_MMStickies"
+			"xpos"		"0"
+			"ypos"		"0"
+			"zpos"		"5"
+			"wide"		"0"
+			"tall"		"0"
+			"visible"		"1"
+			"enabled"		"1"
+			"labelText"		"STICKIES"
+			"textAlignment"		"east"
+			"font"		"HM_Small"
+			"fgcolor"		"HM_BoneMid"
+			"wide_minmode"		"60"
+			"tall_minmode"		"16"
 		}
 	}
 }

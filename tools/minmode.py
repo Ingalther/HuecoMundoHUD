@@ -5,8 +5,9 @@ The default layout (the manga clusters) lives in the plain keys; this one only i
 passes below at the end of each file's patch (kv.set clears a key's _minmode twin, so nothing may set those keys
 after them). No model, no triangle, no band or blade: the health and the ammo as bare numbers either side of the
 crosshair, a quarter of the screen down, each on a torn ink plate that fades out away from the crosshair
-(manga.mm_plate). Between them the sticky card, or with a shield its charge bar alone (build.pipes_pos), the kill
-streak tag under the health plate, the item meters under the ammo plate, the target IDs under the card.
+(manga.mm_plate). Under the ammo plate bare meter rows (stickies / shield charge first, then the item meters), the
+kill streak under the health plate; the Über / metal card and the charge-up line between the plates, the target IDs
+under them.
 
 Units are the HUD's 480-line ones; 'cN' is N from the screen's centre."""
 import kv
@@ -50,10 +51,10 @@ def children(body, skip=()):
 
 # ------------------------------------------------------------------ files
 def health(body):
-    """hudplayerhealth.res: the number right-aligned to the plate's inner end, MAX and the max health at its outer end
-    under the 体力 caption (part of the plate art), the status icons over the outer end; the rest goes."""
+    """hudplayerhealth.res: the current health alone, right-aligned to the plate's inner end (no max), the status icons
+    over the plate's outer end; the rest goes."""
     import build as B
-    keep = {'PlayerStatusHealthValue', 'HM_HealthShadow', 'PlayerStatusMaxHealthValue'}
+    keep = {'PlayerStatusHealthValue', 'HM_HealthShadow'}  # the current health alone: no max
     icons = set(B.STATUS_ICONS)
     for name, blk in children(body, skip=('HudPlayerHealth',)):
         if name in icons or name.startswith(('PlayerStatus_', 'PlayerStatusMarked')):
@@ -65,13 +66,6 @@ def health(body):
         blk = kv.find(body, name)
         if blk is not None:
             mm(blk, xpos=c(nx + d), ypos=MM_Y + 2 + d, wide=84, tall=NUM_T, font='HM_MMNum', textAlignment='east')
-    # the max health (its plain keys keep it hidden in the default layout; its text, %MaxHealth%, stays in the plain
-    # key: a label's text in a _minmode key is shown raw)
-    # (the game shows it only while the health is under the max, so "MAX" is part of its text: both go together)
-    blk = kv.find(body, 'PlayerStatusMaxHealthValue')
-    if blk is not None:
-        kv.setmany(blk, fgcolor='HM_BoneMid', textAlignment='west', labelText='MAX %MaxHealth%')
-        mm(blk, xpos=c(H_X + 10), ypos=MM_Y + 24, wide=70, tall=12, font='HM_Small')
     only_mm(body, 'HM_MMPlateH', B.img_panel('HM_MMPlateH', 0, 0, 0, 0, 'mm_plate_h', z=1),
             (c(H_X), MM_Y, PLATE[0], PLATE[1]))
 
@@ -152,14 +146,34 @@ def meter(body, slot, row):
 
 
 def pipes(body):
-    """huddemomanpipes.res: with a shield, no card: the charge alone, a line bar like the sticky charge bar, level
-    with the plates' middle (the Chargin' Targe tag behind it goes; the sticky count's cards cover it otherwise)."""
+    """huddemomanpipes.res (the panel is the meter row, layout()): the sticky slot's row under the ammo plate. With a
+    shield the game's CHARGE word and the charge as a thin bar, like the item meters; with a sticky launcher the
+    count beside a STICKIES word. No cards."""
+    import build as B
     blk = kv.find(body, 'background')
     if blk is not None:
         hide(blk)
+    blk = kv.find(body, 'ChargeLabel')
+    if blk is not None:
+        mm(blk, xpos=0, ypos=0, wide=BAR_X - 4, tall=STRIP_H, font='HM_Small', textAlignment='east', visible=1)
     blk = kv.find(body, 'ChargeMeter')
     if blk is not None:
-        mm(blk, xpos=8, ypos=(PLATE[1] - 6) // 2, wide=53, tall=6)
+        mm(blk, xpos=BAR_X, ypos=(STRIP_H - 4) // 2, wide=BAR_W, tall=4)
+    for panel in ('PipesPresentPanel', 'NoPipesPresentPanel'):
+        pnl = kv.find(body, panel)
+        if pnl is None:
+            continue
+        mm(pnl, wide=PLATE[0], tall=STRIP_H)
+        for name in ('HM_PipesCover', 'HM_StickyIcon'):
+            blk = kv.find(pnl, name)
+            if blk is not None:
+                hide(blk)
+        for n, d in (('NumPipesLabel', 0), ('NumPipesLabelDropshadow', 1)):
+            blk = kv.find(pnl, n)
+            if blk is not None:
+                mm(blk, xpos=BAR_X + d, ypos=d, wide=40, tall=STRIP_H, font='HM_Metal')
+        only_mm(pnl, 'HM_MMStickies', B.label('HM_MMStickies', 0, 0, 0, 0, 'STICKIES', 'HM_Small', 'HM_BoneMid', 'east'),
+                (0, 0, BAR_X - 4, STRIP_H))
 
 
 def layout(body):
@@ -168,3 +182,12 @@ def layout(body):
     blk = kv.find(body, 'HudWeaponAmmo')
     if blk is not None:
         mm(blk, xpos=c(A_X), ypos=MM_Y, wide=PLATE[0], tall=PLATE[1])
+    # the sticky slot (stickies / shield charge): the first meter row under the ammo plate
+    blk = kv.find(body, 'HudDemomanPipes')
+    if blk is not None:
+        mm(blk, xpos=c(A_X), ypos=UNDER, wide=PLATE[0], tall=STRIP_H)
+    # the sticky / bow / flame-rocket charge-up stays by the crosshair, a line between the plates
+    for n in ('HudDemomanCharge', 'HudBowCharge', 'HudFlameRocketCharge'):
+        blk = kv.find(body, n)
+        if blk is not None:
+            mm(blk, xpos=c(-30), ypos=MM_Y + (PLATE[1] - 8) // 2)
