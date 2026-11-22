@@ -86,10 +86,12 @@
 		"fgcolor"		"HM_Bone"
 		"xpos_minmode"		"c-224"
 		"ypos_minmode"		"320"
-		"wide_minmode"		"84"
+		"wide_minmode"		"92"
 		"tall_minmode"		"36"
 		"font_minmode"		"HM_MMNum"
 		"textAlignment_minmode"		"east"
+		"textinsetx_minmode"		"8"
+		"use_proportional_insets_minmode"		"1"
 	}
 	"PlayerStatusMaxHealthValue"
 	{
@@ -753,10 +755,12 @@
 		"fgcolor"		"HM_Shadow"
 		"xpos_minmode"		"c-223"
 		"ypos_minmode"		"321"
-		"wide_minmode"		"84"
+		"wide_minmode"		"92"
 		"tall_minmode"		"36"
 		"font_minmode"		"HM_MMNum"
 		"textAlignment_minmode"		"east"
+		"textinsetx_minmode"		"8"
+		"use_proportional_insets_minmode"		"1"
 	}
 	"HM_MMPlateH"
 	{

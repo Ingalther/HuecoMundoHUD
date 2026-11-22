@@ -65,7 +65,10 @@ def health(body):
     for name, d in (('PlayerStatusHealthValue', 0), ('HM_HealthShadow', 1)):
         blk = kv.find(body, name)
         if blk is not None:
-            mm(blk, xpos=c(nx + d), ypos=MM_Y + 2 + d, wide=84, tall=NUM_T, font='HM_MMNum', textAlignment='east')
+            # east-aligned italic digits lean out of their box and the game slices them: a right inset keeps the
+            # last one whole (the box grows by as much, so the number stays where it was)
+            mm(blk, xpos=c(nx + d), ypos=MM_Y + 2 + d, wide=84 + 8, tall=NUM_T, font='HM_MMNum', textAlignment='east',
+               textinsetx=8, use_proportional_insets=1)
     only_mm(body, 'HM_MMPlateH', B.img_panel('HM_MMPlateH', 0, 0, 0, 0, 'mm_plate_h', z=1),
             (c(H_X), MM_Y, PLATE[0], PLATE[1]))
 
@@ -155,10 +158,17 @@ def pipes(body):
         hide(blk)
     blk = kv.find(body, 'ChargeLabel')
     if blk is not None:
-        mm(blk, xpos=0, ypos=0, wide=BAR_X - 4, tall=STRIP_H, font='HM_Small', textAlignment='east', visible=1)
+        mm(blk, xpos=0, ypos=0, wide=BAR_X - 4, tall=STRIP_H, font='HM_Small', textAlignment='east', visible=1,
+           fgcolor='HM_BoneMid')
     blk = kv.find(body, 'ChargeMeter')
     if blk is not None:
         mm(blk, xpos=BAR_X, ypos=(STRIP_H - 4) // 2, wide=BAR_W, tall=4)
+    # the game paints the bar white every frame (no key recolours it): a translucent emerald sheet over it turns it
+    # pale jade, like the item meters' bars (build.tint_bar)
+    only_mm(body, 'HM_MMChargeTint', {'ControlName': 'EditablePanel', 'fieldName': 'HM_MMChargeTint', 'zpos': 3,
+                                      'visible': 1, 'enabled': 1, 'paintbackground': 1,
+                                      'bgcolor_override': B.BAR_TINT, 'mouseinputenabled': 0},
+            (BAR_X, (STRIP_H - 4) // 2, BAR_W, 4))
     for panel in ('PipesPresentPanel', 'NoPipesPresentPanel'):
         pnl = kv.find(body, panel)
         if pnl is None:

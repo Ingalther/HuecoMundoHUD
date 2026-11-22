@@ -45,6 +45,7 @@
 		"font_minmode"		"HM_Small"
 		"textAlignment_minmode"		"east"
 		"visible_minmode"		"1"
+		"fgcolor_minmode"		"HM_BoneMid"
 	}
 	"ChargeMeter"
 	{
@@ -338,5 +339,22 @@
 			"wide_minmode"		"60"
 			"tall_minmode"		"16"
 		}
+	}
+	"HM_MMChargeTint"
+	{
+		"ControlName"		"EditablePanel"
+		"fieldName"		"HM_MMChargeTint"
+		"zpos"		"3"
+		"visible"		"1"
+		"enabled"		"1"
+		"paintbackground"		"1"
+		"bgcolor_override"		"3 141 89 153"
+		"mouseinputenabled"		"0"
+		"xpos"		"64"
+		"ypos"		"6"
+		"wide"		"0"
+		"tall"		"0"
+		"wide_minmode"		"70"
+		"tall_minmode"		"4"
 	}
 }
