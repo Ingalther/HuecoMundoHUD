@@ -16,6 +16,8 @@
 		"scaleImage"		"1"
 		"teambg_2"		"replay/thumbnails/hm/tag_shield_red"
 		"teambg_3"		"replay/thumbnails/hm/tag_shield_blue"
+		"wide_minmode"		"0"
+		"tall_minmode"		"0"
 	}
 	"ChargeLabel"
 	{
@@ -56,8 +58,8 @@
 		"brighttext"		"0"
 		"fgcolor_override"		"46 214 140 255"
 		"bgcolor_override"		"226 226 220 45"
-		"xpos_minmode"		"15"
-		"ypos_minmode"		"36"
+		"xpos_minmode"		"8"
+		"ypos_minmode"		"19"
 		"wide_minmode"		"53"
 		"tall_minmode"		"6"
 	}

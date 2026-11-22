@@ -5,7 +5,7 @@ The default layout (the manga clusters) lives in the plain keys; this one only i
 passes below at the end of each file's patch (kv.set clears a key's _minmode twin, so nothing may set those keys
 after them). No model, no triangle, no band or blade: the health and the ammo as bare numbers either side of the
 crosshair, a quarter of the screen down, each on a torn ink plate that fades out away from the crosshair
-(manga.mm_plate). Between them the sticky / shield card with its charge bar under it (build.pipes_pos), the kill
+(manga.mm_plate). Between them the sticky card, or with a shield its charge bar alone (build.pipes_pos), the kill
 streak tag under the health plate, the item meters under the ammo plate, the target IDs under the card.
 
 Units are the HUD's 480-line ones; 'cN' is N from the screen's centre."""
@@ -130,20 +130,19 @@ def meter_pos(slot, row):
 
 
 def pipes(body):
-    """huddemomanpipes.res: the shield's charge as a line bar under the card, like the sticky charge bar (the card
-    keeps the Chargin' Targe; the panel grows to hold the bar)."""
-    import build as B
+    """huddemomanpipes.res: with a shield, no card: the charge alone, a line bar like the sticky charge bar, level
+    with the plates' middle (the Chargin' Targe tag behind it goes; the sticky count's cards cover it otherwise)."""
+    blk = kv.find(body, 'background')
+    if blk is not None:
+        hide(blk)
     blk = kv.find(body, 'ChargeMeter')
     if blk is not None:
-        mm(blk, xpos=10 + 5, ypos=B.PIPES_H + 2, wide=53, tall=6)
+        mm(blk, xpos=8, ypos=(PLATE[1] - 6) // 2, wide=53, tall=6)
 
 
 def layout(body):
-    """hudlayout.res: the ammo plate's place and the pipes panel's height (for the shield bar)."""
+    """hudlayout.res: the ammo plate's place."""
     import build as B
     blk = kv.find(body, 'HudWeaponAmmo')
     if blk is not None:
         mm(blk, xpos=c(A_X), ypos=MM_Y, wide=PLATE[0], tall=PLATE[1])
-    blk = kv.find(body, 'HudDemomanPipes')
-    if blk is not None:
-        mm(blk, tall=B.PIPES_H + 2 + 6)

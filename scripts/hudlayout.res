@@ -914,7 +914,6 @@
 		"tall"		"34"
 		"xpos_minmode"		"c-35"
 		"ypos_minmode"		"318"
-		"tall_minmode"		"42"
 	}
 	"HudTeamGoal"
 	{
