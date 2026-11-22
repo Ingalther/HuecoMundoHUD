@@ -605,8 +605,8 @@ def mm_plate(seed, kanji, inner_right, size=(512, 164)):
 
 def chat_well(size=(1056, 288)):
     """The open chat's history well frame (a border the game paints only while the chat is open): see-through, a thin
-    bone frame, emerald corner brackets top left and bottom right, a screentone patch fading in at the top right, a
-    small 話 // CHAT tag. No fill: the well's own background colour is its ink."""
+    bone frame, emerald corner brackets top left and bottom right, a screentone patch fading in at the top right. No text
+    (a tag would sit behind the chat lines). No fill: the well's own background colour is its ink."""
     w, h = size
     im = Image.new('RGBA', size, (0, 0, 0, 0))
     d = ImageDraw.Draw(im)
@@ -621,8 +621,6 @@ def chat_well(size=(1056, 288)):
                     fill=EMERALD + (255,))
         d.rectangle((min(ax, ax + sx * 10), min(ay, ay + sy * 84), max(ax, ax + sx * 10), max(ay, ay + sy * 84)),
                     fill=EMERALD + (255,))
-    tag = art.text_img('話  //  CHAT', art.font(art.KANJI, 40), (150, 152, 150), tracking=2)
-    im.alpha_composite(tag, (30, 14))
     return im
 
 

@@ -1353,7 +1353,7 @@ def patch_chat(root):
     history well's frame come from there). Its background, painted only while it is open, is a light ink glass; the
     filters button is a strip of bone paper across the top with ink lettering (//  CHAT  //  FILTERS), emerald on
     hover; the history well sits inset under it, its frame (the game paints that border only while the chat is open)
-    thin bone with emerald corner brackets, a screentone patch and a 話 // CHAT tag (build_art.chat_well). No border on
+    thin bone with emerald corner brackets, a screentone patch (build_art.chat_well). No border on
     the chat itself or on the typing line: those are drawn while the chat is closed too."""
     body = next(e[1] for e in root if isinstance(e[1], list))
     kv.setmany(kv.find(body, 'HudChat'), xpos=CHAT[0], ypos=CHAT[1], wide=CHAT[2], tall=CHAT[3], PaintBackgroundType=0,
