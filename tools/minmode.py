@@ -151,15 +151,16 @@ def meter(body, slot, row):
 
 
 def pipes(body):
-    """huddemomanpipes.res (the panel is a strip between the plates, over the charge-up line, layout()): no card. With a
-    sticky launcher STICKIES and the count, like the meter rows; with a shield (the game hides the sticky panels and
-    shows its CHARGE label then) the charge as a thin bar. The game paints that bar white, so the CHARGE label, which
-    only shows with a shield, is laid over it as a translucent emerald sheet (no text): pale jade."""
+    """huddemomanpipes.res: no card. The stickies and the shield share this panel, so in minmode it is a wide see-through
+    box from the middle (between the plates) down to the first meter row under the ammo plate (layout()). With a
+    sticky launcher STICKIES and the count sit at its middle end; with a shield (the game hides the sticky panels and
+    shows its CHARGE label then) the charge is a thin bar in that first row. The game paints that bar white, so the
+    CHARGE label, which only shows with a shield, is laid over it as a translucent emerald sheet (no text): pale jade."""
     import build as B
     blk = kv.find(body, 'background')
     if blk is not None:
         hide(blk)
-    bar = (5, (STICKY_T - 4) // 2, B.PIPES_W - 10, 4)
+    bar = (A_X + B.PIPES_W // 2 + BAR_X, UNDER - (MM_Y + 4) + (STRIP_H - 4) // 2, BAR_W, 4)
     blk = kv.find(body, 'ChargeMeter')
     if blk is not None:
         mm(blk, xpos=bar[0], ypos=bar[1], wide=bar[2], tall=bar[3])
@@ -205,10 +206,12 @@ def layout(body):
     blk = kv.find(body, 'HudWeaponAmmo')
     if blk is not None:
         mm(blk, xpos=c(A_X), ypos=MM_Y, wide=PLATE[0], tall=PLATE[1])
-    # stickies / shield charge: a strip between the plates, the charge-up line right under it
+    # stickies / shield charge: one see-through box from the strip between the plates (stickies) to the first meter
+    # row under the ammo plate (shield charge), pipes()
     blk = kv.find(body, 'HudDemomanPipes')
     if blk is not None:
-        mm(blk, xpos=c(-B.PIPES_W // 2), ypos=MM_Y + 4, wide=B.PIPES_W, tall=STICKY_T)
+        mm(blk, xpos=c(-B.PIPES_W // 2), ypos=MM_Y + 4, wide=B.PIPES_W // 2 + A_X + PLATE[0],
+           tall=UNDER + STRIP_H - (MM_Y + 4))
     # Engineer's metal: the first meter row under the ammo plate, the panel reaching up for the +/- numbers
     blk = kv.find(body, 'CHudAccountPanel')
     if blk is not None:
