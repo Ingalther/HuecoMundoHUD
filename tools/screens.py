@@ -204,7 +204,11 @@ LAYOUT_OPTIONS = [  # (button, preview art, cl_hud_minmode, name, description)
     ('HM_LayoutCentered', 'layout_centered', 0, 'CENTERED', 'Pulled in toward the crosshair (default)'),
     ('HM_LayoutMinmode', 'layout_minmode', 1, 'MINMODE', 'Minimal: bare numbers by the crosshair'),
 ]
-POPUP_W, POPUP_H = 640, 264
+POPUP_W, POPUP_H = 640, 318
+# METERS: where the CENTERED layout's middle column goes (build.py METERS_MODES); the build applies the pick, so the
+# button only leaves a note for update.bat (host_writeconfig writes cfg/hm_meters_<mode>.cfg in TF2's folder)
+METERS_OPTIONS = (('HM_MetersCenter', 'CENTER', 'center'), ('HM_MetersUnder', 'CROSSHAIR', 'under'),
+                  ('HM_MetersSide', 'SIDE', 'side'))
 CHARACTER_OPTIONS = (('HM_Char3D', '3D MODEL', 1), ('HM_Char2D', '2D IMAGE', 0))  # cl_hud_playerclass_use_playermodel
 # QUICK FIXES, the right column: console commands players look up when the game acts up, one click each
 # (button, command, what it does)
@@ -279,6 +283,17 @@ def hud_settings_popup(motd):
         popup_button(motd, name, 22 + i * 100, 218, text, f'engine cl_hud_playerclass_use_playermodel {value}')
     note(motd, 'HM_PopupNote3', 238, 'Same as cl_hud_playerclass_use_playermodel 1 / 0 in the console.',
          w=QUICK_X - 36)
+    # METERS (CENTERED layout): the shield / stickies, Über, metal and item meters in the middle, under the crosshair
+    # or over the ammo
+    add(motd, 'HM_PopupSection4', {'ControlName': 'CExLabel', 'fieldName': 'HM_PopupSection4', 'xpos': 22,
+                                   'ypos': 258, 'zpos': 2, 'wide': QUICK_X - 36, 'tall': 12, 'visible': 1,
+                                   'enabled': 1, 'labelText': 'METERS (CENTERED LAYOUT)', 'textAlignment': 'west',
+                                   'font': 'HM_Menu', 'fgcolor': '46 214 140 255'})
+    for i, (name, text, mode) in enumerate(METERS_OPTIONS):
+        popup_button(motd, name, 22 + i * 100, 274, text, f'engine host_writeconfig hm_meters_{mode}')
+    note(motd, 'HM_PopupNote4', 294, 'Shield, stickies, Uber, metal, item meters: in the middle, under the '
+         'crosshair or over the ammo.', w=QUICK_X - 36)
+    note(motd, 'HM_PopupNote5', 304, 'Pick one, close TF2 and run update.bat.', w=QUICK_X - 36)
     # QUICK FIXES: each button runs its command; what it does beside it, the command itself under that
     add(motd, 'HM_PopupDivider', {'ControlName': 'ImagePanel', 'fieldName': 'HM_PopupDivider', 'xpos': QUICK_X - 14,
                                   'ypos': 44, 'zpos': 2, 'wide': 1, 'tall': 196, 'visible': 1, 'enabled': 1,

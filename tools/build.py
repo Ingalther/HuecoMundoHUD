@@ -760,8 +760,15 @@ def meter_card_name(filename):
 
 
 def meter_card_pos(slot, alt=False):
+    if not alt and meters_mode() == 'under':  # the card slot right under the crosshair (Über, metal)
+        return 'c%d' % (-PIPES_W // 2), UNDER_Y
     x, y = pipes_pos(alt)
-    return 'c%d' % (-PIPES_W // 2 + slot * CARD_STEP), y
+    return xshift(x, slot * CARD_STEP), y
+
+
+def xshift(x, d):
+    """An xpos ('cN' from the centre or 'rN' from the right edge) moved d units right."""
+    return 'r%d' % (int(x[1:]) - d) if x.startswith('r') else 'c%d' % (int(x[1:]) + d)
 
 
 TID_H, TID_GAP = 35, 4  # target ID strip height (stock), gap under each strip
@@ -773,7 +780,11 @@ def target_id_ys(alt=False):
     if alt:  # minmode: the card sits between the plates, so the strips go under its charge bar
         main = max(MM.CHARGE_Y + CHARGE_H, uber_box(True)[1] + UBER_H) + TID_GAP
         return main, main + TID_H + TID_GAP
-    healer = min(335, pipes_pos(alt)[1] - CARD_ROW * max(METER_ROW.values()) + 4 - TID_GAP - TID_H)
+    if meters_mode() == 'under':  # under the meter rows
+        main = UNDER_ROWS_END + TID_GAP
+        return main, main + TID_H + TID_GAP
+    # (METERS > SIDE: the column is off to the right, but the strips keep the centre column's heights)
+    healer = min(335, pipes_pos(alt, 'center')[1] - CARD_ROW * max(METER_ROW.values()) + 4 - TID_GAP - TID_H)
     return min(285, healer - TID_GAP - TID_H), healer
 
 
@@ -805,7 +816,7 @@ def patch_meter_card(root, rel):
         if alt:  # minmode: a bare row under the ammo plate (MM.meter, at the end)
             continue
         x, y = meter_card_pos(slot, alt)
-        x = 'c%d' % (int(x[1:]) - grow // 2)
+        x = xshift(x, -(grow // 2))
         if alt:
             minmode(top, x, y - rise)
         else:
@@ -846,6 +857,8 @@ def patch_meter_card(root, rel):
         blk = kv.find(body, 'KillComboClassIcon%d' % i)
         if blk is not None:
             kv.setmany(blk, xpos=38 + (i - 1) * 9, ypos=22, zpos=2, wide=8, tall=8)
+    if meters_mode() == 'under':
+        under_row(body, slot, METER_ROW.get(fname, 0))
     MM.meter(body, slot, METER_ROW.get(fname, 0))
 
 
@@ -886,11 +899,106 @@ def patch_meter_style(root):
 # with a manga stickybomb
 # (team band, reiatsu aura) breaking out of its left edge and the count beside it; the bomb dims when none are out
 PIPES_W, PIPES_H = 70, 34
+
+
+# HUD Settings > METERS (CENTERED layout only; minmode has its own): where the middle column goes, the sticky / shield
+# card, the Über and metal cards and the item meters.
+#   center: the manga cards at the bottom centre (default);
+#   under:  right under the crosshair, the competitive HUDs' way: the shield as one thin bar, the sticky count and the
+#           item meters as bare rows (the game's word, a thin bar or the count), the Über / metal card in the first row;
+#   side:   the cards as they are, stacked over the ammo blade, so nothing sits in the middle (VSH and other game modes
+#           put their own counters there).
+# A menu cannot change the HUD's files, so the pick goes the Reaper HUD's crosshair way: the button writes the game's
+# settings to cfg/hm_meters_<mode>.cfg in TF2's folder (host_writeconfig), and the next build (update.bat) reads the
+# newest such note, keeps the pick in hm_meters.txt next to the HUD and deletes the notes.
+METERS_MODES = ('center', 'under', 'side')
+METERS_FILE, METERS_MARK = 'hm_meters.txt', 'hm_meters_'
+UNDER_Y = 300               # the under-crosshair strip's top: 60 under the crosshair
+UNDER_W = 100               # the shield's bar across it (budhud's size)
+UROW_SPLIT, UROW_W, UROW_H = 66, 132, 12   # a row: the word right-aligned left of the middle, the bar right of it
+UNDER_ROWS_END = UNDER_Y + 32 + 3 * 13 - 1  # the last row's bottom (rows 1-3 under the card row)
+_meters = []
+
+
+def meters_mode():
+    """The METERS pick (one of METERS_MODES), read once a build. '--meters=<mode>' on the command line overrides it."""
+    if _meters:
+        return _meters[0]
+    pick = next((a.split('=', 1)[1].lower() for a in sys.argv if a.startswith('--meters=')), None)
+    store = os.path.join(OUT, METERS_FILE)
+    cfg = os.path.join(vpk.TF, 'cfg') if vpk.TF else None
+    if pick is None and cfg and os.path.isdir(cfg):
+        marks = sorted((os.path.join(cfg, f) for f in os.listdir(cfg)
+                        if f.lower().startswith(METERS_MARK) and f.lower().endswith('.cfg')), key=os.path.getmtime)
+        if marks:
+            pick = os.path.basename(marks[-1])[len(METERS_MARK):-4].lower()
+            if pick in METERS_MODES:
+                with open(store, 'w', encoding='utf-8') as f:
+                    f.write(pick + '\n')
+            for m in marks:
+                try:
+                    os.remove(m)
+                except OSError:
+                    pass
+    if pick is None and os.path.isfile(store):
+        pick = open(store, encoding='utf-8').read().strip().lower()
+    _meters.append(pick if pick in METERS_MODES else 'center')
+    return _meters[0]
+
+
+def under_pipes(body):
+    """METERS > UNDER, huddemomanpipes.res (the panel is the UNDER_W-wide strip, pipes_pos): no card. The shield's
+    charge as one bar across the strip, the ChargeLabel (shown with a shield only) laid over it as the emerald sheet
+    that turns the game's white bar pale jade; the sticky count as STICKIES and the number in the middle."""
+    kv.setmany(kv.find(body, 'background'), wide=0, tall=0)
+    bar = dict(xpos=0, ypos=4 + (26 - 6) // 2, wide=UNDER_W, tall=6)
+    kv.setmany(kv.find(body, 'ChargeMeter'), zpos=1, bgcolor_override=BAR_TRACK, **bar)
+    kv.setmany(kv.find(body, 'ChargeLabel'), visible=1, zpos=3, paintbackground=1, bgcolor_override=BAR_TINT,
+               fgcolor='0 0 0 0', **bar)
+    for panel in ('PipesPresentPanel', 'NoPipesPresentPanel'):
+        pnl = kv.find(body, panel)
+        if pnl is None:
+            continue
+        kv.setmany(pnl, xpos=(UNDER_W - PIPES_W) // 2, ypos=0, wide=PIPES_W, tall=PIPES_H)
+        for n in ('HM_PipesCover', 'HM_StickyIcon'):
+            blk = kv.find(pnl, n)
+            if blk is not None:
+                kv.setmany(blk, wide=0, tall=0)
+        for n, d in (('NumPipesLabel', 0), ('NumPipesLabelDropshadow', 1)):
+            blk = kv.find(pnl, n)
+            if blk is not None:
+                kv.setmany(blk, xpos=48 + d, ypos=4 + d, wide=22, tall=26, font='HM_Metal')
+        lbl = label('HM_UStickies', 0, 4, 44, 26, 'STICKIES', 'HM_Small', 'HM_BoneMid', 'east')
+        lbl.update(wide_minmode=0, tall_minmode=0)  # minmode has its own (MM.pipes)
+        kv.add_block(pnl, 'HM_UStickies', lbl)
+
+
+def under_row(body, slot, row):
+    """METERS > UNDER, an item meter: no card, a bare row under the crosshair, the game's word for the meter right-
+    aligned left of the middle and a thin bar (or the count) right of it. The rows go down from the card row (a meter
+    of the sticky slot's row sits in it), the MvM sapper's last."""
+    idx = row if slot == 0 else 3
+    y = UNDER_Y + 4 + (26 - UROW_H) // 2 if idx == 0 else UNDER_Y + 32 + (idx - 1) * 13
+    kv.setmany(kv.find(body, 'HudItemEffectMeter'), xpos='c-%d' % UROW_SPLIT, ypos=y, wide=UROW_W, tall=UROW_H)
+    for name, blk in MM.children(body, skip=('HudItemEffectMeter',)):
+        if name == 'ItemEffectMeterLabel':
+            kv.setmany(blk, xpos=0, ypos=0, wide=UROW_SPLIT - 6, tall=UROW_H, font='HM_Small', textAlignment='east',
+                       fgcolor='HM_BoneMid', visible=1, autoResize=0)
+        elif name in ('ItemEffectMeter', 'HM_BarTint'):
+            kv.setmany(blk, xpos=UROW_SPLIT, ypos=(UROW_H - 4) // 2, wide=60, tall=4)
+        elif name == 'ItemEffectMeterCount':
+            kv.setmany(blk, xpos=UROW_SPLIT, ypos=0, wide=40, tall=UROW_H, font='HM_Metal', fgcolor='HM_Bone',
+                       textAlignment='west')
+        elif name.startswith('KillComboClassIcon'):
+            i = int(name[-1])
+            kv.setmany(blk, xpos=UROW_SPLIT + 30 + (i - 1) * 12, ypos=1, wide=10, tall=10)
+        else:
+            kv.setmany(blk, wide=0, tall=0)
 CTF_STRIP = 48  # CTF's score strip (patch_flagpanel) starts this far above the screen's bottom
 CHARGE_H = 8    # the stock sticky / bow / flame-rocket charge bars, right under the card (patch_hudlayout)
 
 
-def pipes_pos(alt=False):
+def pipes_pos(alt=False, mode=None):
     """Centered on the screen, level with the middle of the health band / ammo blade row of each layout, but high
     enough that the charge bar under it clears CTF's score strip: in the corners layout the row sat on the strip."""
     band_mid = pc(*BAND, alt=alt)[1] + k(BAND[3]) / 2
@@ -898,7 +1006,21 @@ def pipes_pos(alt=False):
     y = round((band_mid + blade_mid) / 2 + 20 - PIPES_H / 2)
     if alt:  # minmode: between the two plates, level with their tops; the charge bar under it (tools/minmode.py)
         return "c-%d" % (PIPES_W // 2), MM.MM_Y
+    mode = mode or meters_mode()
+    if mode == 'under':  # a strip under the crosshair, as wide as the shield's bar
+        return 'c-%d' % (UNDER_W // 2), UNDER_Y
+    if mode == 'side':  # above the ammo blade, centred on it, the charge-up line between them
+        wx, wy = weapon_pos()
+        return xshift(wx, k(WEAPON_W) // 2 - PIPES_W // 2), wy - 2 - CHARGE_H - 2 - PIPES_H
     return "c-%d" % (PIPES_W // 2), min(y, 480 - CTF_STRIP - 2 - CHARGE_H - 2 - PIPES_H)
+
+
+def charge_pos():
+    """The sticky / bow / flame-rocket charge-up line: under the sticky card, or over the meter rows."""
+    if meters_mode() == 'under':
+        return 'c-30', UNDER_Y - CHARGE_H
+    x, y = pipes_pos()
+    return xshift(x, 5), y + PIPES_H + 2
 
 
 def patch_pipes(root):
@@ -932,6 +1054,8 @@ def patch_pipes(root):
     kv.set(kv.find(body, 'PipesPresentPanel'), 'visible', 0)
     for n in ('NumPipesLabel', 'NumPipesLabelDropshadow'):
         kv.set(kv.find(kv.find(body, 'NoPipesPresentPanel'), n), 'labelText', '0')
+    if meters_mode() == 'under':
+        under_pipes(body)
     MM.pipes(body)
 
 
@@ -1016,7 +1140,7 @@ def patch_uber(root):
 def uber_box(alt=False):
     """Centered on the sticky tag (which is 58 wide at +10 in its slot), wider than it."""
     x, y = meter_card_pos(0, alt)
-    return 'c%d' % (int(x[1:]) + 10 + (58 - UBER_W) // 2), y + 4
+    return xshift(x, 10 + (58 - UBER_W) // 2), y + 4
 
 
 def patch_streak_notice(root):
@@ -1582,7 +1706,7 @@ def patch_hudlayout(root):
     for n in ('HudDemomanCharge', 'HudBowCharge', 'HudFlameRocketCharge'):
         blk = kv.find(body, n)
         if blk is not None:
-            kv.setmany(blk, zpos=5, xpos='c-30', ypos=pipes_pos()[1] + PIPES_H + 2)
+            kv.setmany(blk, zpos=5, **dict(zip(('xpos', 'ypos'), charge_pos())))
             minmode(blk, 'c-30', pipes_pos(True)[1] + PIPES_H + 2)
     for n in ('HudItemEffectMeter', 'HudDemomanCharge', 'HudBowCharge', 'HudFlameRocketCharge'):
         blk = kv.find(body, n)
@@ -1595,7 +1719,7 @@ def patch_hudlayout(root):
         kv.setmany(uber, **box(*uber_box(), UBER_W, UBER_H))
         minmode(uber, *uber_box(True))
     pipes = kv.find(body, 'HudDemomanPipes')
-    kv.setmany(pipes, **box(*pipes_pos(), PIPES_W, PIPES_H))
+    kv.setmany(pipes, **box(*pipes_pos(), UNDER_W if meters_mode() == 'under' else PIPES_W, PIPES_H))
     minmode(pipes, *pipes_pos(True))
     for n, y, y_alt in zip(('CMainTargetID', 'CSecondaryTargetID'), target_id_ys(), target_id_ys(True)):
         blk = kv.find(body, n)

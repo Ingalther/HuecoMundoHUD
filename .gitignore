@@ -2,3 +2,5 @@ __pycache__/
 *.pyc
 # update.bat's install check (tools/doctor.py) writes this next to it
 hm_report.txt
+# HUD Settings > METERS: the pick update.bat's build keeps (tools/build.py METERS_FILE)
+hm_meters.txt
