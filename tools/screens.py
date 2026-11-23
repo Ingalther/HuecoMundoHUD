@@ -294,6 +294,8 @@ def hud_settings_popup(motd):
                                    'enabled': 1, 'labelText': 'METERS (CENTERED LAYOUT)', 'textAlignment': 'west',
                                    'font': 'HM_Menu', 'fgcolor': '46 214 140 255'})
     cw, ch = METERS_CARD
+    import build
+    picked = build.meters_mode()  # the one this build applied: its card keeps the emerald frame and an IN USE tag
     for i, (name, mode, title, desc) in enumerate(METERS_OPTIONS):
         x = 22 + i * (cw + 8)
         blk = _block(name, {'fieldName': name, 'visible': 1, 'enabled': 1, 'tabPosition': 0,
@@ -303,7 +305,18 @@ def hud_settings_popup(motd):
         motd.append([name, blk, None])
         card_button(motd, blk, 'meters_' + mode, x, 274, cw, ch, f'engine host_writeconfig hm_meters_{mode}')
         kv.set(blk, 'actionsignallevel', 2)
-        for suffix, y, text, font, color in (('Name', 338, title, 'HM_Menu', '226 226 220 255'),
+        on = mode == picked
+        if on:
+            kv.set(kv.find(motd, f'HM_Card_{name}'), 'image', T + f'meters_{mode}_h')
+        kv.remove(motd, name + 'InUse')
+        if on:
+            add(motd, name + 'InUse', {'ControlName': 'CExLabel', 'fieldName': name + 'InUse', 'xpos': x + 5,
+                                       'ypos': 279, 'zpos': 7, 'wide': 38, 'tall': 11, 'visible': 1, 'enabled': 1,
+                                       'mouseinputenabled': 0, 'labelText': 'IN USE', 'textAlignment': 'center',
+                                       'font': 'HM_Small', 'fgcolor': '8 9 10 255', 'paintbackground': 1,
+                                       'bgcolor_override': '46 214 140 255'})
+        for suffix, y, text, font, color in (('Name', 338, title, 'HM_Menu',
+                                              '46 214 140 255' if on else '226 226 220 255'),
                                              ('Desc', 352, desc, 'HM_Small', '150 152 150 255')):
             add(motd, name + suffix, {'ControlName': 'CExLabel', 'fieldName': name + suffix, 'xpos': x, 'ypos': y,
                                       'zpos': 2, 'wide': cw, 'tall': 12, 'visible': 1, 'enabled': 1,

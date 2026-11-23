@@ -1451,8 +1451,27 @@
 			"visible"		"1"
 			"enabled"		"1"
 			"scaleImage"		"1"
-			"image"		"replay/thumbnails/hm/meters_center"
+			"image"		"replay/thumbnails/hm/meters_center_h"
 			"mouseinputenabled"		"0"
+		}
+		"HM_MetersCenterInUse"
+		{
+			"ControlName"		"CExLabel"
+			"fieldName"		"HM_MetersCenterInUse"
+			"xpos"		"27"
+			"ypos"		"279"
+			"zpos"		"7"
+			"wide"		"38"
+			"tall"		"11"
+			"visible"		"1"
+			"enabled"		"1"
+			"mouseinputenabled"		"0"
+			"labelText"		"IN USE"
+			"textAlignment"		"center"
+			"font"		"HM_Small"
+			"fgcolor"		"8 9 10 255"
+			"paintbackground"		"1"
+			"bgcolor_override"		"46 214 140 255"
 		}
 		"HM_MetersCenterName"
 		{
@@ -1468,7 +1487,7 @@
 			"labelText"		"CENTER"
 			"textAlignment"		"west"
 			"font"		"HM_Menu"
-			"fgcolor"		"226 226 220 255"
+			"fgcolor"		"46 214 140 255"
 		}
 		"HM_MetersCenterDesc"
 		{
