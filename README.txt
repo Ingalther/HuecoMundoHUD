@@ -30,9 +30,9 @@ HUD SETTINGS
 "HUD Settings" in the main menu:
 - Layout: CENTERED (default) or MINMODE       (console: cl_hud_minmode 0 / 1)
 - Player: 3D MODEL or 2D IMAGE                (console: cl_hud_playerclass_use_playermodel 1 / 0)
-- Meters (CENTERED layout): CENTER, CROSSHAIR or SIDE: the shield / sticky, Uber, metal and item
-  meters as cards in the middle, as thin rows under the crosshair, or as cards over the ammo.
-  Pick one, close TF2 and run update.bat.
+- Meters (CENTERED layout): CENTER, CROSSHAIR, SIDE or SIDE ROWS: the shield / sticky, Uber, metal
+  and item meters as cards in the middle, as thin rows under the crosshair, as cards over the ammo,
+  or as thin rows over the ammo. Pick one, close TF2 and run update.bat.
 
 GOOD TO KNOW
 ------------

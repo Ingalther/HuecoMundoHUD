@@ -361,6 +361,52 @@ def hud_settings_art(out):
                   (ammo, (wx + 40, wy + 22, 26 * ammo.width / ammo.height, 26))]
         out.thumb(name, manga.layout_preview(scene, pieces))
         out.thumb(name + '_h', manga.layout_preview(scene, pieces, hover=True))
+    meters_art(out, scene, pieces)
+
+
+def meters_art(out, scene, base):
+    """HUD Settings > METERS cards: the CENTERED layout (base: its health / ammo pieces) with the middle column where
+    each pick puts it (build.pipes_pos / meter_card_pos / the under-crosshair rows)."""
+    import build
+    import manga
+    cx = 853.33 / 2
+    card, card2 = manga.tag(415), manga.tag(416)
+    jade = Image.new('RGBA', (8, 8), (170, 197, 181, 255))
+    track = Image.new('RGBA', (8, 8), (10, 10, 12, 230))
+    word = Image.new('RGBA', (8, 8), BONE + (200,))
+    wx, wy = build.weapon_pos()
+    wx = 853.33 - float(wx[1:])
+    picks = {}
+    # CENTER: the cards at the bottom centre, a meter card stacked over the sticky / shield one
+    py = build.pipes_pos(mode='center')[1]
+    picks['center'] = [(card, (cx - build.PIPES_W / 2 + 10, py + 4, 58, 26)),
+                       (card2, (cx - build.PIPES_W / 2 + 10, py + 4 - build.CARD_ROW, 58, 26))]
+    # CROSSHAIR / SIDE ROWS: the shield's bar, then meter rows (a word left of the middle, a thin bar right of it),
+    # under the crosshair or ending just over the ammo blade
+    def rows(mx, uy):
+        pieces = [(track, (mx - build.UNDER_W / 2 - 1, uy + 13, build.UNDER_W + 2, 8)),
+                  (jade, (mx - build.UNDER_W / 2, uy + 14, build.UNDER_W * 0.75, 6))]
+        for r in (1, 2):
+            y = uy + 32 + (r - 1) * 13
+            pieces += [(word, (mx - 6 - 34, y + 3, 34, 6)), (track, (mx + 6 - 1, y + 3, 62, 6)),
+                       (jade, (mx + 6, y + 4, 60 * (0.8 if r == 1 else 0.45), 4))]
+        return pieces
+    picks['under'] = rows(cx, build.UNDER_Y)
+    picks['siderows'] = rows(wx + build.WEAPON_W / 2, wy - 4 - build.ROWS_H)
+    # SIDE: the same cards stacked over the ammo blade
+    sx = wx + build.WEAPON_W / 2 - build.PIPES_W / 2
+    sy = wy - 2 - build.CHARGE_H - 2 - build.PIPES_H
+    picks['side'] = [(card, (sx + 10, sy + 4, 58, 26)), (card2, (sx + 10, sy + 4 - build.CARD_ROW, 58, 26))]
+    # the cards are small: the column is drawn 1.8 times its size around its own middle so it reads
+    for mode, pieces in picks.items():
+        x0 = min(x for _, (x, y, w, h) in pieces)
+        x1 = max(x + w for _, (x, y, w, h) in pieces)
+        y0 = min(y for _, (x, y, w, h) in pieces)
+        y1 = max(y + h for _, (x, y, w, h) in pieces)
+        mx, my, z = (x0 + x1) / 2, (y0 + y1) / 2, 1.8
+        pieces = [(img, (mx + (x - mx) * z, my + (y - my) * z, w * z, h * z)) for img, (x, y, w, h) in pieces]
+        out.thumb('meters_' + mode, manga.layout_preview(scene, base + pieces))
+        out.thumb('meters_' + mode + '_h', manga.layout_preview(scene, base + pieces, hover=True))
 
 
 def mm_preview(out, scene, digits, ammo):

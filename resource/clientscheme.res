@@ -6193,6 +6193,86 @@
 			"draw_corner_width"		"0"
 			"draw_corner_height"		"0"
 		}
+		"HM_Card_meters_center"
+		{
+			"bordertype"		"scalable_image"
+			"backgroundtype"		"2"
+			"image"		"replay/thumbnails/hm/meters_center"
+			"src_corner_height"		"0"
+			"src_corner_width"		"0"
+			"draw_corner_width"		"0"
+			"draw_corner_height"		"0"
+		}
+		"HM_Card_meters_center_h"
+		{
+			"bordertype"		"scalable_image"
+			"backgroundtype"		"2"
+			"image"		"replay/thumbnails/hm/meters_center_h"
+			"src_corner_height"		"0"
+			"src_corner_width"		"0"
+			"draw_corner_width"		"0"
+			"draw_corner_height"		"0"
+		}
+		"HM_Card_meters_under"
+		{
+			"bordertype"		"scalable_image"
+			"backgroundtype"		"2"
+			"image"		"replay/thumbnails/hm/meters_under"
+			"src_corner_height"		"0"
+			"src_corner_width"		"0"
+			"draw_corner_width"		"0"
+			"draw_corner_height"		"0"
+		}
+		"HM_Card_meters_under_h"
+		{
+			"bordertype"		"scalable_image"
+			"backgroundtype"		"2"
+			"image"		"replay/thumbnails/hm/meters_under_h"
+			"src_corner_height"		"0"
+			"src_corner_width"		"0"
+			"draw_corner_width"		"0"
+			"draw_corner_height"		"0"
+		}
+		"HM_Card_meters_side"
+		{
+			"bordertype"		"scalable_image"
+			"backgroundtype"		"2"
+			"image"		"replay/thumbnails/hm/meters_side"
+			"src_corner_height"		"0"
+			"src_corner_width"		"0"
+			"draw_corner_width"		"0"
+			"draw_corner_height"		"0"
+		}
+		"HM_Card_meters_side_h"
+		{
+			"bordertype"		"scalable_image"
+			"backgroundtype"		"2"
+			"image"		"replay/thumbnails/hm/meters_side_h"
+			"src_corner_height"		"0"
+			"src_corner_width"		"0"
+			"draw_corner_width"		"0"
+			"draw_corner_height"		"0"
+		}
+		"HM_Card_meters_siderows"
+		{
+			"bordertype"		"scalable_image"
+			"backgroundtype"		"2"
+			"image"		"replay/thumbnails/hm/meters_siderows"
+			"src_corner_height"		"0"
+			"src_corner_width"		"0"
+			"draw_corner_width"		"0"
+			"draw_corner_height"		"0"
+		}
+		"HM_Card_meters_siderows_h"
+		{
+			"bordertype"		"scalable_image"
+			"backgroundtype"		"2"
+			"image"		"replay/thumbnails/hm/meters_siderows_h"
+			"src_corner_height"		"0"
+			"src_corner_width"		"0"
+			"draw_corner_width"		"0"
+			"draw_corner_height"		"0"
+		}
 		"HM_Card_team_tag_blu"
 		{
 			"bordertype"		"scalable_image"

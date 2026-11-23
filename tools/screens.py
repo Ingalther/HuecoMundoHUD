@@ -204,11 +204,15 @@ LAYOUT_OPTIONS = [  # (button, preview art, cl_hud_minmode, name, description)
     ('HM_LayoutCentered', 'layout_centered', 0, 'CENTERED', 'Pulled in toward the crosshair (default)'),
     ('HM_LayoutMinmode', 'layout_minmode', 1, 'MINMODE', 'Minimal: bare numbers by the crosshair'),
 ]
-POPUP_W, POPUP_H = 640, 318
-# METERS: where the CENTERED layout's middle column goes (build.py METERS_MODES); the build applies the pick, so the
-# button only leaves a note for update.bat (host_writeconfig writes cfg/hm_meters_<mode>.cfg in TF2's folder)
-METERS_OPTIONS = (('HM_MetersCenter', 'CENTER', 'center'), ('HM_MetersUnder', 'CROSSHAIR', 'under'),
-                  ('HM_MetersSide', 'SIDE', 'side'))
+POPUP_W, POPUP_H = 640, 410
+# METERS: where the CENTERED layout's middle column goes (build.py METERS_MODES), a picture card each
+# (build_art.meters_art); the build applies the pick, so the card only leaves a note for update.bat
+# (host_writeconfig writes cfg/hm_meters_<mode>.cfg in TF2's folder)
+METERS_OPTIONS = (('HM_MetersCenter', 'center', 'CENTER', 'In the middle (default)'),
+                  ('HM_MetersUnder', 'under', 'CROSSHAIR', 'Thin rows under it'),
+                  ('HM_MetersSide', 'side', 'SIDE', 'Cards over the ammo'),
+                  ('HM_MetersSideRows', 'siderows', 'SIDE ROWS', 'Thin rows over the ammo'))
+METERS_CARD = (108, 61)
 CHARACTER_OPTIONS = (('HM_Char3D', '3D MODEL', 1), ('HM_Char2D', '2D IMAGE', 0))  # cl_hud_playerclass_use_playermodel
 # QUICK FIXES, the right column: console commands players look up when the game acts up, one click each
 # (button, command, what it does)
@@ -241,7 +245,7 @@ def hud_settings_button(body, y):
 
 
 def hud_settings_popup(motd):
-    kv.setmany(motd, xpos='c-%d' % (POPUP_W // 2), ypos=110, zpos=60, wide=POPUP_W, tall=POPUP_H, border='',
+    kv.setmany(motd, xpos='c-%d' % (POPUP_W // 2), ypos=(480 - POPUP_H) // 2, zpos=60, wide=POPUP_W, tall=POPUP_H, border='',
                paintborder=0, PaintBackgroundType=0, bgcolor_override='0 0 0 0')
     for e in motd:
         if isinstance(e[1], list) and e[0].startswith('MOTD_') and e[0] != 'MOTD_CloseButton':
@@ -286,14 +290,26 @@ def hud_settings_popup(motd):
     # METERS (CENTERED layout): the shield / stickies, Über, metal and item meters in the middle, under the crosshair
     # or over the ammo
     add(motd, 'HM_PopupSection4', {'ControlName': 'CExLabel', 'fieldName': 'HM_PopupSection4', 'xpos': 22,
-                                   'ypos': 258, 'zpos': 2, 'wide': QUICK_X - 36, 'tall': 12, 'visible': 1,
+                                   'ypos': 258, 'zpos': 2, 'wide': POPUP_W - 44, 'tall': 12, 'visible': 1,
                                    'enabled': 1, 'labelText': 'METERS (CENTERED LAYOUT)', 'textAlignment': 'west',
                                    'font': 'HM_Menu', 'fgcolor': '46 214 140 255'})
-    for i, (name, text, mode) in enumerate(METERS_OPTIONS):
-        popup_button(motd, name, 22 + i * 100, 274, text, f'engine host_writeconfig hm_meters_{mode}')
-    note(motd, 'HM_PopupNote4', 294, 'Shield, stickies, Uber, metal, item meters: in the middle, under the '
-         'crosshair or over the ammo.', w=QUICK_X - 36)
-    note(motd, 'HM_PopupNote5', 304, 'Pick one, close TF2 and run update.bat.', w=QUICK_X - 36)
+    cw, ch = METERS_CARD
+    for i, (name, mode, title, desc) in enumerate(METERS_OPTIONS):
+        x = 22 + i * (cw + 8)
+        blk = _block(name, {'fieldName': name, 'visible': 1, 'enabled': 1, 'tabPosition': 0,
+                            'sound_depressed': 'UI/buttonclick.wav', 'sound_released': 'UI/buttonclickrelease.wav',
+                            'sound_armed': 'UI/buttonrollover.wav'})
+        kv.remove(motd, name)
+        motd.append([name, blk, None])
+        card_button(motd, blk, 'meters_' + mode, x, 274, cw, ch, f'engine host_writeconfig hm_meters_{mode}')
+        kv.set(blk, 'actionsignallevel', 2)
+        for suffix, y, text, font, color in (('Name', 338, title, 'HM_Menu', '226 226 220 255'),
+                                             ('Desc', 352, desc, 'HM_Small', '150 152 150 255')):
+            add(motd, name + suffix, {'ControlName': 'CExLabel', 'fieldName': name + suffix, 'xpos': x, 'ypos': y,
+                                      'zpos': 2, 'wide': cw, 'tall': 12, 'visible': 1, 'enabled': 1,
+                                      'labelText': text, 'textAlignment': 'west', 'font': font, 'fgcolor': color})
+    note(motd, 'HM_PopupNote4', 368, 'Shield, stickies, Uber, metal and item meters. Pick one, close TF2 and run '
+         'update.bat.', w=POPUP_W - 44)
     # QUICK FIXES: each button runs its command; what it does beside it, the command itself under that
     add(motd, 'HM_PopupDivider', {'ControlName': 'ImagePanel', 'fieldName': 'HM_PopupDivider', 'xpos': QUICK_X - 14,
                                   'ypos': 44, 'zpos': 2, 'wide': 1, 'tall': 196, 'visible': 1, 'enabled': 1,
@@ -385,6 +401,7 @@ def card_button(body, blk, img, x, y, w, h, command=None):
 
 CARD_BORDERS = ['cls_' + c for c, _ in [('scout', 0), ('soldier', 0), ('pyro', 0), ('demoman', 0), ('heavyweapons', 0),
                                           ('engineer', 0), ('medic', 0), ('sniper', 0), ('spy', 0), ('random', 0)]] +                ['team_blu', 'team_red', 'team_auto', 'team_spec', 'layout_centered', 'layout_minmode',
+                'meters_center', 'meters_under', 'meters_side', 'meters_siderows',
                 'team_tag_blu', 'team_tag_red']
 
 
